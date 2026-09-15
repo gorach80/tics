@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TICs Aplicadas a la Ingeniería — Unidad I</title>
+<meta name="description" content="Material educativo interactivo sobre Datos, Información, TIC/TO y Productividad en Ingeniería Industrial. 1er Semestre." />
+<style>
+/* ============ CSS RESET + VARIABLES ============ */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+:root {
+  --amber-50: #fffbeb; --amber-100: #fef3c7; --amber-200: #fde68a; --amber-300: #fcd34d;
+  --amber-500: #f59e0b; --amber-600: #d97706; --amber-700: #b45309;
+  --teal-50: #f0fdfa; --teal-100: #ccfbf1; --teal-200: #99f6e4; --teal-500: #14b8a6; --teal-700: #0f766e;
+  --violet-50: #f5f3ff; --violet-100: #ede9fe; --violet-200: #ddd6fe; --violet-500: #8b5cf6; --violet-700: #6d28d9;
+  --rose-50: #fff1f2; --rose-100: #ffe4e6; --rose-200: #fecdd3; --rose-500: #f43f5e; --rose-700: #be123c;
+  --emerald-50: #ecfdf5; --emerald-100: #d1fae5; --emerald-200: #a7f3d0; --emerald-500: #10b981; --emerald-700: #047857;
+  --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0; --slate-300: #cbd5e1;
+  --slate-400: #94a3b8; --slate-500: #64748b; --slate-600: #475569; --slate-700: #334155;
+  --slate-800: #1e293b; --slate-900: #0f172a; --slate-950: #020617;
+  --sky-50: #f0f9ff; --sky-100: #e0f2fe; --sky-200: #bae6fd; --sky-500: #0ea5e9; --sky-700: #0369a1;
+  --bg: #ffffff; --bg-soft: #f8fafc; --fg: #0f172a; --fg-soft: #475569; --fg-muted: #64748b;
+  --border: #e2e8f0; --card-bg: #ffffff;
+  --radius: 0.625rem;
+  --header-h: 64px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", Menlo, Monaco, "Courier New", monospace;
+}
+[data-theme="dark"] {
+  --bg: #020617; --bg-soft: #0f172a; --fg: #f8fafc; --fg-soft: #cbd5e1; --fg-muted: #94a3b8;
+  --border: #1e293b; --card-bg: #0f172a;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: linear-gradient(to bottom, var(--bg-soft), var(--bg));
+  color: var(--fg);
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ============ HEADER ============ */
+.header {
+  position: sticky; top: 0; z-index: 40;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 95%, transparent);
+  backdrop-filter: blur(8px);
+}
+.header-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 1rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: var(--header-h); gap: 1rem;
+}
+.brand { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
+.brand-logo {
+  width: 40px; height: 40px; border-radius: 0.75rem;
+  background: linear-gradient(135deg, var(--amber-500), var(--rose-500));
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 700; font-size: 1.1rem; flex-shrink: 0;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+.brand-text { min-width: 0; }
+.brand-title { font-size: 0.875rem; font-weight: 700; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand-subtitle { font-size: 0.6875rem; color: var(--fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header-actions { display: flex; align-items: center; gap: 0.25rem; flex-shrink: 0; }
+
+/* ============ BUTTONS ============ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
+  padding: 0.5rem 0.75rem; border-radius: 0.375rem;
+  border: 1px solid transparent; background: transparent;
+  color: var(--fg); cursor: pointer; font-size: 0.875rem; font-weight: 500;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  font-family: inherit;
+}
+.btn:hover { background: var(--slate-100); }
+[data-theme="dark"] .btn:hover { background: var(--slate-800); }
+.btn-icon { width: 36px; height: 36px; padding: 0; }
+.btn-outline { border-color: var(--border); background: var(--bg); }
+.btn-outline:hover { background: var(--slate-50); }
+[data-theme="dark"] .btn-outline:hover { background: var(--slate-800); }
+.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; height: 32px; }
+
+/* ============ READING PROGRESS BAR ============ */
+.reading-progress {
+  position: fixed; top: var(--header-h); left: 0; right: 0;
+  height: 3px; z-index: 30; pointer-events: none;
+}
+.reading-progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(to right, var(--amber-500), var(--rose-500), var(--violet-500));
+  transition: width 0.15s ease-out;
+}
+
+/* ============ MAIN LAYOUT ============ */
+.main {
+  flex: 1; max-width: 1400px; margin: 0 auto;
+  padding: 1.5rem 1rem; width: 100%;
+}
+@media (min-width: 1280px) {
+  .main { padding: 2rem 1.5rem; }
+  .content-grid { display: grid; grid-template-columns: 1fr 18rem; gap: 2rem; align-items: start; }
+}
+
+/* ============ TABS ============ */
+.tabs-list {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.25rem;
+  background: var(--slate-100); padding: 6px; border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+[data-theme="dark"] .tabs-list { background: var(--slate-900); }
+.tab-trigger {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 8px; font-size: 0.75rem; font-weight: 500;
+  border: none; background: transparent; color: var(--fg-soft);
+  cursor: pointer; border-radius: 0.5rem; transition: all 0.15s;
+  font-family: inherit;
+}
+.tab-trigger:hover { color: var(--fg); }
+.tab-trigger.active {
+  background: var(--bg); color: var(--amber-700); box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+[data-theme="dark"] .tab-trigger.active { background: var(--slate-800); color: var(--amber-300); }
+.tab-trigger .icon { width: 16px; height: 16px; }
+.tab-trigger .badge {
+  font-size: 0.625rem; padding: 1px 6px; border-radius: 9999px;
+  border: 1px solid var(--border); font-weight: 600;
+  margin-top: 2px;
+}
+.badge-unread { background: var(--slate-50); color: var(--slate-500); }
+[data-theme="dark"] .badge-unread { background: var(--slate-900); color: var(--slate-400); }
+.badge-reading { background: var(--amber-50); color: var(--amber-700); border-color: var(--amber-200); }
+[data-theme="dark"] .badge-reading { background: color-mix(in srgb, var(--amber-950) 40%, transparent); color: var(--amber-300); border-color: var(--amber-700); }
+.badge-completed { background: var(--emerald-50); color: var(--emerald-700); border-color: var(--emerald-200); }
+[data-theme="dark"] .badge-completed { background: color-mix(in srgb, var(--emerald-950) 40%, transparent); color: var(--emerald-300); border-color: var(--emerald-700); }
+
+@media (max-width: 1023px) {
+  .tabs-list { display: flex; overflow-x: auto; grid-template-columns: none; }
+  .tab-trigger { flex-direction: row; padding: 8px 12px; white-space: nowrap; }
+  .tab-trigger .icon { width: 14px; height: 14px; }
+}
+
+/* ============ TAB PANEL ============ */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.2s ease-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ============ ACTION BAR ============ */
+.action-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0.75rem; margin-bottom: 1rem;
+}
+.progress-indicator {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.75rem; color: var(--fg-muted); font-family: var(--font-mono);
+}
+.progress-indicator-bar {
+  width: 80px; height: 6px; background: var(--slate-200); border-radius: 9999px; overflow: hidden;
+}
+[data-theme="dark"] .progress-indicator-bar { background: var(--slate-700); }
+.progress-indicator-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(to right, var(--amber-500), var(--emerald-500));
+  transition: width 0.3s ease-out;
+}
+.action-buttons { display: flex; gap: 0.5rem; }
+
+/* ============ TOC SIDEBAR ============ */
+.toc-sidebar {
+  position: sticky; top: calc(var(--header-h) + 1.5rem);
+  max-height: calc(100vh - var(--header-h) - 4rem);
+  overflow-y: auto;
+  padding-right: 8px;
+}
+.toc-card {
+  border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem;
+  background: var(--card-bg);
+}
+.toc-title {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--fg-muted); font-weight: 600; margin-bottom: 0.75rem;
+}
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 0.8125rem; }
+.toc-list a {
+  display: block; padding: 2px 0; text-decoration: none; color: var(--fg-soft);
+  transition: color 0.15s;
+}
+.toc-list a:hover { color: var(--amber-700); }
+[data-theme="dark"] .toc-list a:hover { color: var(--amber-300); }
+.toc-list .h2 { font-weight: 600; color: var(--fg); }
+.toc-list .h3 { padding-left: 12px; border-left: 1px solid var(--border); }
+
+.course-progress {
+  margin-top: 1rem; padding: 0.75rem;
+  border: 1px solid var(--border); border-radius: 0.5rem;
+  background: linear-gradient(135deg, var(--amber-50), var(--emerald-50));
+}
+[data-theme="dark"] .course-progress { background: linear-gradient(135deg, color-mix(in srgb, var(--amber-950) 20%, transparent), color-mix(in srgb, var(--emerald-950) 20%, transparent)); }
+.course-progress-header {
+  display: flex; justify-content: space-between; margin-bottom: 6px;
+  font-size: 0.75rem;
+}
+.course-progress-label { font-weight: 600; color: var(--fg); }
+.course-progress-count { font-family: var(--font-mono); color: var(--fg-muted); }
+.course-progress-bar {
+  height: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 9999px; overflow: hidden;
+}
+.course-progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(to right, var(--amber-500), var(--rose-500), var(--emerald-500));
+  transition: width 0.5s ease-out;
+}
+.course-progress-footer {
+  display: flex; justify-content: space-between; margin-top: 6px;
+  font-size: 0.75rem; color: var(--fg-muted);
+}
+
+@media (max-width: 1279px) {
+  .toc-sidebar { display: none; }
+}
+
+/* ============ TYPOGRAPHY & CONTENT ============ */
+.content { max-width: none; color: var(--fg); }
+.content p { margin-bottom: 1rem; font-size: 0.9375rem; line-height: 1.7; }
+.content strong { font-weight: 600; color: var(--fg); }
+.content em { font-style: italic; }
+.content h2, .content h3, .content h4 { scroll-margin-top: calc(var(--header-h) + 1rem); }
+.content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
+.content h3 { font-size: 1.125rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+.content h4 { font-size: 1rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; }
+.content ul, .content ol { margin: 0.75rem 0 1rem 1.5rem; }
+.content li { margin-bottom: 0.5rem; font-size: 0.9375rem; line-height: 1.7; }
+.content code { font-family: var(--font-mono); background: var(--slate-100); padding: 2px 6px; border-radius: 4px; font-size: 0.875em; }
+[data-theme="dark"] .content code { background: var(--slate-800); }
+
+/* ============ HERO HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, var(--slate-900), var(--slate-700));
+  color: white; padding: 2rem; border-radius: 1rem; margin-bottom: 1.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+.hero-badge {
+  display: inline-block; padding: 4px 10px; border-radius: 9999px;
+  background: var(--amber-400); color: var(--slate-900);
+  font-size: 0.75rem; font-weight: 600; margin-bottom: 0.75rem;
+}
+.hero-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; line-height: 1.2; }
+@media (min-width: 640px) { .hero-title { font-size: 1.875rem; } }
+.hero-meta {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;
+}
+@media (min-width: 640px) { .hero-meta { grid-template-columns: repeat(4, 1fr); } }
+.hero-meta-item {
+  background: rgba(255,255,255,0.1); border-radius: 0.5rem; padding: 0.625rem;
+  backdrop-filter: blur(8px);
+}
+.hero-meta-label { font-size: 0.6875rem; opacity: 0.7; }
+.hero-meta-value { font-size: 0.8125rem; font-weight: 600; margin-top: 2px; }
+
+/* ============ SECTION HEADING ============ */
+.section-heading {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 1rem 1.25rem; border-radius: 0.75rem;
+  margin-bottom: 1.5rem; border: 1px solid;
+}
+.section-heading .icon-wrap {
+  flex-shrink: 0; padding: 8px; border-radius: 0.5rem;
+  background: rgba(255,255,255,0.7);
+}
+[data-theme="dark"] .section-heading .icon-wrap { background: rgba(0,0,0,0.2); }
+.section-heading .icon-wrap svg { width: 20px; height: 20px; }
+.section-heading h3 { margin: 0; font-size: 1.125rem; font-weight: 700; }
+.section-heading .subtitle { font-size: 0.8125rem; opacity: 0.8; margin-top: 2px; }
+.sh-amber { background: linear-gradient(135deg, color-mix(in srgb, var(--amber-500) 15%, transparent), color-mix(in srgb, var(--amber-500) 5%, transparent)); color: var(--amber-700); border-color: var(--amber-200); }
+.sh-teal { background: linear-gradient(135deg, color-mix(in srgb, var(--teal-500) 15%, transparent), color-mix(in srgb, var(--teal-500) 5%, transparent)); color: var(--teal-700); border-color: var(--teal-200); }
+.sh-violet { background: linear-gradient(135deg, color-mix(in srgb, var(--violet-500) 15%, transparent), color-mix(in srgb, var(--violet-500) 5%, transparent)); color: var(--violet-700); border-color: var(--violet-200); }
+.sh-rose { background: linear-gradient(135deg, color-mix(in srgb, var(--rose-500) 15%, transparent), color-mix(in srgb, var(--rose-500) 5%, transparent)); color: var(--rose-700); border-color: var(--rose-200); }
+.sh-emerald { background: linear-gradient(135deg, color-mix(in srgb, var(--emerald-500) 15%, transparent), color-mix(in srgb, var(--emerald-500) 5%, transparent)); color: var(--emerald-700); border-color: var(--emerald-200); }
+[data-theme="dark"] .sh-amber { color: var(--amber-300); border-color: var(--amber-700); }
+[data-theme="dark"] .sh-teal { color: var(--teal-300); border-color: var(--teal-700); }
+[data-theme="dark"] .sh-violet { color: var(--violet-300); border-color: var(--violet-700); }
+[data-theme="dark"] .sh-rose { color: var(--rose-300); border-color: var(--rose-700); }
+[data-theme="dark"] .sh-emerald { color: var(--emerald-300); border-color: var(--emerald-700); }
+
+/* ============ CALLOUT ============ */
+.callout {
+  display: flex; gap: 12px; padding: 0.875rem 1rem;
+  border: 1px solid; border-radius: 0.5rem; margin: 1rem 0;
+  font-size: 0.875rem; line-height: 1.6;
+}
+.callout svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+.callout-title { font-weight: 600; margin-bottom: 4px; }
+.callout-body { flex: 1; }
+.callout-info { border-color: var(--sky-200); background: var(--sky-50); color: var(--sky-700); }
+.callout-warning { border-color: var(--amber-200); background: var(--amber-50); color: var(--amber-700); }
+.callout-tip { border-color: var(--violet-200); background: var(--violet-50); color: var(--violet-700); }
+.callout-success { border-color: var(--emerald-200); background: var(--emerald-50); color: var(--emerald-700); }
+.callout-danger { border-color: var(--rose-200); background: var(--rose-50); color: var(--rose-700); }
+.callout-note { border-color: var(--slate-200); background: var(--slate-50); color: var(--slate-700); }
+[data-theme="dark"] .callout-info { background: color-mix(in srgb, var(--sky-950, #0c4a6e) 40%, transparent); border-color: var(--sky-700, #0369a1); color: var(--sky-200, #bae6fd); }
+[data-theme="dark"] .callout-warning { background: color-mix(in srgb, var(--amber-950, #451a03) 40%, transparent); border-color: var(--amber-700); color: var(--amber-200); }
+[data-theme="dark"] .callout-tip { background: color-mix(in srgb, var(--violet-950, #2e1065) 40%, transparent); border-color: var(--violet-700); color: var(--violet-200); }
+[data-theme="dark"] .callout-success { background: color-mix(in srgb, var(--emerald-950, #022c22) 40%, transparent); border-color: var(--emerald-700); color: var(--emerald-200); }
+[data-theme="dark"] .callout-danger { background: color-mix(in srgb, var(--rose-950, #4c0519) 40%, transparent); border-color: var(--rose-700); color: var(--rose-200); }
+[data-theme="dark"] .callout-note { background: color-mix(in srgb, var(--slate-900) 40%, transparent); border-color: var(--slate-700); color: var(--slate-200); }
+
+/* ============ CARDS ============ */
+.card-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.5rem 0; }
+@media (min-width: 640px) { .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); } }
+.concept-card {
+  border: 1px solid var(--border); border-radius: 0.5rem; overflow: hidden;
+  background: var(--card-bg);
+}
+.concept-card-header {
+  padding: 0.75rem 1rem; font-weight: 600; font-size: 0.9375rem;
+  display: flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--slate-50), var(--slate-100));
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="dark"] .concept-card-header { background: linear-gradient(135deg, var(--slate-900), var(--slate-800)); }
+.concept-card-header svg { width: 16px; height: 16px; color: var(--amber-600); }
+.concept-card-body { padding: 1rem; font-size: 0.875rem; line-height: 1.6; }
+.concept-card-example {
+  margin-top: 0.5rem; padding-left: 12px;
+  border-left: 2px solid var(--amber-300);
+  font-size: 0.75rem; font-style: italic; color: var(--fg-muted);
+}
+
+/* ============ PHASE CARD ============ */
+.phase-card {
+  border: 1px solid var(--border); border-left: 4px solid;
+  border-radius: 0.5rem; margin: 1.25rem 0; background: var(--card-bg);
+}
+.phase-card.amber { border-left-color: var(--amber-500); }
+.phase-card.teal { border-left-color: var(--teal-500); }
+.phase-card.rose { border-left-color: var(--rose-500); }
+.phase-card.violet { border-left-color: var(--violet-500); }
+.phase-card.emerald { border-left-color: var(--emerald-500); }
+.phase-card-header { padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.phase-badge {
+  padding: 2px 8px; border-radius: 4px; font-family: var(--font-mono);
+  font-size: 0.75rem; font-weight: 600;
+}
+.phase-badge.amber { background: var(--amber-100); color: var(--amber-700); }
+.phase-badge.teal { background: var(--teal-100); color: var(--teal-700); }
+.phase-badge.rose { background: var(--rose-100); color: var(--rose-700); }
+.phase-badge.violet { background: var(--violet-100); color: var(--violet-700); }
+.phase-badge.emerald { background: var(--emerald-100); color: var(--emerald-700); }
+.phase-card-title { font-weight: 600; font-size: 0.9375rem; display: flex; align-items: center; gap: 8px; }
+.phase-card-title svg { width: 16px; height: 16px; }
+.phase-card-body { padding: 0 1rem 1rem 1rem; font-size: 0.875rem; line-height: 1.7; }
+
+/* ============ TABLE ============ */
+.table-wrap { margin: 1rem 0; border: 1px solid var(--border); border-radius: 0.5rem; overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.875rem; }
+th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+th { background: var(--slate-100); font-weight: 600; }
+[data-theme="dark"] th { background: var(--slate-800); }
+tr:last-child td { border-bottom: none; }
+td.bold { font-weight: 600; }
+
+/* ============ CODE BLOCK ============ */
+.code-block {
+  margin: 1rem 0; border: 1px solid var(--slate-700); border-radius: 0.5rem;
+  overflow: hidden;
+}
+.code-header {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; background: var(--slate-800); color: var(--slate-200);
+  font-size: 0.75rem; font-family: var(--font-mono);
+}
+.code-header svg { width: 14px; height: 14px; }
+.code-block pre {
+  background: var(--slate-900); color: var(--slate-100);
+  padding: 1rem; overflow-x: auto; font-size: 0.75rem; line-height: 1.6;
+  font-family: var(--font-mono);
+}
+
+/* ============ FORMULA ============ */
+.formula {
+  margin: 1rem 0; padding: 1rem; text-align: center;
+  border: 1px solid var(--border); border-radius: 0.5rem;
+  background: var(--slate-50); font-family: var(--font-mono);
+  font-size: 1rem; overflow-x: auto;
+}
+[data-theme="dark"] .formula { background: color-mix(in srgb, var(--slate-900) 60%, transparent); }
+.formula-caption { font-size: 0.75rem; color: var(--fg-muted); margin-top: 0.5rem; font-family: var(--font-sans); }
+
+/* ============ TIMELINE ============ */
+.timeline { margin: 1.5rem 0; position: relative; padding-left: 40px; }
+.timeline::before {
+  content: ''; position: absolute; left: 12px; top: 8px; bottom: 8px;
+  width: 2px; background: var(--slate-200);
+}
+[data-theme="dark"] .timeline::before { background: var(--slate-800); }
+.timeline-item { position: relative; margin-bottom: 1.25rem; }
+.timeline-dot {
+  position: absolute; left: -34px; top: 4px;
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 4px solid var(--bg); box-shadow: 0 0 0 1px var(--border);
+}
+.timeline-dot.default { background: var(--slate-400); }
+.timeline-dot.warning { background: var(--amber-500); }
+.timeline-dot.danger { background: var(--rose-500); }
+.timeline-dot.success { background: var(--emerald-500); }
+.timeline-time {
+  display: inline-block; padding: 2px 8px; border: 1px solid var(--border);
+  border-radius: 4px; font-family: var(--font-mono); font-size: 0.75rem;
+  margin-right: 8px;
+}
+.timeline-title { font-weight: 600; font-size: 0.9375rem; }
+.timeline-desc { font-size: 0.875rem; color: var(--fg-muted); margin-top: 4px; line-height: 1.6; }
+
+/* ============ STAT BLOCKS ============ */
+.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin: 1rem 0; }
+@media (min-width: 640px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
+.stat-block {
+  padding: 1rem; border-radius: 0.75rem; text-align: center; color: white;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+.stat-block.amber { background: linear-gradient(135deg, var(--amber-500), var(--amber-600)); }
+.stat-block.teal { background: linear-gradient(135deg, var(--teal-500), var(--teal-600)); }
+.stat-block.rose { background: linear-gradient(135deg, var(--rose-500), var(--rose-600)); }
+.stat-block.emerald { background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600)); }
+.stat-block.violet { background: linear-gradient(135deg, var(--violet-500), var(--violet-600)); }
+.stat-value { font-size: 1.5rem; font-weight: 700; }
+@media (min-width: 640px) { .stat-value { font-size: 1.875rem; } }
+.stat-label { font-size: 0.75rem; opacity: 0.9; margin-top: 4px; }
+
+/* ============ KEY-VALUE GRID ============ */
+.kv-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin: 1rem 0; }
+@media (min-width: 640px) { .kv-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .kv-grid { grid-template-columns: repeat(3, 1fr); } }
+.kv-item {
+  border: 1px solid var(--border); border-radius: 0.5rem;
+  padding: 0.75rem; background: var(--slate-50);
+}
+[data-theme="dark"] .kv-item { background: color-mix(in srgb, var(--slate-900) 40%, transparent); }
+.kv-label { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-muted); font-weight: 600; }
+.kv-value { font-size: 0.875rem; font-weight: 500; margin-top: 4px; }
+
+/* ============ KNOWLEDGE LADDER ============ */
+.ladder { margin: 1.5rem 0; }
+.ladder-step { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; position: relative; }
+.ladder-step::after {
+  content: ''; position: absolute; left: 24px; top: 48px; bottom: -24px;
+  width: 2px; background: var(--slate-200);
+}
+.ladder-step:last-child::after { display: none; }
+[data-theme="dark"] .ladder-step::after { background: var(--slate-700); }
+.ladder-num {
+  flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+.ladder-num.violet { background: var(--violet-500); }
+.ladder-num.teal { background: var(--teal-500); }
+.ladder-num.amber { background: var(--amber-500); }
+.ladder-num.rose { background: var(--rose-500); }
+.ladder-label { font-weight: 700; font-size: 1rem; }
+.ladder-desc { font-size: 0.875rem; color: var(--fg-muted); margin-top: 4px; line-height: 1.6; }
+
+/* ============ ACCORDION (SOLUTION) ============ */
+.accordion { margin: 1rem 0; border: 1px solid var(--border); border-radius: 0.5rem; overflow: hidden; background: color-mix(in srgb, var(--emerald-50) 40%, transparent); }
+[data-theme="dark"] .accordion { background: color-mix(in srgb, var(--emerald-950, #022c22) 20%, transparent); }
+.accordion-trigger {
+  width: 100%; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 8px;
+  background: transparent; border: none; cursor: pointer; text-align: left;
+  font-size: 0.875rem; font-weight: 600; color: var(--emerald-700); font-family: inherit;
+}
+[data-theme="dark"] .accordion-trigger { color: var(--emerald-300); }
+.accordion-trigger svg { width: 16px; height: 16px; transition: transform 0.2s; }
+.accordion-trigger.open svg { transform: rotate(180deg); }
+.accordion-content { display: none; padding: 0 1rem 1rem 1rem; font-size: 0.875rem; line-height: 1.7; }
+.accordion-content.open { display: block; }
+.accordion-hint { font-size: 0.6875rem; color: var(--fg-muted); font-weight: 400; margin-left: 8px; }
+
+/* ============ QUIZ ============ */
+.quiz { margin: 1.25rem 0; border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem; background: var(--card-bg); }
+.quiz-header { display: flex; gap: 12px; }
+.quiz-num {
+  flex-shrink: 0; padding: 4px 10px; border-radius: 4px;
+  background: var(--slate-800); color: white; font-size: 0.75rem; font-weight: 600;
+}
+.quiz-question { font-weight: 500; font-size: 0.9375rem; margin-bottom: 0.75rem; line-height: 1.6; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-option { display: flex; gap: 8px; font-size: 0.875rem; line-height: 1.6; }
+.quiz-option-label { font-weight: 700; color: var(--fg-muted); flex-shrink: 0; }
+
+/* ============ DIVIDER ============ */
+.divider { margin: 1.5rem 0; border-bottom: 1px solid var(--border); }
+.divider-label {
+  display: flex; align-items: center; gap: 12px; margin: 1.5rem 0;
+}
+.divider-label::before, .divider-label::after {
+  content: ''; flex: 1; border-bottom: 1px solid var(--border);
+}
+.divider-label span {
+  font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--fg-muted); font-weight: 600;
+}
+
+/* ============ BLOCKQUOTE ============ */
+blockquote {
+  margin: 1rem 0; padding: 0.75rem 1rem;
+  border-left: 4px solid var(--amber-400);
+  background: color-mix(in srgb, var(--amber-50) 40%, transparent);
+  font-style: italic; font-size: 0.875rem;
+}
+[data-theme="dark"] blockquote { background: color-mix(in srgb, var(--amber-950, #451a03) 20%, transparent); }
+
+/* ============ DIAGRma BLOCKS ============ */
+.diagram-ladder {
+  margin: 1.5rem 0; padding: 1.25rem; border: 1px solid var(--border);
+  border-radius: 0.5rem; background: linear-gradient(to bottom, var(--slate-50), var(--bg));
+  text-align: center; font-family: var(--font-mono); font-size: 0.75rem;
+}
+[data-theme="dark"] .diagram-ladder { background: linear-gradient(to bottom, var(--slate-900), var(--slate-950)); }
+.diagram-ladder .row { padding: 8px; border-radius: 4px; margin-bottom: 4px; font-weight: 700; }
+.diagram-ladder .arrow { color: var(--slate-400); }
+.diagram-ladder .r-violet { background: color-mix(in srgb, var(--violet-100) 50%, transparent); color: var(--violet-700); }
+.diagram-ladder .r-teal { background: color-mix(in srgb, var(--teal-100) 50%, transparent); color: var(--teal-700); }
+.diagram-ladder .r-amber { background: color-mix(in srgb, var(--amber-100) 50%, transparent); color: var(--amber-700); }
+.diagram-ladder .r-rose { background: color-mix(in srgb, var(--rose-100) 50%, transparent); color: var(--rose-700); }
+[data-theme="dark"] .diagram-ladder .r-violet { background: color-mix(in srgb, var(--violet-950, #2e1065) 50%, transparent); color: var(--violet-300); }
+[data-theme="dark"] .diagram-ladder .r-teal { background: color-mix(in srgb, var(--teal-950, #042f2e) 50%, transparent); color: var(--teal-300); }
+[data-theme="dark"] .diagram-ladder .r-amber { background: color-mix(in srgb, var(--amber-950, #451a03) 50%, transparent); color: var(--amber-300); }
+[data-theme="dark"] .diagram-ladder .r-rose { background: color-mix(in srgb, var(--rose-950, #4c0519) 50%, transparent); color: var(--rose-300); }
+
+.diagram-tic-to {
+  margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 0.5rem;
+  overflow: hidden; font-family: var(--font-mono); font-size: 0.875rem;
+}
+.diagram-tic-to .tic {
+  padding: 1rem; text-align: center;
+  background: color-mix(in srgb, var(--sky-100) 50%, transparent); color: var(--sky-700);
+  border-bottom: 2px solid var(--sky-200);
+}
+.diagram-tic-to .arrow {
+  padding: 0.75rem; text-align: center;
+  background: var(--slate-200); color: var(--slate-600);
+}
+[data-theme="dark"] .diagram-tic-to .arrow { background: var(--slate-800); color: var(--slate-300); }
+.diagram-tic-to .to {
+  padding: 1rem; text-align: center;
+  background: color-mix(in srgb, var(--rose-100) 50%, transparent); color: var(--rose-700);
+  border-top: 2px solid var(--rose-200);
+}
+[data-theme="dark"] .diagram-tic-to .tic { background: color-mix(in srgb, var(--sky-950, #0c4a6e) 40%, transparent); color: var(--sky-200); border-color: var(--sky-700, #0369a1); }
+[data-theme="dark"] .diagram-tic-to .to { background: color-mix(in srgb, var(--rose-950, #4c0519) 40%, transparent); color: var(--rose-200); border-color: var(--rose-700); }
+
+/* ============ FOOTER ============ */
+.footer {
+  margin-top: auto; border-top: 1px solid var(--border);
+  background: var(--bg); padding: 1.5rem 1rem;
+}
+.footer-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 0.75rem;
+  font-size: 0.75rem; color: var(--fg-muted);
+}
+@media (min-width: 640px) { .footer-inner { flex-direction: row; align-items: center; justify-content: space-between; } }
+.footer-main { font-weight: 500; color: var(--fg); }
+.footer-meta { display: flex; align-items: center; gap: 8px; }
+
+/* ============ BACK TO TOP ============ */
+.back-to-top {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 40;
+  width: 44px; height: 44px; border-radius: 9999px;
+  background: var(--slate-900); color: white; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  opacity: 0; transform: translateY(12px); pointer-events: none;
+  transition: all 0.3s ease-out;
+}
+[data-theme="dark"] .back-to-top { background: var(--slate-100); color: var(--slate-900); }
+.back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.back-to-top svg { width: 20px; height: 20px; }
+
+/* ============ THEME DROPDOWN ============ */
+.dropdown { position: relative; display: inline-block; }
+.dropdown-menu {
+  position: absolute; right: 0; top: calc(100% + 4px);
+  min-width: 144px; border: 1px solid var(--border); border-radius: 0.5rem;
+  background: var(--bg); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  padding: 4px; z-index: 50; display: none;
+}
+.dropdown-menu.open { display: block; }
+.dropdown-item {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 6px 8px; border: none; background: transparent;
+  cursor: pointer; font-size: 0.875rem; color: var(--fg);
+  border-radius: 4px; text-align: left; font-family: inherit;
+}
+.dropdown-item:hover { background: var(--slate-100); }
+[data-theme="dark"] .dropdown-item:hover { background: var(--slate-800); }
+.dropdown-item.active { background: var(--slate-100); }
+[data-theme="dark"] .dropdown-item.active { background: var(--slate-800); }
+.dropdown-item svg { width: 16px; height: 16px; }
+
+/* ============ SEARCH BAR ============ */
+.search-bar {
+  position: fixed; top: 80px; right: 16px; z-index: 40;
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px; border: 1px solid var(--border); border-radius: 0.5rem;
+  background: var(--bg); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  width: 288px;
+}
+@media (min-width: 640px) { .search-bar { width: 320px; } }
+.search-bar input {
+  flex: 1; border: none; outline: none; background: transparent;
+  color: var(--fg); font-size: 0.875rem; padding: 4px;
+  font-family: inherit;
+}
+.search-bar .counter {
+  font-family: var(--font-mono); font-size: 0.75rem; color: var(--fg-muted);
+  white-space: nowrap; padding: 0 4px;
+}
+.search-bar .btn-icon { width: 28px; height: 28px; }
+mark[data-search-match] {
+  background: var(--amber-200); color: inherit; border-radius: 2px; padding: 0 2px;
+}
+[data-theme="dark"] mark[data-search-match] { background: color-mix(in srgb, var(--amber-500) 50%, transparent); }
+mark[data-search-match].current {
+  box-shadow: 0 0 0 2px var(--rose-500);
+}
+
+/* ============ MOBILE NAV ============ */
+.mobile-nav {
+  display: none;
+  border-top: 1px solid var(--border);
+  background: var(--bg); padding: 0.75rem;
+}
+.mobile-nav.open { display: block; }
+.mobile-nav-list { display: flex; flex-direction: column; gap: 4px; }
+.mobile-nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 0.5rem; border: none;
+  background: transparent; cursor: pointer; text-align: left;
+  font-size: 0.875rem; font-weight: 500; color: var(--fg-soft);
+  font-family: inherit; width: 100%;
+}
+.mobile-nav-item:hover { background: var(--slate-100); }
+[data-theme="dark"] .mobile-nav-item:hover { background: var(--slate-800); }
+.mobile-nav-item.active { background: var(--amber-100); color: var(--amber-700); }
+[data-theme="dark"] .mobile-nav-item.active { background: color-mix(in srgb, var(--amber-950) 40%, transparent); color: var(--amber-300); }
+.mobile-nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+.mobile-nav-item .badge { margin-left: auto; font-size: 0.625rem; }
+
+.menu-btn { display: none; }
+@media (max-width: 1023px) {
+  .menu-btn { display: inline-flex; }
+}
+
+/* ============ HIGHLIGHT MARKS ============ */
+.fg-amber { color: var(--amber-700); }
+.fg-teal { color: var(--teal-700); }
+.fg-rose { color: var(--rose-700); }
+.fg-violet { color: var(--violet-700); }
+[data-theme="dark"] .fg-amber { color: var(--amber-300); }
+[data-theme="dark"] .fg-teal { color: var(--teal-300); }
+[data-theme="dark"] .fg-rose { color: var(--rose-300); }
+[data-theme="dark"] .fg-violet { color: var(--violet-300); }
+
+/* ============ PRINT STYLES ============ */
+@media print {
+  @page { margin: 1.5cm 1.8cm; size: A4; }
+  html, body { background: white !important; color: black !important; font-size: 10pt; line-height: 1.4; }
+  .header, .footer, .toc-sidebar, .action-bar, .reading-progress, .back-to-top, .search-bar, .menu-btn, .tabs-list, .mobile-nav { display: none !important; }
+  .main { padding: 0 !important; max-width: 100% !important; }
+  .content-grid { display: block !important; }
+  .tab-panel { display: none !important; }
+  .tab-panel.active { display: block !important; }
+  .accordion-content { display: block !important; }
+  .accordion-trigger { display: none !important; }
+  .accordion { border: 1px solid #999 !important; background: white !important; padding: 0.5rem !important; }
+  .hero, .section-heading, .callout, .concept-card-header, .phase-card-header {
+    background: white !important; color: black !important; border: 1px solid #999 !important;
+  }
+  .hero { color: black !important; }
+  .hero-badge { background: #ddd !important; color: black !important; }
+  .hero-meta-item { background: #f4f4f4 !important; color: black !important; }
+  .code-block pre { background: #f4f4f4 !important; color: #111 !important; border: 1px solid #ddd !important; }
+  table { border-collapse: collapse !important; }
+  th, td { border: 1px solid #999 !important; }
+  th { background: #eee !important; }
+  .stat-block, .ladder-num, .quiz-num { background: #ddd !important; color: black !important; }
+  .phase-badge, .badge { background: #eee !important; color: black !important; border: 1px solid #999 !important; }
+  .formula { background: #f9f9f9 !important; }
+  blockquote { background: #f9f9f9 !important; }
+  h2, h3, h4 { page-break-after: avoid; }
+  .card-grid, .stat-grid { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- READING PROGRESS -->
+  <div class="reading-progress" aria-hidden="true">
+    <div class="reading-progress-bar" id="reading-progress-bar"></div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo">🎓</div>
+        <div class="brand-text">
+          <div class="brand-title">TICs Aplicadas a la Ingeniería</div>
+          <div class="brand-subtitle">1er Semestre · Ingeniería Industrial · Unidad I</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-icon" id="search-toggle" aria-label="Buscar en el contenido" title="Buscar (Ctrl+F)">🔍</button>
+        <div class="dropdown">
+          <button class="btn btn-icon" id="theme-toggle" aria-label="Cambiar tema">🌙</button>
+          <div class="dropdown-menu" id="theme-menu">
+            <button class="dropdown-item" data-theme-value="light">☀️ <span>Claro</span></button>
+            <button class="dropdown-item" data-theme-value="dark">🌙 <span>Oscuro</span></button>
+            <button class="dropdown-item" data-theme-value="system">💻 <span>Sistema</span></button>
+          </div>
+        </div>
+        <button class="btn btn-icon menu-btn" id="menu-toggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav">
+      <div class="mobile-nav-list" id="mobile-nav-list"></div>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="tabs-list" id="tabs-list"></div>
+
+    <div class="action-bar">
+      <div class="progress-indicator">
+        <div class="progress-indicator-bar"><div class="progress-indicator-fill" id="progress-indicator-fill"></div></div>
+        <span id="progress-indicator-text">0%</span>
+      </div>
+      <div class="action-buttons">
+        <button class="btn btn-outline btn-sm" id="share-btn">🔗 <span class="hide-sm">Compartir</span></button>
+        <button class="btn btn-outline btn-sm" id="print-btn">🖨️ <span class="hide-sm">Imprimir / PDF</span></button>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="content" id="content">
+        <!-- TAB PANELS INJECTED HERE -->
+      </div>
+      <aside class="toc-sidebar">
+        <div class="toc-card">
+          <div class="toc-title">📋 <span>Índice</span></div>
+          <ul class="toc-list" id="toc-list"></ul>
+        </div>
+        <div class="course-progress">
+          <div class="course-progress-header">
+            <span class="course-progress-label">Progreso del curso</span>
+            <span class="course-progress-count"><span id="completed-count">0</span>/5 pestañas</span>
+          </div>
+          <div class="course-progress-bar"><div class="course-progress-fill" id="course-progress-fill"></div></div>
+          <div class="course-progress-footer">
+            <span><span id="overall-percent">0</span>% completado</span>
+            <span id="course-complete-msg" style="display:none;color:var(--emerald-700);font-weight:600">✓ ¡Curso finalizado!</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-main">Material educativo · Unidad I — Datos, Información y TIC en Ingeniería Industrial</div>
+        <div>TICs Aplicadas a la Ingeniería · 1er Semestre · Ingeniería Industrial / Seguridad y Salud Ocupacional</div>
+      </div>
+      <div class="footer-meta">📖 <span>5 pestañas de contenido estructurado</span></div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" aria-label="Volver al inicio">↑</button>
+</div>
+
+<!-- SEARCH BAR (hidden initially) -->
+<div class="search-bar" id="search-bar" style="display:none">
+  <span>🔍</span>
+  <input type="text" id="search-input" placeholder="Buscar en esta pestaña…" />
+  <span class="counter" id="search-counter"></span>
+  <button class="btn btn-icon btn-sm" id="search-prev" title="Anterior (Shift+Enter)">▲</button>
+  <button class="btn btn-icon btn-sm" id="search-next" title="Siguiente (Enter)">▼</button>
+  <button class="btn btn-icon btn-sm" id="search-close" title="Cerrar (Esc)">✕</button>
+</div>
+
+<script>
+/* ============================================================
+   TICs Aplicadas a la Ingeniería — Standalone HTML App
+   ============================================================ */
+
+/* ---- SVG ICONS ---- */
+const ICONS = {
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>',
+  building: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>',
+  factory: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20M4 20V8l5 4V8l5 4V8l5 4v8M9 14h0M14 14h0"/></svg>',
+  lightbulb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+  warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  calc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/></svg>',
+  cpu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>',
+  network: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6"/><rect x="2" y="16" width="6" height="6"/><rect x="16" y="16" width="6" height="6"/><path d="M12 8v4M12 12h-7v4M12 12h7v4"/></svg>',
+  fileText: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  listChecks: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 4 12 5 16 1"/><polyline points="11 12 12 13 16 9"/><polyline points="11 20 12 21 16 17"/><line x1="20" y1="4" x2="22" y2="4"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="20" y1="20" x2="22" y2="20"/></svg>',
+  penLine: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>',
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+  database: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>',
+  chevronDown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
+  circle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>',
+};
+
+/* ---- HELPERS ---- */
+function el(tag, props, children) {
+  const e = document.createElement(tag);
+  if (props) {
+    for (const k in props) {
+      if (k === 'class') e.className = props[k];
+      else if (k === 'html') e.innerHTML = props[k];
+      else if (k.startsWith('on') && typeof props[k] === 'function') e.addEventListener(k.slice(2), props[k]);
+      else if (k === 'style' && typeof props[k] === 'object') Object.assign(e.style, props[k]);
+      else e.setAttribute(k, props[k]);
+    }
+  }
+  if (children) {
+    (Array.isArray(children) ? children : [children]).forEach(c => {
+      if (c == null) return;
+      e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    });
+  }
+  return e;
+}
+
+function icon(name) { const s = ICONS[name]; return s || ''; }
+
+/* ---- TOAST ---- */
+function toast(title, desc) {
+  const t = el('div', {
+    class: 'toast',
+    style: {
+      position: 'fixed', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%)',
+      background: 'var(--slate-900)', color: 'white', padding: '0.75rem 1rem',
+      borderRadius: '0.5rem', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.2)',
+      zIndex: '100', fontSize: '0.875rem', maxWidth: '90vw',
+    },
+    html: `<div style="font-weight:600">${title}</div>${desc ? `<div style="opacity:0.8;font-size:0.75rem;margin-top:2px">${desc}</div>` : ''}`,
+  });
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; }, 2500);
+  setTimeout(() => t.remove(), 2900);
+}
+
+/* ---- COMPONENT BUILDERS ---- */
+function buildHero(badge, title, meta) {
+  return `
+    <div class="hero">
+      <span class="hero-badge">${badge}</span>
+      <h2 class="hero-title">${title}</h2>
+      <div class="hero-meta">
+        ${meta.map(m => `<div class="hero-meta-item"><div class="hero-meta-label">${m.label}</div><div class="hero-meta-value">${m.value}</div></div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function buildSectionHeading(iconName, title, subtitle, accent) {
+  return `
+    <div class="section-heading sh-${accent}">
+      <div class="icon-wrap">${icon(iconName)}</div>
+      <div>
+        <h3>${title}</h3>
+        ${subtitle ? `<div class="subtitle">${subtitle}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+function buildCallout(type, title, body) {
+  const icons = { info: 'info', warning: 'warning', tip: 'lightbulb', success: 'check', danger: 'shield', note: 'book' };
+  return `<div class="callout callout-${type}">${icon(icons[type])}<div class="callout-body"><div class="callout-title">${title}</div>${body}</div></div>`;
+}
+
+function buildConceptCard(term, definition, example, iconName) {
+  return `<div class="concept-card">
+    <div class="concept-card-header">${icon(iconName || 'book')}<span>${term}</span></div>
+    <div class="concept-card-body"><div>${definition}</div>${example ? `<div class="concept-card-example">${example}</div>` : ''}</div>
+  </div>`;
+}
+
+function buildFormula(content, caption) {
+  return `<div class="formula">${content}${caption ? `<div class="formula-caption">${caption}</div>` : ''}</div>`;
+}
+
+function buildCodeBlock(lang, code, title) {
+  return `<div class="code-block">
+    <div class="code-header">📝 <span>${title || lang.toUpperCase()}</span></div>
+    <pre>${code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+  </div>`;
+}
+
+function buildTable(headers, rows, opts) {
+  const ths = headers.map(h => `<th>${h}</th>`).join('');
+  const trs = rows.map(r => `<tr>${r.map(c => `<td${opts && opts.bold && opts.bold(r, c) ? ' class="bold"' : ''}>${c}</td>`).join('')}</tr>`).join('');
+  return `<div class="table-wrap"><table><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table></div>`;
+}
+
+function buildTimeline(events) {
+  return `<div class="timeline">
+    ${events.map(e => `<div class="timeline-item">
+      <div class="timeline-dot ${e.tone || 'default'}"></div>
+      <div><span class="timeline-time">${e.time}</span><span class="timeline-title">${e.title}</span>
+      <div class="timeline-desc">${e.description}</div></div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function buildStatGrid(stats) {
+  return `<div class="stat-grid">
+    ${stats.map(s => `<div class="stat-block ${s.tone}"><div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join('')}
+  </div>`;
+}
+
+function buildKvGrid(items) {
+  return `<div class="kv-grid">
+    ${items.map(i => `<div class="kv-item"><div class="kv-label">${i.label}</div><div class="kv-value">${i.value}</div></div>`).join('')}
+  </div>`;
+}
+
+function buildLadder(steps) {
+  return `<div class="ladder">
+    ${steps.map((s, i) => `<div class="ladder-step">
+      <div class="ladder-num ${s.color}">${i + 1}</div>
+      <div><div class="ladder-label">${s.label}</div><div class="ladder-desc">${s.description}</div></div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function buildPhaseCard(phase, title, iconName, accent, body) {
+  return `<div class="phase-card ${accent}">
+    <div class="phase-card-header"><span class="phase-badge ${accent}">${phase}</span><span class="phase-card-title">${icon(iconName)} ${title}</span></div>
+    <div class="phase-card-body">${body}</div>
+  </div>`;
+}
+
+function buildAccordion(title, body, hint) {
+  const id = 'acc-' + Math.random().toString(36).slice(2, 9);
+  return `<div class="accordion">
+    <button class="accordion-trigger" onclick="toggleAccordion('${id}')">${icon('check')}<span>${title}</span>${hint ? `<span class="accordion-hint">${hint}</span>` : ''}${icon('chevronDown')}</button>
+    <div class="accordion-content" id="${id}">${body}</div>
+  </div>`;
+}
+
+function toggleAccordion(id) {
+  const trig = document.querySelector(`[onclick="toggleAccordion('${id}')"]`);
+  const cont = document.getElementById(id);
+  if (!trig || !cont) return;
+  trig.classList.toggle('open');
+  cont.classList.toggle('open');
+}
+
+function buildQuiz(num, question, options, answer, explanation) {
+  const optsHtml = options.map(o => `<div class="quiz-option"><span class="quiz-option-label">${o.label})</span><span>${o.text}</span></div>`).join('');
+  const sol = buildAccordion('Ver respuesta correcta',
+    `<div style="font-weight:600;color:var(--emerald-700);margin-bottom:8px">Respuesta: ${answer}</div>${explanation}`,
+    '(clic para desplegar)');
+  return `<div class="quiz">
+    <div class="quiz-header">
+      <span class="quiz-num">P${num}</span>
+      <div style="flex:1"><div class="quiz-question">${question}</div><div class="quiz-options">${optsHtml}</div>${sol}</div>
+    </div>
+  </div>`;
+}
+
+function buildTrueFalse(num, statement, answer, explanation) {
+  const sol = buildAccordion('Ver respuesta correcta',
+    `<div style="font-weight:600;color:var(--emerald-700);margin-bottom:8px">Respuesta: ${answer === 'V' ? 'Verdadero' : 'Falso'}</div>${explanation}`,
+    '(clic para desplegar)');
+  return `<div class="quiz">
+    <div class="quiz-header">
+      <span class="quiz-num">P${num}</span>
+      <div style="flex:1">
+        <div class="quiz-question">${statement}</div>
+        <div style="font-size:0.75rem;color:var(--fg-muted);font-style:italic;margin-bottom:8px">Argumente o corrija si es falso.</div>
+        ${sol}
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildOpenQuestion(num, question, answer) {
+  const sol = answer ? buildAccordion('Respuesta modelo', answer, '(clic para desplegar)') : '';
+  return `<div class="quiz">
+    <div class="quiz-header">
+      <span class="quiz-num">P${num}</span>
+      <div style="flex:1"><div class="quiz-question">${question}</div>${sol}</div>
+    </div>
+  </div>`;
+}
+
+function buildDivider(label) {
+  return label
+    ? `<div class="divider-label"><span>${label}</span></div>`
+    : `<div class="divider"></div>`;
+}
+
+/* ============================================================
+   TAB CONTENT BUILDERS
+   ============================================================ */
+const TAB_CONTENTS = {};
+
+/* ---- TAB 1: Unidad I ---- */
+TAB_CONTENTS['unidad'] = function() {
+  return `
+  ${buildHero('UNIDAD I', '¿Qué es la Información y Cómo Impulsa a la Ingeniería Industrial?',
+    [{label:'Asignatura',value:'TICs Aplicadas a la Ingeniería'},{label:'Nivel',value:'1er Semestre'},
+     {label:'Modalidad',value:'Lectura + Actividad'},{label:'Duración',value:'60 min'}])}
+
+  ${buildSectionHeading('lightbulb','Introducción Motivadora','¿Por qué un ingeniero industrial debe entender el viaje del dato?','amber')}
+
+  <p>Imagina que estás a cargo de una planta embotelladora. Frente a ti hay una pantalla con números que cambian cada segundo, luces verdes y rojas parpadeando, y una alarma sonando en la zona de empaque. ¿Qué significa todo eso? ¿La máquina se detuvo por una falla mecánica, se acabó la materia prima o un operario activó la parada de emergencia para evitar un accidente?</p>
+
+  <p>Como futuro ingeniero o ingeniera industrial, tu trabajo no consiste únicamente en ver máquinas moverse; consiste en <strong>tomar decisiones estratégicas y oportunas para evitar pérdidas económicas y proteger vidas humanas</strong>. Para tomar buenas decisiones necesitas entender cómo viaja la realidad de la fábrica hasta tus manos. Ese viaje comienza con un pulso eléctrico diminuto, se convierte en un dato, se organiza como información y se transforma en conocimiento para que la empresa opere con máxima seguridad y eficiencia.</p>
+
+  ${buildDivider('iDevice de Lectura')}
+
+  ${buildSectionHeading('book','1. La Escalera del Conocimiento: De la Señal al Control','Cuatro peldaños que todo ingeniero industrial debe distinguir','violet')}
+
+  <p>Para gestionar una fábrica o una faena minera, debemos distinguir con claridad cuatro peldaños fundamentales que conectan el mundo físico con la toma de decisiones gerenciales:</p>
+
+  <div class="diagram-ladder">
+    <div class="row r-violet">[ CONOCIMIENTO ] → Sé por qué ocurrió y cómo solucionarlo/prevenirlo.</div>
+    <div class="arrow">↑</div>
+    <div class="row r-teal">[ INFORMACIÓN ] → El dato tiene sentido, unidad de medida y contexto.</div>
+    <div class="arrow">↑</div>
+    <div class="row r-amber">[ DATO ] → Un número o símbolo aislado, sin procesar.</div>
+    <div class="arrow">↑</div>
+    <div class="row r-rose">[ SEÑAL ] → Fenómeno físico real (calor, presión, luz, vibración).</div>
+  </div>
+
+  <div class="card-grid cols-2">
+    ${buildConceptCard('Señal','Es el fenómeno físico real en la máquina. Por ejemplo, el calor que emite el motor de una faja transportadora.',null,'shield')}
+    ${buildConceptCard('Dato','Es la captura cruda de esa señal expresada en un símbolo o número, pero sin explicación. Un sensor lee un voltaje y registra simplemente: 85. ¿Son 85 grados Celsius, 85 dólares, o 85 revoluciones por minuto? Por sí solo, el dato no nos dice qué hacer.',null,'database')}
+    ${buildConceptCard('Información','Es el dato al que le agregamos <strong>contexto, unidad de medida y tiempo</strong>. Si el sistema indica: <em>"El motor 3 de la faja transportadora alcanzó 85 °C a las 10:15 AM (límite seguro: 70 °C)"</em>, ahora tenemos información útil. Sabemos qué está pasando, dónde y cuándo.',null,'info')}
+    ${buildConceptCard('Conocimiento','Es la interpretación de esa información usando las leyes de la física, la experiencia y los manuales de ingeniería. Concluyes: <em>"La temperatura subió porque falta lubricante en el rodamiento; si no detenemos el motor en los próximos 10 minutos, se fundirá y parará toda la línea de producción"</em>.',null,'lightbulb')}
+  </div>
+
+  ${buildSectionHeading('check','2. Propiedades de la Buena Información en Fábricas','Si la información no cumple estas propiedades, el ingeniero decide a ciegas','emerald')}
+
+  <p>No cualquier dato sirve. Si la información no cumple con ciertas propiedades, el ingeniero industrial tomará decisiones a ciegas:</p>
+
+  <ol>
+    <li><strong>Exactitud y Veracidad:</strong> La lectura debe reflejar la realidad del proceso. Si el termómetro marca <code>25 °C</code> pero la caldera está a <code>100 °C</code>, hay peligro inminente de explosión.</li>
+    <li><strong>Oportunidad (Llegar a tiempo):</strong> La información que llega tarde no sirve de nada. Saber que una máquina falló hace dos horas solo sirve para lamentarse; saberlo en el milisegundo en que comenzó a vibrar permite apagarla a tiempo.</li>
+    <li><strong>Claridad y Relevancia:</strong> Si un tablero de control muestra 500 números a la vez, el operario se confunde. La información debe mostrar solo lo necesario para resolver el problema sin saturar la vista.</li>
+    <li><strong>Completitud:</strong> Debe contener los datos clave: qué máquina es, qué variable falló, cuál es el valor normal y la hora exacta del evento.</li>
+  </ol>
+
+  ${buildSectionHeading('fileText','3. Clasificación de la Información según su Formato','Estructurada, Semiestructurada y No Estructurada','teal')}
+
+  <p>En el trabajo diario nos encontramos con tres tipos principales de información que el ingeniero debe saber identificar para elegir el tratamiento digital adecuado:</p>
+
+  ${buildTable(
+    ['Tipo de Información','¿Cómo se reconoce?','Ejemplo en Ingeniería y Seguridad'],
+    [
+      ['<strong class="fg-amber">Estructurada</strong>','Está perfectamente ordenada en tablas con filas y columnas (como en Excel o bases de datos).','Lista de asistencia de trabajadores, tabla con las horas de mantenimiento de cada torno, inventario de cascos de seguridad.'],
+      ['<strong class="fg-teal">Semiestructurada</strong>','No está en una tabla fija, pero tiene etiquetas o marcadores que permiten organizarla fácilmente.','Mensajes que envían los sensores automáticos mediante internet (archivos de texto livianos tipo JSON), correos con formularios técnicos.'],
+      ['<strong class="fg-rose">No Estructurada</strong>','Información libre y continua sin formato de tabla predefinido.','Videos de las cámaras de seguridad para detectar si los operarios usan chaleco reflectivo, fotos térmicas de motores, planos escaneados en PDF.'],
+    ]
+  )}
+
+  ${buildSectionHeading('cpu','4. ¿Qué son las TIC y las Tecnologías de Operación en una Planta?','Dos mundos computacionales que deben conversar sin fallar','rose')}
+
+  <p>Tradicionalmente se habla de las <strong>TIC</strong> (Tecnologías de la Información y la Comunicación) como las computadoras, redes, bases de datos y software que administran empresas, oficinas y finanzas.</p>
+
+  <p>Sin embargo, en la ingeniería industrial existe una rama gemela indispensable: las <strong>Tecnologías de Operación (TO)</strong>, que son los equipos electrónicos y computacionales que controlan directamente las máquinas físicas de la fábrica.</p>
+
+  <div class="diagram-tic-to">
+    <div class="tic"><strong>OFICINA / GERENCIA (TIC)</strong><br/><span style="font-size:0.75rem;opacity:0.8">Sistemas administrativos, costos, compras y ventas.</span></div>
+    <div class="arrow">↕ Redes industriales y bases de datos</div>
+    <div class="to"><strong>PLANTA / TALLER (TO)</strong><br/><span style="font-size:0.75rem;opacity:0.8">Sensores, brazos robóticos, botones de emergencia y motores.</span></div>
+  </div>
+
+  <ul>
+    <li><strong>Sensores y Actuadores:</strong> Los "ojos" y "manos" de la planta. El sensor detecta si una caja pasó; el actuador (un pistón) empuja la caja hacia el camión.</li>
+    <li><strong>Controladores Lógicos Programables (PLC):</strong> Pequeñas computadoras industriales muy resistentes al polvo y al calor que deciden qué motor encender o apagar en fracciones de segundo.</li>
+    <li><strong>Sistemas de Parada de Emergencia:</strong> Dispositivos dedicados exclusivamente a detener las máquinas si una persona cruza una barrera láser o presiona un botón de seguridad tipo hongo.</li>
+    <li><strong>Software de Eficiencia y Productividad:</strong> Programas donde el ingeniero revisa el indicador <strong>OEE</strong> (<em>Efectividad Global de los Equipos</em>), el cual mide qué porcentaje del tiempo la máquina estuvo produciendo piezas buenas sin detenerse.</li>
+  </ul>
+
+  ${buildSectionHeading('calc','Validación de Integridad','Código Python para procesar datos de máquinas y calcular productividad','amber')}
+
+  <p>En el primer semestre de ingeniería aprenderás a programar en Python. Los ingenieros no usan código solo para crear páginas web, sino para <strong>procesar los datos de las máquinas y calcular la productividad</strong>.</p>
+
+  <p>A continuación, observa este script sencillo. Lee el reporte de una jornada de trabajo y calcula de forma automática el indicador básico de <strong>Disponibilidad</strong> (cuánto tiempo trabajó la máquina frente al tiempo que debía trabajar):</p>
+
+  ${buildCodeBlock('python', `"""Módulo introductorio para cálculo de disponibilidad de una máquina en planta."""
+
+def calcular_disponibilidad(
+    tiempo_programado_min: float, tiempo_paradas_min: float
+) -> float:
+    """Calcula el porcentaje de disponibilidad de una máquina.
+
+    Maneja validaciones de datos para evitar errores lógicos.
+    """
+    if tiempo_programado_min <= 0:
+        raise ValueError("El tiempo programado de turno debe ser mayor a cero.")
+
+    if tiempo_paradas_min < 0:
+        raise ValueError("El tiempo de parada no puede ser negativo.")
+
+    if tiempo_paradas_min > tiempo_programado_min:
+        raise ValueError(
+            "Las paradas no pueden ser mayores que el turno programado."
+        )
+
+    tiempo_operativo = tiempo_programado_min - tiempo_paradas_min
+    disponibilidad = (tiempo_operativo / tiempo_programado_min) * 100.0
+    return round(disponibilidad, 2)
+
+
+# --- Ejemplo de aplicación en planta ---
+# Turno de 8 horas = 480 minutos
+minutos_turno = 480.0
+# La máquina se detuvo 40 minutos por ajuste de cuchillas
+minutos_detenida = 40.0
+
+try:
+    resultado = calcular_disponibilidad(minutos_turno, minutos_detenida)
+    print(f"[*] Turno planificado: {minutos_turno} minutos")
+    print(f"[*] Tiempo perdido por paradas: {minutos_detenida} minutos")
+    print(f"[*] Disponibilidad de la máquina: {resultado}%")
+except ValueError as error:
+    print(f"[ERROR]: Datos inconsistentes: {error}")`, 'Python — cálculo de disponibilidad')}
+
+  ${buildCallout('success','Salida esperada del script', `<code>[*] Turno planificado: 480.0 minutos<br/>[*] Tiempo perdido por paradas: 40.0 minutos<br/>[*] Disponibilidad de la máquina: 91.67%</code>`)}
+
+  ${buildSectionHeading('target','Actividad Práctica: Caso de Estudio en Taller Mecánico','Aplicación inmediata de los conceptos','violet')}
+
+  <div class="callout callout-info">
+    ${icon('info')}
+    <div class="callout-body">
+      <div class="callout-title">Situación Real:</div>
+      <p>Trabajas como practicante de ingeniería en una planta embotelladora. Durante tu turno de 8 horas (<code>480 minutos</code>), la máquina llenadora registró los siguientes eventos:</p>
+      <ul>
+        <li>Trabajó sin problemas durante la mayor parte del día.</li>
+        <li>Se detuvo <code>30 minutos</code> porque se trabó una botella en la faja transportadora.</li>
+        <li>Se detuvo <code>15 minutos</code> porque un operario presionó la parada de emergencia al ver un derrame de líquido en el piso (condición de riesgo).</li>
+      </ul>
+    </div>
+  </div>
+
+  <h4>Tu tarea:</h4>
+  <ol>
+    <li><strong>Diferenciar datos de información:</strong> Escribe tres datos aislados que se generaron durante ese turno y transfórmalos en una oración con información útil para el jefe de seguridad industrial.</li>
+    <li><strong>Cálculo manual de disponibilidad:</strong>
+      <ul>
+        <li>Suma el tiempo total de paradas: <code>30 + 15 = 45 minutos</code>.</li>
+        <li>Calcula el tiempo real de trabajo: <code>480 − 45 = 435 minutos</code>.</li>
+        <li>Encuentra el porcentaje de disponibilidad dividiendo el tiempo real entre el tiempo total programado y multiplicando por 100:</li>
+      </ul>
+      ${buildFormula('Disponibilidad = (435 / 480) × 100 = ?')}
+    </li>
+    <li><strong>Clasificación de formatos:</strong> Identifica si el manual del fabricante en PDF es información estructurada o no estructurada, y por qué.</li>
+  </ol>
+
+  ${buildAccordion('Retroalimentación', `
+    <div><strong>Datos vs. Información:</strong> El número 15 o la palabra "Derrame" son solo datos aislados. La información estructurada es: <em>"A las 14:15 hubo una detención de 15 minutos en la línea 1 por derrame de jarabe en el pasillo norte, activando el protocolo de seguridad para evitar caídas"</em>.</div>
+    <div style="margin-top:8px"><strong>Interpretación de la Disponibilidad:</strong> El cálculo arroja una disponibilidad de <code>90.62%</code>. Como futuro ingeniero, tu misión no termina en sacar el porcentaje; tu verdadero valor agregado está en preguntarte: <em>¿Cómo evitamos los 30 minutos de botellas atascadas con mejores sensores para subir ese porcentaje al 98% sin descuidar jamás la seguridad de los trabajadores?</em></div>
+    <div style="margin-top:8px"><strong>Formatos de Información:</strong> Un manual en PDF con texto corrido y gráficos es <strong>no estructurado</strong>, porque una computadora no puede leerlo en columnas automáticas a menos que usemos herramientas especiales de procesamiento de texto.</div>
+  `, '(clic para desplegar)')}
+
+  ${buildSectionHeading('network','Matriz Analítica: Configuración Óptima de iDevice en eXeLearning','Recomendación didáctica para el aula virtual','teal')}
+
+  <p>Para que este tema sea incorporado en un aula virtual interactiva de primer semestre, se recomienda configurar la herramienta de autor eXeLearning bajo los siguientes parámetros didácticos:</p>
+
+  ${buildTable(
+    ['Parámetro / Módulo','Configuración Recomendada','Propósito Pedagógico (1er Semestre)'],
+    [
+      ['<strong>Tipo de iDevice</strong>','<em>Texto de Lectura</em> + <em>Pregunta de Selección Múltiple</em>','Presenta la teoría en lenguaje accesible y evalúa inmediatamente la diferencia entre dato, información y conocimiento.'],
+      ['<strong>Ajustes Generales</strong>','Exportación web en HTML5 con diseño responsivo (INTEF o EducaMadrid)','Permite a los estudiantes revisar el contenido tanto en sus teléfonos inteligentes como en computadoras de laboratorio.'],
+      ['<strong>Trazabilidad SCORM</strong>','Estándar SCORM 1.2 con reporte de calificación al aula virtual (Moodle)','Registra de forma automática si el alumno completó la lectura y si aprobó la actividad de cálculo básico con nota mínima de <code>7/10</code>.'],
+      ['<strong>Gamificación y Bloqueo</strong>','iDevice de <em>Contenido Bloqueado</em> con retroalimentación inmediata','El caso práctico del taller se desbloquea una vez que el estudiante ingresa el porcentaje correcto de disponibilidad (<code>90.62</code>).'],
+      ['<strong>Claridad Visual</strong>','Cajas de notas (Consejo o Aviso de Seguridad)','Resalta las diferencias entre incidentes de seguridad y fallas mecánicas de forma visualmente atractiva.'],
+    ]
+  )}
+
+  ${buildSectionHeading('book','Referencias Bibliográficas',null,'amber')}
+
+  <ul>
+    <li>Chase, R. B., Jacobs, F. R., &amp; Aquilano, N. J. (2018). <em>Administración de operaciones: Producción y cadena de suministros</em> (15.ª ed.). McGraw-Hill.</li>
+    <li>Groover, M. P. (2019). <em>Fundamentos de manufactura moderna: Materiales, procesos y sistemas</em> (3.ª ed.). McGraw-Hill.</li>
+    <li>Laudon, K. C., &amp; Laudon, J. P. (2020). <em>Sistemas de información gerencial</em> (16.ª ed.). Pearson Educación.</li>
+    <li>Nakajima, S. (1988). <em>Introduction to TPM: Total Productive Maintenance</em>. Productivity Press.</li>
+  </ul>
+  `;
+};
+
+/* ============================================================
+   TAB 2: Caso "Bebidas del Valle"
+   ============================================================ */
+TAB_CONTENTS['caso-bebidas'] = function() {
+  return `
+  ${buildHero('CASO DE ESTUDIO', 'Crisis Operativa en la Línea de Embotellado "Bebidas del Valle"',
+    [{label:'Nivel',value:'1er Semestre'},{label:'Materia',value:'TICs Aplicadas a la Ingeniería'},
+     {label:'Modalidad',value:'Equipos de 4 estudiantes'},{label:'Tiempo',value:'90 minutos'}])}
+
+  ${buildSectionHeading('building','1. Contexto de la Empresa y Planteamiento del Problema','Una jornada que terminó en incidente peligroso y caída de productividad','rose')}
+
+  <p>La planta "Bebidas del Valle" opera una línea automatizada de envasado de gaseosas en formato familiar (3 litros). La meta de producción por turno de 8 horas (<code>480 minutos</code>) es de <code>12 000 botellas</code>.</p>
+
+  <p>Durante el turno matutino del lunes pasado, la línea experimentó múltiples anomalías que culminaron en un incidente peligroso y una caída severa de la productividad. El gerente de planta convocó con urgencia al equipo de ingeniería industrial y al prevencionista de riesgos para analizar lo sucedido a partir de los registros de campo.</p>
+
+  ${buildCallout('danger','Registro Cronológico del Turno — Bitácora de Campo', buildTimeline([
+    {time:'08:00',title:'Inicio del turno',description:'Los operarios cargan el lote de tapas y jarabe concentrado.',tone:'success'},
+    {time:'09:30',title:'Lectura intermitente anómala',description:'En la pantalla del motor principal de la banda transportadora aparece una lectura intermitente: VAL: 92. El operario no reporta nada porque "la máquina sigue andando".',tone:'warning'},
+    {time:'10:15',title:'Parada súbita por atasco térmico',description:'La máquina envasadora se detiene súbitamente. El tablero principal emite una alarma sonora y muestra el código binario ERR-01001011. El técnico de mantenimiento tarda 25 minutos en buscar el manual físico para descubrir que el código significa "atasco por deformación térmica en el cabezal de llenado".',tone:'warning'},
+    {time:'11:40',title:'Alerta de desalineación ignorada',description:'Un sensor fotoeléctrico emite una señal de advertencia: las botellas entran con una ligera desalineación hacia la encajonadora automática. Nadie atiende la alerta.',tone:'warning'},
+    {time:'12:20',title:'Accidente con esquirlas de vidrio',description:'Ocurre un accidente: una botella de vidrio se estrella contra la compuerta metálica de la encajonadora, arrojando esquirlas. Un operario resbala con el líquido en el piso mientras intentaba esquivar los vidrios. Afortunadamente contaba con botas antideslizantes y gafas, pero la línea entra en Parada de Emergencia total por protocolo de seguridad durante 50 minutos para limpieza profunda, retiro de vidrios y revisión de barandas.',tone:'danger'},
+    {time:'14:00',title:'Reinicio a menor velocidad',description:'Se retoma el ritmo de trabajo a menor velocidad para calibrar guías mecánicas (15 minutos de micro-paradas acumuladas).',tone:'warning'},
+    {time:'16:00',title:'Fin del turno — Pérdida severa',description:'Fin del turno. El contador digital marca un total de 8 500 botellas producidas, de las cuales 425 unidades fueron rechazadas por defectos de llenado o sellado deficiente.',tone:'danger'},
+  ]).replace('<div class="timeline"', '$&'))}
+
+  ${buildSectionHeading('database','2. Información Técnica Recolectada por el Sistema','Tres archivos en formatos distintos para el análisis','teal')}
+
+  <p>Al finalizar la jornada, el departamento de sistemas y mantenimiento extrae los siguientes tres archivos para el análisis del equipo de ingeniería:</p>
+
+  <h4>${icon('database')} Archivo A: Fragmento del Reporte en Hoja de Cálculo (Base de Datos Operativa)</h4>
+  ${buildTable(
+    ['ID_Evento','Hora_Inicio','Duración (min)','Equipo Afectado','Causa Reportada','Tipo de Parada'],
+    [
+      ['<code>EVT-101</code>','<code>10:15</code>','25','Cabezal de Llenado','Atasco mecánico por dilatación','No Planificada'],
+      ['<code>EVT-102</code>','<code>12:20</code>','50','Encajonadora Norte','Rotura de botella y derrame (E-Stop)','Seguridad / Emergencia'],
+      ['<code>EVT-103</code>','<code>14:00</code>','15','Guías de Transporte','Micro-ajustes de alineación','Mantenimiento Menor'],
+    ]
+  )}
+
+  <h4>${icon('fileText')} Archivo B: Registro en Formato JSON del Sensor Térmico del Motor (Banda 1)</h4>
+  ${buildCodeBlock('json', `{
+  "sensor_id": "TEMP-MTR-01",
+  "ubicacion": "Banda_Transportadora_Entrada",
+  "lecturas": [
+    {"timestamp": "09:30:00", "valor_crudo": 92, "unidad": "Celsius", "alerta": true},
+    {"timestamp": "09:30:30", "valor_crudo": 95, "unidad": "Celsius", "alerta": true},
+    {"timestamp": "09:31:00", "valor_crudo": 98, "unidad": "Celsius", "critico": true}
+  ],
+  "limite_seguro_maximo": 75
+}`)}
+
+  <h4>${icon('fileText')} Archivo C: Fragmento del Manual Escaneado del Fabricante (PDF)</h4>
+  <blockquote>"Para evitar desajustes catastróficos en el cabezal de llenado, la temperatura de operación jamás debe sobrepasar los 75 °C. En caso de superarse los 90 °C, el sistema de lubricación interna pierde viscosidad, provocando fricción y deformación milimétrica que detiene el rotor principal."</blockquote>
+
+  ${buildSectionHeading('target','3. Guía de Trabajo Práctico para los Estudiantes','Cada equipo asume el rol de la Mesa de Control de Productividad y Seguridad Industrial','violet')}
+
+  ${buildPhaseCard('Fase 1','Análisis de la Información y Gestión del Conocimiento','database','violet', `
+    <ol>
+      <li><strong>Diferenciación conceptual:</strong>
+        <ul>
+          <li>Identifiquen el <strong>dato crudo</strong> que apareció a las 09:30.</li>
+          <li>Redacten la <strong>información completa</strong> que debió recibir el supervisor en su pantalla en ese mismo instante.</li>
+          <li>Expliquen cuál era el <strong>conocimiento técnico</strong> necesario para haber evitado la falla de las 10:15.</li>
+        </ul>
+      </li>
+      <li><strong>Propiedades de la información:</strong> ¿Qué propiedad falló a las 10:15 cuando el técnico tardó 25 minutos en descifrar el código ERR-01001011? (Elijan entre: <em>Exactitud, Oportunidad, Claridad o Completitud</em>) y justifiquen cómo impactó en el proceso.</li>
+      <li><strong>Clasificación por formato:</strong> Clasifiquen los Archivos <strong>A</strong>, <strong>B</strong> y <strong>C</strong> en: <em>Estructurado</em>, <em>Semiestructurado</em> o <em>No estructurado</em>, explicando la razón en una tabla comparativa.</li>
+    </ol>
+  `)}
+
+  ${buildPhaseCard('Fase 2','Cuantificación de Pérdidas y Cálculo de Disponibilidad','calc','amber', `
+    <p>El indicador de <strong>Disponibilidad (A)</strong> mide la proporción del tiempo planificado en que la máquina estuvo efectivamente operando:</p>
+    ${buildFormula('A = (Tiempo Operativo Real / Tiempo Total Programado) × 100')}
+    <p>Con base en la información del turno:</p>
+    <ol>
+      <li>Calculen el Tiempo Total de Paradas (minutos).</li>
+      <li>Calculen el Tiempo Operativo Real (minutos).</li>
+      <li>Determinen el porcentaje de Disponibilidad de la línea.</li>
+      <li>¿Cuántas botellas se dejaron de producir durante los 50 minutos que la línea estuvo detenida por el derrame de vidrio? (Consideren la velocidad nominal de diseño de <code>12 000 botellas</code> en <code>480 minutos</code>).</li>
+    </ol>
+  `)}
+
+  ${buildPhaseCard('Fase 3','Propuesta de Tecnologías de la Información y Operación (TIC / TO)','cpu','teal', `
+    <p>Diseñen una propuesta con dos mejoras tecnológicas puntuales para evitar que este escenario se repita:</p>
+    <ul>
+      <li><strong>Mejora en TO (Piso de planta):</strong> ¿Qué tipo de sensor, alarma visual o barrera de seguridad automática instalarían en la encajonadora?</li>
+      <li><strong>Mejora en TIC (Gestión y Comunicación):</strong> ¿Cómo harían para que la alerta del motor llegue de inmediato al teléfono o tableta del jefe de mantenimiento en lugar de quedarse oculta en un código numérico?</li>
+    </ul>
+  `)}
+
+  ${buildSectionHeading('shield','4. Solucionario y Criterios de Evaluación para el Docente','Guía para la plenaria de cierre y evaluación grupal','emerald')}
+
+  <h4>Criterios de Resolución Esperados</h4>
+
+  ${buildPhaseCard('Fase 1','Solución — Análisis de la Información','database','violet', `
+    <ul>
+      <li><strong>Dato:</strong> <code>92</code>.</li>
+      <li><strong>Información:</strong> <em>"Motor 1 de banda transportadora alcanzó 92 °C a las 09:30 (excede el límite seguro de 75 °C)"</em>.</li>
+      <li><strong>Conocimiento:</strong> Saber que el exceso térmico degrada el lubricante, deforma el cabezal por dilatación térmica y detiene la línea si no se refrigera de inmediato.</li>
+      <li><strong>Propiedad fallida:</strong> <strong>Claridad / Comprensibilidad</strong> y <strong>Oportunidad</strong>. Un código crudo en binario o hexadecimal sin traducción inmediata al lenguaje humano genera retrasos cognitivos inadmisibles en la toma de decisiones.</li>
+      <li><strong>Taxonomía:</strong> Archivo A → Estructurado; Archivo B → Semiestructurado; Archivo C → No estructurado.</li>
+    </ul>
+  `)}
+
+  ${buildPhaseCard('Fase 2','Solución — Cálculos de Disponibilidad y Pérdidas','calc','amber', `
+    <ul>
+      <li><strong>Tiempo total programado</strong> = <code>480 min</code>.</li>
+      <li><strong>Tiempo total de paradas</strong> = <code>25 (atasco) + 50 (derrame) + 15 (ajustes) = 90 min</code>.</li>
+      <li><strong>Tiempo operativo real</strong> = <code>480 − 90 = 390 min</code>.</li>
+      <li><strong>Disponibilidad</strong> = <code>(390 / 480) × 100 = 81.25%</code>.</li>
+      <li><strong>Pérdida por derrame:</strong> Velocidad nominal = <code>12 000 / 480 = 25 botellas/min</code>. En <code>50 minutos</code> se dejaron de fabricar: <code>50 × 25 = 1 250 botellas</code>.</li>
+    </ul>
+  `)}
+
+  ${buildPhaseCard('Fase 3','Solución — Propuestas Tecnológicas','cpu','teal', `
+    <ul>
+      <li><strong>TO:</strong> Sensores de visión artificial o fotocélulas de centrado con interbloqueo (<em>interlock</em> de seguridad) que paren la máquina antes del impacto si la botella entra chueca.</li>
+      <li><strong>TIC:</strong> Conexión del PLC a una red industrial con envío de notificaciones automáticas (SMS, Telegram o dashboard en tiempo real) con descripción textual del fallo y procedimiento estándar de acción.</li>
+    </ul>
+  `)}
+
+  ${buildCallout('info','Resumen del aprendizaje', `Este caso demuestra cómo una sola propiedad fallida de la información (Claridad + Oportunidad) puede encadenar una secuencia de eventos que deriva en accidente laboral, parada de emergencia y pérdida de más de 1 250 botellas. La inversión en integración TIC/TO no es un lujo: es la línea entre operación segura y crisis operativa.`)}
+  `;
+};
+
+/* ============================================================
+   TAB 3: Taller Exprés
+   ============================================================ */
+TAB_CONTENTS['taller'] = function() {
+  return `
+  ${buildHero('TALLER EXPRES', 'Taller Exprés de Aula (20 Minutos)',
+    [{label:'Asignatura',value:'TICs Aplicadas a la Ingeniería'},{label:'Tema',value:'Datos, Información y Productividad'},
+     {label:'Modalidad',value:'Parejas (1 hoja por pareja)'},{label:'Materiales',value:'Hoja + calculadora'}])}
+
+  <p>Para optimizar al máximo una ventana de <strong>20 minutos</strong> en el aula con estudiantes de primer semestre, el método pedagógico más eficiente es el <strong>Aprendizaje Basado en Problemas Exprés (Fórmula 3-2-1) mediante trabajo en parejas (Peer Instruction / Think-Pair-Share)</strong>.</p>
+
+  <p>Este formato minimiza los tiempos muertos de organización, obliga a cada estudiante a procesar la información de inmediato y genera una evidencia física tangible en una sola hoja por pareja.</p>
+
+  ${buildSectionHeading('clock','Estructura Cronológica del Taller (Gestión del Tiempo)','Cada minuto cuenta: 4 etapas para 20 minutos de aula','amber')}
+
+  ${buildTable(
+    ['Minuto','Etapa','Acción del Estudiante','Rol del Docente'],
+    [
+      ['<code>00:00 – 03:00</code>','<strong>Lectura y Contexto</strong>','Lectura individual del microcaso proyectado en pizarra o entregado impreso.','Proyecta el enunciado y activa el cronómetro visible en pantalla.'],
+      ['<code>03:00 – 15:00</code>','<strong>Resolución por Parejas</strong>','Discusión rápida y llenado de la hoja de respuestas (Fases 1, 2 y 3).','Circula por el aula respondiendo dudas operativas puntuales (no dar respuestas).'],
+      ['<code>15:00 – 18:00</code>','<strong>Cotejo Cruzado</strong>','Intercambio de hojas con la pareja de al lado para coevaluación con el solucionario.','Proyecta las respuestas correctas y los criterios de puntuación.'],
+      ['<code>18:00 – 20:00</code>','<strong>Cierre y Entrega</strong>','Registro de la nota obtenida y entrega inmediata de la hoja al docente.','Concluye con el principio clave: <em>"Un dato sin contexto paraliza una fábrica"</em>.'],
+    ]
+  )}
+
+  ${buildCallout('info','Materiales necesarios', `Hoja de papel y calculadora o teléfono móvil. Cada pareja entrega <strong>una sola hoja</strong> con nombres, fecha y respuestas de los tres bloques.`)}
+
+  ${buildDivider('Hoja de Trabajo del Estudiante')}
+
+  ${buildKvGrid([
+    {label:'Nombres', value:'___________________________________'},
+    {label:'Fecha', value:'15/09/2026'},
+    {label:'Tiempo límite', value:'12 MINUTOS DE TRABAJO ACTIVO'},
+  ])}
+
+  ${buildSectionHeading('penLine','Microcaso: La Envasadora de Jugos "Cítricos del Sur"',null,'violet')}
+
+  <div class="callout callout-info">
+    ${icon('info')}
+    <div class="callout-body">
+      <p>Un turno de trabajo dura <code>480 minutos</code>. La máquina envasadora principal tiene programado producir <code>9 600 botellas</code> por turno. A las 10:00 AM ocurrió lo siguiente:</p>
+      <ol>
+        <li>En el panel apareció la cifra suelta: 105.</li>
+        <li>A las 10:20 AM sonó una alarma con el mensaje: <em>ERR-TEMP: Motor banda superó 105 °C a las 10:00 (Límite: 80 °C)</em>.</li>
+        <li>La máquina se recalentó y se detuvo durante <code>40 minutos</code> por falla mecánica.</li>
+        <li>Más tarde, se detuvo <code>20 minutos</code> adicionales porque un operario activó la parada de emergencia al derramarse líquido resbaladizo en la zona de paso peatonal.</li>
+      </ol>
+    </div>
+  </div>
+
+  ${buildPhaseCard('Bloque 1','Diferenciación Conceptual y Propiedades','listChecks','violet', `
+    <p class="font-semibold">Valor: 4 puntos / 3 minutos</p>
+    <ol>
+      <li><p>En el caso anterior, identifique:</p>
+        <div style="margin-top:8px">
+          <div><strong>El Dato crudo:</strong> <span style="border-bottom:1px dashed #999;display:inline-block;min-width:12rem">&nbsp;</span> <em>(1 pto)</em></div>
+          <div><strong>La Información contextualizada:</strong> <span style="border-bottom:1px dashed #999;display:inline-block;min-width:12rem">&nbsp;</span> <em>(1 pto)</em></div>
+        </div>
+      </li>
+      <li><p>El operario vio la cifra 105 a las 10:00 AM, pero la alarma de texto recién apareció a las 10:20 AM cuando el motor ya humeaba. ¿Qué propiedad crítica de la información falló? (Subraye una sola):</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;font-size:0.875rem">
+          <div>a) Veracidad</div><div>b) Oportunidad (Tiempo de respuesta)</div>
+          <div>c) Tipografía</div><div>d) Cantidad de memoria</div>
+        </div>
+        <div style="font-size:0.75rem;color:var(--fg-muted);margin-top:4px"><em>(2 ptos)</em></div>
+      </li>
+    </ol>
+  `)}
+
+  ${buildPhaseCard('Bloque 2','Clasificación de Datos en Ingeniería','listChecks','teal', `
+    <p class="font-semibold">Valor: 3 puntos / 2 minutos</p>
+    <p>Relacione con una línea cada elemento del caso con su tipo de información:</p>
+    ${buildTable(
+      ['Elemento de la Fábrica','Relación','Tipo de Información'],
+      [
+        ['<strong>A.</strong> La tabla de Excel con el registro de horas de parada y causas.','•','<strong>1.</strong> No Estructurada'],
+        ['<strong>B.</strong> El video de la cámara que grabó al operario resbalando con el jugo.','•','<strong>2.</strong> Semiestructurada (JSON/XML)'],
+        ['<strong>C.</strong> El archivo de telemetría de texto enviado por el sensor del motor.','•','<strong>3.</strong> Estructurada'],
+      ]
+    )}
+    <p style="font-size:0.75rem;color:var(--fg-muted);font-style:italic">Puntaje: 1 punto por cada acierto.</p>
+  `)}
+
+  ${buildPhaseCard('Bloque 3','Cálculo Operativo de Ingeniería','listChecks','amber', `
+    <p class="font-semibold">Valor: 3 puntos / 4 minutos</p>
+    <p>Fórmula de Disponibilidad:</p>
+    ${buildFormula('Disponibilidad (A) = (Tiempo Operativo Real / Tiempo Total Programado) × 100')}
+    <ol>
+      <li><strong>Tiempo total de paradas:</strong> <code>40 min + 20 min =</code> <span style="border-bottom:1px dashed #999;display:inline-block;min-width:6rem">&nbsp;</span> <code>minutos</code>.</li>
+      <li><strong>Tiempo operativo real:</strong> <code>480 min − Total paradas =</code> <span style="border-bottom:1px dashed #999;display:inline-block;min-width:6rem">&nbsp;</span> <code>minutos</code>.</li>
+      <li><strong>Calcule el porcentaje de Disponibilidad (A):</strong> <em>(Muestre la operación)</em>
+        ${buildFormula('Disponibilidad = (____ / 480) × 100 = ________ %')}
+      </li>
+      <li><strong>Impacto en producción:</strong> Si la máquina produce normalmente a un ritmo de <code>20 botellas por minuto</code>, ¿cuántas botellas se perdieron durante los <code>20 minutos</code> de la parada por el derrame en el piso?
+        <div style="margin-top:8px">Cálculo: <code>20 min × 20 botellas/min =</code> <span style="border-bottom:1px dashed #999;display:inline-block;min-width:6rem">&nbsp;</span> <code>botellas no fabricadas</code>.</div>
+      </li>
+    </ol>
+  `)}
+
+  ${buildDivider('Hoja Guía de Coevaluación (Minuto 15)')}
+
+  ${buildSectionHeading('check','Clave de Respuestas para Proyectar','Las parejas intercambian hojas y revisan el taller de sus compañeros','emerald')}
+
+  ${buildPhaseCard('Bloque 1','Solución — 4 puntos','check','violet', `
+    <ul>
+      <li><strong>Dato:</strong> <code>105</code> <em>(1 pto)</em>.</li>
+      <li><strong>Información:</strong> <em>ERR-TEMP: Motor banda superó 105 °C a las 10:00 (Límite: 80 °C)</em> o descripción equivalente con unidad, variable y hora <em>(1 pto)</em>.</li>
+      <li><strong>Propiedad fallida:</strong> <strong>b) Oportunidad</strong> <em>(2 ptos)</em>.</li>
+    </ul>
+  `)}
+
+  ${buildPhaseCard('Bloque 2','Solución — 3 puntos','check','teal', `
+    <ul>
+      <li><strong>A → 3</strong> (Estructurada)</li>
+      <li><strong>B → 1</strong> (No Estructurada)</li>
+      <li><strong>C → 2</strong> (Semiestructurada)</li>
+    </ul>
+  `)}
+
+  ${buildPhaseCard('Bloque 3','Solución — 3 puntos','check','amber', `
+    <ul>
+      <li><strong>Paradas</strong> = <code>60 minutos</code> <em>(0.5 ptos)</em>.</li>
+      <li><strong>Tiempo operativo</strong> = <code>480 − 60 = 420 minutos</code> <em>(0.5 ptos)</em>.</li>
+      <li><strong>Disponibilidad</strong> = <code>(420 / 480) × 100 = 87.50%</code> <em>(1 pto)</em>.</li>
+      <li><strong>Pérdida de producción</strong> = <code>20 × 20 = 400 botellas</code> <em>(1 pto)</em>.</li>
+    </ul>
+  `)}
+
+  ${buildCallout('success','Calificación final', `Sumatoria directa sobre <strong>10 puntos</strong>. La nota se registra en la misma hoja y se entrega al docente al cierre del minuto 20.`)}
+
+  ${buildStatGrid([
+    {value:'90s',label:'Lectura individual',tone:'violet'},
+    {value:'12 min',label:'Trabajo activo',tone:'amber'},
+    {value:'3 min',label:'Coevaluación',tone:'teal'},
+    {value:'2 min',label:'Cierre y entrega',tone:'emerald'},
+  ])}
+  `;
+};
+
+/* ============================================================
+   TAB 4: Tarea Asincrónica (30 preguntas)
+   ============================================================ */
+TAB_CONTENTS['tarea'] = function() {
+  return `
+  ${buildHero('TAREA ASINCRÓNICA', 'Fundamentos de la Información, TIC y Productividad en Ingeniería Industrial',
+    [{label:'Asignatura',value:'TICs Aplicadas a la Ingeniería'},{label:'Unidad',value:'I — Datos, Información, TO y OEE'},
+     {label:'Nivel',value:'1er Semestre'},{label:'Total',value:'30 preguntas'}])}
+
+  ${buildKvGrid([
+    {label:'Modalidad', value:'Trabajo autónomo asincrónico individual'},
+    {label:'Bloques', value:'6 bloques temáticos'},
+    {label:'Total reactivos', value:'30 preguntas'},
+    {label:'Evaluación', value:'Formativa + sumativa'},
+  ])}
+
+  ${buildSectionHeading('listChecks','Bloque 1: Opción Múltiple con Justificación Técnica','Preguntas 1 a 6 — Selecciona la opción correcta y justifica por qué descartas las demás','amber')}
+
+  ${buildCallout('info','Instrucciones', `Selecciona la opción correcta y justifica brevemente (en 1 o 2 líneas) por qué descartas las demás opciones.`)}
+
+  ${buildQuiz(1, 'En el tablero de control de un silo de cemento se lee el número 4.8. Este elemento clasifica estrictamente como:',
+    [{label:'A',text:'Información, porque tiene un punto decimal que indica calibración.'},
+     {label:'B',text:'Conocimiento, porque el operador ya sabe qué hacer con ese valor.'},
+     {label:'C',text:'Dato, porque carece de unidad de medida, variable asignada y estampa temporal.'},
+     {label:'D',text:'Señal analógica pura, porque no ha ingresado a ningún microprocesador.'}],
+    'C', `<p><strong>C.</strong> Es un dato suelto sin contexto, unidad ni variable asignada. Las demás opciones requieren justo lo que falta: la información necesita unidad/variable; el conocimiento requiere interpretación; y la señal es el fenómeno físico previo a la captura digital.</p>`)}
+
+  ${buildQuiz(2, 'Si un sensor de gases emite una alerta de fuga de monóxido de carbono con 45 minutos de retraso, la propiedad fundamental de la información que ha sido vulnerada es:',
+    [{label:'A',text:'Veracidad.'},{label:'B',text:'Oportunidad.'},{label:'C',text:'Precisión.'},{label:'D',text:'Relevancia.'}],
+    'B', `<p><strong>B.</strong> La información tardía pierde utilidad crítica frente al riesgo de intoxicación. La veracidad se refiere a que el dato sea verdadero; la precisión al grado de exactitud; la relevancia a si el dato corresponde al problema. Aquí el problema es el retraso temporal.</p>`)}
+
+  ${buildQuiz(3, '¿Cuál de los siguientes ejemplos corresponde a información no estructurada dentro de un entorno industrial?',
+    [{label:'A',text:'Una tabla de Excel con el número de partes rechazadas por turno.'},
+     {label:'B',text:'Un archivo de video del sistema de circuito cerrado (CCTV) donde se observa la postura de carga de un operario.'},
+     {label:'C',text:'Una base de datos relacional en Access con el historial de mantenimiento preventivo.'},
+     {label:'D',text:'Un mensaje en formato JSON con la temperatura y vibración de un torno CNC.'}],
+    'B', `<p><strong>B.</strong> El video es un flujo continuo binario sin estructura de filas/columnas predefinida. Las opciones A y C son estructuradas (tablas / base relacional); la D es semiestructurada (JSON).</p>`)}
+
+  ${buildQuiz(4, 'La diferencia esencial entre las Tecnologías de la Información (TI) y las Tecnologías de Operación (TO) es que:',
+    [{label:'A',text:'Las TI controlan motores e interruptores físicos, mientras las TO solo administran correos electrónicos.'},
+     {label:'B',text:'Las TI gestionan datos del negocio y transacciones; las TO supervisan y controlan directamente la maquinaria y los procesos físicos.'},
+     {label:'C',text:'Las TI son de uso exclusivo para ingenieros mecánicos y las TO para administradores de empresas.'},
+     {label:'D',text:'Las TO no emplean ningún tipo de computadora ni microprocesador.'}],
+    'B', `<p><strong>B.</strong> TI administra datos administrativos/corporativos; TO actúa sobre el entorno físico y electromecánico. Las demás invierten los roles o son técnicamente falsas (las TO sí usan PLCs y microprocesadores).</p>`)}
+
+  ${buildQuiz(5, 'En una caldera industrial, el límite superior seguro de presión es <code>6.0 bar</code>. A las 14:00 el manómetro registra <code>8.2 bar</code> y el operario apaga el quemador principal. La acción del operario de apagar el quemador representa:',
+    [{label:'A',text:'Un dato crudo.'},{label:'B',text:'Una señal eléctrica.'},
+     {label:'C',text:'Aplicación de conocimiento.'},{label:'D',text:'Información no estructurada.'}],
+    'C', `<p><strong>C.</strong> El operario aplica criterio, experiencia y normas operativas para reaccionar ante la información. Un dato crudo sería el 8.2 aislado; la señal es el fenómeno físico previo; la información no estructurada es un formato, no una acción.</p>`)}
+
+  ${buildQuiz(6, '¿Qué dispositivo de planta actúa como el puente computacional directo de TO para leer señales de sensores y ejecutar comandos hacia actuadores en milisegundos?',
+    [{label:'A',text:'Servidor ERP central.'},{label:'B',text:'Controlador Lógico Programable (PLC).'},
+     {label:'C',text:'Hoja de cálculo de Google Sheets.'},{label:'D',text:'Módem de telefonía corporativa.'}],
+    'B', `<p><strong>B.</strong> El PLC es el estándar industrial para adquisición de señales y control en tiempo real. El ERP es TI corporativa; una hoja de cálculo no opera en tiempo real; el módem solo transporta datos.</p>`)}
+
+  ${buildSectionHeading('listChecks','Bloque 2: Verdadero o Falso con Argumentación Crítica','Preguntas 7 a 12 — Escribe (V) o (F) y, si es falsa, redacta la corrección obligatoria','teal')}
+
+  ${buildCallout('info','Instrucciones', `Escribe (V) si la afirmación es verdadera o (F) si es falsa. En caso de ser falsa, debes redactar la corrección obligatoria para validar tu puntaje.`)}
+
+  ${buildTrueFalse(7, 'Un conjunto masivo de datos no estructurados se convierte automáticamente en información útil sin necesidad de procesamiento previo.', 'F',
+    `<p><strong>Falso.</strong> Requiere extracción, limpieza, estructuración y análisis algorítmico o humano. El dato sin procesar no se transforma por sí solo en información útil.</p>`)}
+
+  ${buildTrueFalse(8, 'La "Disponibilidad" dentro del cálculo del OEE disminuye tanto por una avería mecánica como por una parada para atender un derrame que pone en riesgo a un operario.', 'V',
+    `<p><strong>Verdadero.</strong> Toda detención no planificada consume tiempo operativo programado y reduce la disponibilidad, sin importar si la causa es mecánica o de seguridad.</p>`)}
+
+  ${buildTrueFalse(9, 'Una señal analógica industrial típica, como un lazo de corriente de <code>4 − 20 mA</code>, presenta infinitos valores posibles dentro de su rango continuo antes de ser digitalizada por un conversor analógico-digital (ADC).', 'V',
+    `<p><strong>Verdadero.</strong> Las variables físicas continuas presentan infinitos estados dentro de un rango analógico antes de ser cuantizadas por el ADC.</p>`)}
+
+  ${buildTrueFalse(10, 'Los archivos en formato JSON se consideran información estructurada pura porque contienen datos numéricos sin texto libre.', 'F',
+    `<p><strong>Falso.</strong> JSON es semiestructurado; utiliza pares clave-valor y objetos anidados sin esquema tabular estricto. Puede contener texto libre y estructuras heterogéneas.</p>`)}
+
+  ${buildTrueFalse(11, 'La fatiga de alarmas ocurre cuando el sistema satura al operador con información redundante o irrelevante, violando el principio de relevancia y claridad de la información.', 'V',
+    `<p><strong>Verdadero.</strong> La saturación de alarmas degrada la atención y el tiempo de respuesta del operador, justo porque viola relevancia y claridad.</p>`)}
+
+  ${buildTrueFalse(12, 'En un sistema de parada de emergencia (E-Stop), es admisible una latencia de transmisión de 5 a 10 segundos, siempre y cuando el dato sea verídico.', 'F',
+    `<p><strong>Falso.</strong> Los sistemas de seguridad exigen tiempos de respuesta en milisegundos para evitar atrapamientos o amputaciones. Una latencia de 5–10 segundos puede ser fatal.</p>`)}
+
+  ${buildSectionHeading('link','Bloque 3: Relación de Columnas y Términos Técnicos','Preguntas 13 a 17 — Asocia cada concepto de la Columna A con su definición en la Columna B','violet')}
+
+  ${buildTable(
+    ['Pregunta / Concepto (Col. A)','Relación','Definición / Caso Práctico (Col. B)'],
+    [
+      ['<strong>13. Actuador industrial</strong>','[ &nbsp;&nbsp;&nbsp; ]','<strong>A.</strong> Proporción del tiempo planificado en que la maquinaria estuvo operando efectivamente.'],
+      ['<strong>14. Información Semiestructurada</strong>','[ &nbsp;&nbsp;&nbsp; ]','<strong>B.</strong> Fenómeno físico observable antes de ser medido o cuantificado.'],
+      ['<strong>15. Señal</strong>','[ &nbsp;&nbsp;&nbsp; ]','<strong>C.</strong> Elemento físico electromecánico o neumático que ejecuta una acción física sobre el proceso (ej. válvula, pistón).'],
+      ['<strong>16. Disponibilidad (A)</strong>','[ &nbsp;&nbsp;&nbsp; ]','<strong>D.</strong> Lectura que indica el estado del sistema sin distorsiones ni alteraciones no autorizadas.'],
+      ['<strong>17. Veracidad de la información</strong>','[ &nbsp;&nbsp;&nbsp; ]','<strong>E.</strong> Archivos con etiquetas de apertura y cierre (como XML o JSON) que organizan los datos sin tener forma de tabla fija.'],
+    ]
+  )}
+
+  ${buildAccordion('Solucionario — Bloque 3', `
+    <div style="font-family:var(--font-mono);font-size:0.875rem">
+      <div><strong>13 → C</strong></div>
+      <div><strong>14 → E</strong></div>
+      <div><strong>15 → B</strong></div>
+      <div><strong>16 → A</strong></div>
+      <div><strong>17 → D</strong></div>
+    </div>
+  `, '(clic para desplegar)')}
+
+  ${buildSectionHeading('penLine','Bloque 4: Completación de Enunciados Técnicos','Preguntas 18 a 22 — Rellena los espacios en blanco con el término técnico exacto','rose')}
+
+  <div style="margin:1rem 0;display:flex;flex-direction:column;gap:1rem">
+    <div style="border:1px solid var(--border);padding:0.75rem;border-radius:0.5rem;font-size:0.875rem"><strong>18.</strong> El paso de una magnitud física continua a un código binario discreto procesable por una computadora industrial se realiza mediante un convertidor denominado <span style="border-bottom:2px dashed #999;display:inline-block;min-width:12rem">&nbsp;</span>.</div>
+    <div style="border:1px solid var(--border);padding:0.75rem;border-radius:0.5rem;font-size:0.875rem"><strong>19.</strong> Cuando a un dato cuantitativo le agregamos su <span style="border-bottom:2px dashed #999;display:inline-block;min-width:8rem">&nbsp;</span>, su <span style="border-bottom:2px dashed #999;display:inline-block;min-width:8rem">&nbsp;</span> y su estampa temporal, lo transformamos formalmente en información.</div>
+    <div style="border:1px solid var(--border);padding:0.75rem;border-radius:0.5rem;font-size:0.875rem"><strong>20.</strong> Dentro de la pirámide de automatización, el nivel de <span style="border-bottom:2px dashed #999;display:inline-block;min-width:10rem">&nbsp;</span> engloba los sensores y actuadores físicos en el piso de fábrica.</div>
+    <div style="border:1px solid var(--border);padding:0.75rem;border-radius:0.5rem;font-size:0.875rem"><strong>21.</strong> La métrica industrial que evalúa de forma multiplicativa la Disponibilidad, el Rendimiento y la Calidad de una línea de producción se denomina <span style="border-bottom:2px dashed #999;display:inline-block;min-width:10rem">&nbsp;</span> (escribe las siglas o el nombre completo).</div>
+    <div style="border:1px solid var(--border);padding:0.75rem;border-radius:0.5rem;font-size:0.875rem"><strong>22.</strong> Un botón pulsador tipo "hongo" de color rojo con enclavamiento mecánico utilizado para detener inmediatamente una celda de manufactura ante un peligro inminente se denomina botón de <span style="border-bottom:2px dashed #999;display:inline-block;min-width:10rem">&nbsp;</span>.</div>
+  </div>
+
+  ${buildAccordion('Solucionario — Bloque 4', `
+    <ul>
+      <li><strong>18:</strong> Convertidor Analógico-Digital (o ADC).</li>
+      <li><strong>19:</strong> Unidad de medida / Contexto operacional (o significado funcional).</li>
+      <li><strong>20:</strong> Campo / Proceso (Nivel 0 de la norma ISA-95).</li>
+      <li><strong>21:</strong> OEE (Overall Equipment Effectiveness / Efectividad Global de los Equipos).</li>
+      <li><strong>22:</strong> Parada de Emergencia (E-Stop).</li>
+    </ul>
+  `, '(clic para desplegar)')}
+
+  ${buildSectionHeading('calc','Bloque 5: Resolución Numérica y Análisis de Casos de Planta','Preguntas 23 a 27 — Resuelve mostrando explícitamente el procedimiento paso a paso','amber')}
+
+  ${buildOpenQuestion(23, `<p>Una celda de soldadura robotizada tiene un turno programado de 8 horas (<code>480 minutos</code>). A lo largo del día se registraron las siguientes detenciones:</p>
+    <ul>
+      <li><code>20 minutos</code> por ajuste de electrodos y calibración de antorcha.</li>
+      <li><code>35 minutos</code> por falta de piezas metálicas en la bandeja de entrada.</li>
+      <li><code>15 minutos</code> porque un sensor de cortina láser detuvo la celda al detectar a un operario cruzando una línea de peligro.</li>
+    </ul>
+    <div style="margin-top:8px">
+      <div><strong>Paso a:</strong> Calcula el tiempo total de paradas (min).</div>
+      <div><strong>Paso b:</strong> Calcula el tiempo operativo neto de la celda (min).</div>
+      <div><strong>Paso c:</strong> Determina el porcentaje de Disponibilidad (A) de la máquina.</div>
+    </div>`,
+    `<ul>
+      <li><strong>Paradas</strong> = <code>20 + 35 + 15 = 70 min</code>.</li>
+      <li><strong>Tiempo Operativo</strong> = <code>480 − 70 = 410 min</code>.</li>
+      <li><strong>Disponibilidad (A)</strong> = <code>(410 / 480) × 100 = 85.42%</code>.</li>
+    </ul>`)}
+
+  ${buildOpenQuestion(24, `<p>La empresa "Tubos Andinos" cuenta con una línea de extrusión plástica continua con un turno planificado de 12 horas (<code>720 minutos</code>). La línea reportó una disponibilidad del <code>85%</code> al final del día.</p>
+    <ul>
+      <li>¿Cuántos minutos en total estuvo detenida la máquina durante el turno?</li>
+      <li>Si la meta de velocidad nominal de producción es de <code>3 metros de tubo por minuto</code>, ¿cuántos metros se dejaron de producir únicamente debido al tiempo que la máquina estuvo detenida?</li>
+    </ul>`,
+    `<ul>
+      <li><strong>Tiempo operativo</strong> = <code>720 × 0.85 = 612 min</code>.</li>
+      <li><strong>Tiempo detenido</strong> = <code>720 − 612 = 108 min</code>.</li>
+      <li><strong>Producción perdida</strong> = <code>108 min × 3 m/min = 324 metros de tubo</code>.</li>
+    </ul>`)}
+
+  ${buildOpenQuestion(25, `<p>Un ingeniero analiza dos reportes de temperatura del mismo rodamiento en un molino de bolas:</p>
+    <ul>
+      <li><em>Reporte 1:</em> Una gráfica impresa que contiene manchas de grasa donde no se lee la escala del eje vertical de temperatura.</li>
+      <li><em>Reporte 2:</em> Un registro digital con fecha, hora, minutos, temperatura en °C y firma digital del sensor.</li>
+    </ul>
+    <div>Indica qué propiedad de la información carece el <em>Reporte 1</em> y por qué el <em>Reporte 2</em> previene una decisión errónea de mantenimiento.</div>`,
+    `<p>Carece de <strong>veracidad, completitud y legibilidad/precisión</strong>. El Reporte 2 proporciona trazabilidad exacta de temperatura para comparar contra los límites del manual antes del desgaste del cojinete.</p>`)}
+
+  ${buildOpenQuestion(26, `<p>En una planta embotelladora se producen <code>5 000 botellas</code> en un turno. Al pasar por la estación de inspección por visión artificial (cámara industrial), se detecta que <code>180 botellas</code> tienen la tapa torcida y <code>70 botellas</code> tienen un nivel de líquido por debajo del estándar legal.</p>
+    <div>Calcula el porcentaje del factor de <strong>Calidad (Q)</strong> de la línea, utilizando la fórmula:</div>
+    ${buildFormula('Q = (Unidades Conformes Producidas / Total de Unidades Producidas) × 100')}`,
+    `<p><strong>Total conformes</strong> = <code>5 000 − (180 + 70) = 4 750 unidades</code>.</p>
+     ${buildFormula('Calidad (Q) = (4 750 / 5 000) × 100 = 95.00%')}`)}
+
+  ${buildOpenQuestion(27, `<p>Una prensa hidráulica registró una detención no planificada de <code>50 minutos</code>. El supervisor anotó únicamente: <em>"Paró porque sonó feo"</em>. Reescribe este registro transformándolo en <strong>información de ingeniería estructurada</strong> que contenga al menos cuatro campos o parámetros técnicos indispensables para el departamento de mantenimiento y seguridad.</p>`,
+    `<p>El estudiante debe estructurar una tabla o registro formal con: <strong>Código de Equipo</strong> (ej. PREN-04), <strong>Estampa Temporal</strong> (Hora de inicio/fin), <strong>Código de Falla</strong> (Ruido anormal en bomba hidráulica) y <strong>Nivel de Riesgo</strong> (Seguridad / Parada Controlada).</p>`)}
+
+  ${buildSectionHeading('book','Bloque 6: Preguntas de Desarrollo y Criterio Ingenieril','Preguntas 28 a 30 — Desarrolla tu respuesta en un párrafo de 5 a 8 líneas con vocabulario técnico','emerald')}
+
+  ${buildOpenQuestion(28, `<p>Explica por qué para un ingeniero industrial o un responsable de seguridad laboral <strong>un exceso descontrolado de datos puede ser tan perjudicial como la falta absoluta de datos</strong>. En tu respuesta, cita un ejemplo real en un panel de control o sala de supervisión de una refinería o fábrica textil.</p>`,
+    `<p><em>Criterio de evaluación</em> enfocado en sobrecarga cognitiva, retraso en toma de decisiones críticas y filtrado deficiente de datos primarios frente a secundarios. Se espera que el estudiante cite un caso real (ej. refinería con panel de alarmas saturado durante falla de bomba, o fábrica textil con cientos de sensores de humedad en paralelo) y explique cómo la saturación impide identificar la señal crítica.</p>`)}
+
+  ${buildOpenQuestion(29, `<p>Imagina que eres contratado como supervisor de una planta de alimentos balanceados. La gerencia no quiere invertir en redes de comunicación industrial (TIC/TO) y prefiere que los operarios anoten las fallas y temperaturas en un cuaderno de papel cada 3 horas. Redacta un argumento técnico-económico de tres puntos sustentando por qué la captura manual de datos perjudica la productividad (OEE) y aumenta el riesgo de accidentes laborales.</p>`,
+    `<p><em>Criterio de evaluación</em> enfocado en desfase temporal (falta de oportunidad), error humano en la transcripción y falta de trazabilidad en auditorías de seguridad. Tres argumentos esperados: (1) la oportunidad se pierde — una falla térmica detectada 3 horas después ya causó daño; (2) el error humano en la transcripción degrada la veracidad; (3) sin trazabilidad digital no hay auditoría de seguridad efectiva.</p>`)}
+
+  ${buildOpenQuestion(30, `<p>Diseña conceptualmente un flujo de control de seguridad para un taladro de banco industrial utilizando los conceptos de <strong>Sensor → Transmisión de Información → Actuador → Decisión</strong>:</p>
+    <ul>
+      <li>Describe qué sensor instalarías para evitar que la máquina arranque si el trabajador no ha bajado la guarda de protección acrílica.</li>
+      <li>Explica cómo viaja esa señal para autorizar o bloquear el motor principal de la máquina.</li>
+    </ul>`,
+    `<p><em>Criterio de evaluación</em> enfocado en: Sensor de fin de carrera magnético/óptico en la guarda → señal discreta a relé de seguridad/PLC → corte o activación de energía al contactor del motor del taladro. Se espera que el estudiante describa el lazo completo y mencione conceptos de seguridad funcional (relé de seguridad, enclavamiento, fallo seguro).</p>`)}
+
+  ${buildDivider('Rúbrica de Corrección')}
+
+  ${buildSectionHeading('check','Solucionario y Rúbrica de Corrección','Uso exclusivo del docente','rose')}
+
+  ${buildPhaseCard('Bloque 1','Opción Múltiple — Respuestas','check','amber', `
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-family:var(--font-mono);font-size:0.875rem">
+      <div><strong>1: C</strong> — Dato suelto sin contexto</div>
+      <div><strong>2: B</strong> — Oportunidad vulnerada</div>
+      <div><strong>3: B</strong> — Video no estructurado</div>
+      <div><strong>4: B</strong> — TI vs TO</div>
+      <div><strong>5: C</strong> — Aplicación de conocimiento</div>
+      <div><strong>6: B</strong> — PLC es el puente de TO</div>
+    </div>
+  `)}
+
+  ${buildPhaseCard('Bloque 2','Verdadero o Falso — Respuestas','check','teal', `
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-family:var(--font-mono);font-size:0.875rem">
+      <div><strong>7: F</strong> — Requiere procesamiento</div>
+      <div><strong>8: V</strong> — Toda parada reduce A</div>
+      <div><strong>9: V</strong> — Infinitos valores analógicos</div>
+      <div><strong>10: F</strong> — JSON es semiestructurado</div>
+      <div><strong>11: V</strong> — Saturación degrada atención</div>
+      <div><strong>12: F</strong> — Latencia en milisegundos</div>
+    </div>
+  `)}
+
+  ${buildPhaseCard('Bloques 3-6','Resumen — Respuestas clave','check','violet', `
+    <p><strong>Bloque 3 (Relación):</strong> 13→C · 14→E · 15→B · 16→A · 17→D</p>
+    <p><strong>Bloque 4 (Completación):</strong> ADC · Unidad de medida/Contexto · Campo/Proceso · OEE · Parada de Emergencia (E-Stop)</p>
+    <p><strong>Bloque 5 (Numéricos):</strong> P23 = 85.42% · P24 = 108 min · 324 m · P26 = 95.00%</p>
+    <p><strong>Bloque 6 (Desarrollo):</strong> Criterio enfocado en sobrecarga cognitiva, desfase temporal, error humano y trazabilidad de seguridad.</p>
+  `)}
+  `;
+};
+
+/* ============================================================
+   TAB 5: Caso "Laminados del Pacífico"
+   ============================================================ */
+TAB_CONTENTS['caso-laminados'] = function() {
+  return `
+  ${buildHero('CASO NIVEL MEDIO', 'Diagnóstico de Cuellos de Botella, Falla TI/TO y Gestión de Seguridad en "Laminados Industriales del Pacífico S.A."',
+    [{label:'Unidad',value:'Adquisición de Datos y OEE'},{label:'Nivel',value:'1er Semestre (Dificultad Media)'},
+     {label:'Modalidad',value:'Asincrónica individual o parejas'},{label:'Entregable',value:'Informe técnico máx. 4 páginas'}])}
+
+  ${buildCallout('info','Requiere', `Integración de balances de tiempo, cálculo multivariable de OEE y análisis crítico de flujos de información. El entregable debe incluir memoria de cálculo detallada.`)}
+
+  ${buildSectionHeading('building','1. Descripción del Entorno Operativo','Arquitectura técnica de 3 niveles y capacidad nominal','teal')}
+
+  <p>"Laminados Industriales del Pacífico S.A." fabrica planchas de acero galvanizado para carrocerías y techados industriales. La línea continua trabaja en turnos estándar de 8 horas (<code>480 minutos</code>) y cuenta con una capacidad nominal de diseño de <code>2.5 metros de lámina por minuto</code>.</p>
+
+  <p>La arquitectura técnica de la celda de laminado y corte integra tres niveles:</p>
+
+  <ol>
+    <li><strong>Nivel de Campo (TO):</strong> Sensores inductivos de posición, pirómetro infrarrojo de temperatura de rodillos, celda de carga para espesor y cortina óptica de seguridad con interbloqueo (<em>interlock</em>) en la guillotina hidráulica.</li>
+    <li><strong>Nivel de Control:</strong> Controlador Lógico Programable (PLC) que recibe señales discretas y analógicas (<code>4 − 20 mA</code>).</li>
+    <li><strong>Nivel de Gestión (TI):</strong> Servidor central que aloja la base de datos SQL del sistema MES (<em>Manufacturing Execution System</em>) para calcular el OEE en tiempo real y emitir alertas a los terminales de supervisión.</li>
+  </ol>
+
+  ${buildSectionHeading('warning','2. Los Hechos: Crónica de la Jornada del 10 de Septiembre','Cinco eventos críticos que desnudaron una falla sistémica TI/TO','rose')}
+
+  <p>Durante el turno analizado, se programaron <code>480 minutos</code> brutos de operación, de los cuales la empresa tenía estipulados <code>30 minutos</code> <strong>de parada planificada</strong> para limpieza y cambio de turno de operarios.</p>
+
+  <p>A lo largo de los <code>450 minutos</code> de tiempo de carga disponible ocurrieron los siguientes eventos:</p>
+
+  ${buildTimeline([
+    {time:'08:00',title:'Inicio de Producción',description:'Arranque del turno con la línea en condiciones nominales.',tone:'success'},
+    {time:'09:15',title:'Evento A — Parada no planificada (35 min)',description:'Desalineación de bobina provoca detención para reajuste mecánico.',tone:'warning'},
+    {time:'11:00',title:'Evento B — Pérdida de paquetes en enlace Ethernet PLC ↔ MES',description:'La lectura en pantalla del operador muestra un valor crudo congelado: "VAL_302". El enlace entre PLC y servidor MES se degrada por colisión de paquetes.',tone:'warning'},
+    {time:'12:10',title:'Evento C — Lectura crítica de 115 °C en cojinetes',description:'El sensor térmico registra 115 °C en los cojinetes (límite crítico: 85 °C). La alarma sonora no suena en cabina debido al fallo de enlace TI/TO.',tone:'danger'},
+    {time:'12:40',title:'Evento D — Dilatación mecánica + intento de intervención manual',description:'La guillotina se traba por dilatación severa. Un operario intenta desatorarla con la mano; la cortina óptica detiene la máquina por parada de emergencia (E-Stop). La detención dura 45 minutos.',tone:'danger'},
+    {time:'14:30',title:'Evento E — Ajustes de calibración de espesor (10 min)',description:'Micro-paradas acumuladas por recalibración tras el incidente térmico.',tone:'warning'},
+    {time:'16:00',title:'Fin del turno',description:'Cierre del turno para análisis posterior.',tone:'success'},
+  ])}
+
+  ${buildCallout('warning','Datos de Producción Recolectados al Cierre del Turno', `
+    <div>
+      <div><strong>Producción bruta total:</strong> Se procesaron <code>810 metros</code> de lámina de acero durante el tiempo que la máquina estuvo en marcha.</div>
+      <div style="margin-top:8px"><strong>Inspección de Calidad:</strong></div>
+      <ul>
+        <li><code>54 metros</code> salieron con espesor irregular por la dilatación térmica no advertida.</li>
+        <li><code>16 metros</code> se arrugaron y cortaron defectuosamente durante el bloqueo de la guillotina.</li>
+        <li>El resto del producto cumplió estrictamente con las especificaciones técnicas.</li>
+      </ul>
+    </div>
+  `)}
+
+  ${buildSectionHeading('fileText','3. Registros Técnicos de Soporte','Tres evidencias digitales para el informe de diagnóstico','violet')}
+
+  <h4>${icon('fileText')} Archivo 1: Trazas de Red Industrial (Fragmento del Syslog del Switch)</h4>
+  ${buildCodeBlock('plaintext', `[11:00:12] WARN  - Port 4 (Link to MES Server): Packet collision rate > 18%. Latency spikes to 8500ms.
+[11:00:45] ERROR - OPC-UA Connection Timeout: Node "Bearing_Temp_Bearing_02" state: STALE_VALUE.
+[12:10:02] ALERT - Local PLC memory register 40012: Value 115.3 C. MES DB sync failed: Connection Closed.`)}
+
+  <h4>${icon('fileText')} Archivo 2: Estructura del Mensaje de Parada Registrado en el PLC (JSON)</h4>
+  ${buildCodeBlock('json', `{
+  "registro_id": "EVT-20260910-04",
+  "modulo": "Célula_Guillotina_Hidraulica",
+  "dispositivo_disparo": "Barrera_Infrarroja_Seguridad_PLe",
+  "tiempo_inicio": "12:40:00",
+  "tiempo_reinicio": "13:25:00",
+  "duracion_minutos": 45,
+  "clasificacion_seguridad": "Condición Subestándar / Intento de Intervención con Energía Residual"
+}`)}
+
+  ${buildSectionHeading('target','4. Guía de Trabajo del Caso (Entregable del Estudiante)','El informe técnico debe estructurarse en cuatro secciones obligatorias','amber')}
+
+  ${buildPhaseCard('Sección A','Análisis de la Información y Arquitectura TI / TO (Ponderación: 25%)','network','violet', `
+    <ol>
+      <li><p><strong>Ruptura de la cadena de valor del dato:</strong></p>
+        <ul>
+          <li>Señala en qué momento el <strong>dato</strong> de temperatura dejó de convertirse en <strong>información útil</strong> para el operador de cabina y explica qué componente físico o lógico de la red fue el responsable.</li>
+          <li>Analiza qué propiedades de la información (entre <em>Veracidad, Oportunidad, Completitud y Claridad</em>) se perdieron entre las 11:00 y las 12:40, y cómo esta degradación condujo casi a un accidente laboral grave (amputación).</li>
+        </ul>
+      </li>
+      <li><p><strong>Clasificación taxonómica:</strong> Clasifica en una tabla los siguientes tres elementos según su estructura (<em>Estructurada, Semiestructurada, No Estructurada</em>):</p>
+        <ul>
+          <li>La tabla consolidada de órdenes de producción en la base de datos SQL del MES.</li>
+          <li>El log de eventos de red del switch industrial mostrado en el Archivo 1.</li>
+          <li>La fotografía térmica de los cojinetes capturada por el técnico con una cámara infrarroja portátil después de la falla.</li>
+        </ul>
+      </li>
+    </ol>
+  `)}
+
+  ${buildPhaseCard('Sección B','Memoria de Cálculo Cuantitativo — OEE Completo (Ponderación: 35%)','calc','amber', `
+    <p>Desarrolla paso a paso todas las operaciones aritméticas mostrando las unidades de medida:</p>
+    <ol>
+      <li><strong>Tiempo Planificado de Producción (T_plan):</strong>
+        ${buildFormula('T_plan = Tiempo de Turno Bruto − Paradas Planificadas')}
+      </li>
+      <li><strong>Factor de Disponibilidad (A):</strong>
+        <ul>
+          <li>Suma el total de minutos de paradas no programadas (A + D + E).</li>
+          <li>Calcula el Tiempo Operativo Real (T_operativo).</li>
+        </ul>
+        ${buildFormula('A = (T_operativo / T_plan) × 100')}
+      </li>
+      <li><strong>Factor de Rendimiento (P):</strong>
+        <ul>
+          <li>Calcula la <strong>Producción Teórica Máxima</strong> que debió alcanzarse durante el T_operativo trabajando a la velocidad de diseño (<code>2.5 m/min</code>).</li>
+        </ul>
+        ${buildFormula('P = (Producción Bruta Real / Producción Teórica Máxima) × 100')}
+      </li>
+      <li><strong>Factor de Calidad (Q):</strong>
+        <ul><li>Determina los metros de lámina conforme (piezas buenas).</li></ul>
+        ${buildFormula('Q = (Metros Conformes / Producción Bruta Real) × 100')}
+      </li>
+      <li><strong>Efectividad Global de los Equipos (OEE):</strong>
+        ${buildFormula('OEE = A × P × Q')}
+        <p>Calcula el valor global expresado en porcentaje con dos decimales.</p>
+      </li>
+    </ol>
+  `)}
+
+  ${buildPhaseCard('Sección C','Identificación del Cuello de Botella y Seguridad Ocupacional (Ponderación: 25%)','shield','rose', `
+    <ol>
+      <li><p><strong>Cuello de botella de la línea:</strong> Analiza si la pérdida principal del turno se originó en la velocidad de la máquina, en los rechazos de calidad o en la inactividad por detenciones. Justifica matemáticamente cuál de los tres factores afectó con mayor peso al OEE.</p></li>
+      <li><p><strong>Análisis de Causa Raíz (Seguridad e Información):</strong></p>
+        <ul>
+          <li>¿Por qué la activación de la cortina óptica a las 12:40 es un ejemplo de un sistema TO de seguridad que funciona correctamente a nivel local, pero que evidencia una falla crítica en el sistema TIC superior?</li>
+          <li>Redacta una norma o procedimiento de seguridad de parada (LOTO — <em>Lockout/Tagout</em>) que el operario violó al meter la mano en la guillotina.</li>
+        </ul>
+      </li>
+    </ol>
+  `)}
+
+  ${buildPhaseCard('Sección D','Propuesta de Solución Tecnológica (Ponderación: 15%)','cpu','teal', `
+    <p>Plantea dos soluciones de ingeniería industrial aplicables a bajo costo:</p>
+    <ol>
+      <li><strong>Rediseño de la red de datos:</strong> ¿Cómo evitarías que el tráfico pesado de la red administrativa o fallas en el servidor MES bloqueen las alarmas críticas locales del PLC? (Menciona al menos un concepto de segmentación o prioridad de red, como VLAN o redundancia local).</li>
+      <li><strong>Tablero de visualización de planta:</strong> Especifica qué datos mínimos debe mostrar una pantalla local (HMI) directamente cableada al PLC frente a la guillotina para evitar que el operario trabaje a ciegas.</li>
+    </ol>
+  `)}
+
+  ${buildSectionHeading('book','5. Rúbrica Analítica de Evaluación (Para el Docente)',null,'emerald')}
+
+  ${buildTable(
+    ['Criterio','Excelente (10-9)','Bueno (8-7)','Regular (6-5)','Insuficiente (4-0)'],
+    [
+      ['<strong>Análisis de Información y TI/TO (25%)</strong>','Identifica con precisión la desconexión entre variable física, PLC y MES. Clasifica correctamente todos los formatos justificando su estructura.','Identifica la falla de comunicación pero confunde propiedades de la información (ej. oportunidad con veracidad).','Clasifica los datos de manera superficial sin explicar el impacto en la seguridad del operador.','No distingue entre datos crudos e información; omite la clasificación de formatos.'],
+      ['<strong>Cálculo de OEE y Rigor Matemático (35%)</strong>','Deduce correctamente T_plan, disponibilidad, rendimiento, calidad y OEE con ecuaciones claras y unidades correctas.','Errores menores de redondeo en el cálculo del rendimiento o calidad; metodología global correcta.','Confunde tiempo de turno total con tiempo planificado; omite calcular la producción teórica.','Cálculos incoherentes o solo presenta resultados numéricos sin procedimiento.'],
+      ['<strong>Diagnóstico de Seguridad y Operación (25%)</strong>','Identifica el factor crítico que frena la línea y vincula sólidamente la falla de información con la condición subestándar de riesgo.','Identifica la causa de la parada pero no fundamenta el análisis de causa raíz en seguridad ocupacional.','Identifica el cuello de botella pero no analiza el comportamiento del sistema de seguridad física (cortina).','Análisis descriptivo sin rigor técnico ni comprensión de normas de seguridad.'],
+      ['<strong>Propuesta de Ingeniería (15%)</strong>','Propone arquitectura de red segregada y alarmas locales prioritarias viables e industriales.','Propuestas lógicas pero genéricas (ej. "comprar mejores computadoras").','Propuestas incompletas que no resuelven la causa raíz del retardo en alarmas.','No presenta propuestas o son inviables para una planta industrial.'],
+    ]
+  )}
+
+  ${buildSectionHeading('shield','6. Solucionario Guía para el Docente',null,'emerald')}
+
+  <h4>Balance de Tiempos</h4>
+  ${buildStatGrid([
+    {value:'450 min',label:'T_plan (480 − 30)',tone:'teal'},
+    {value:'90 min',label:'Paradas no planificadas (A+D+E)',tone:'rose'},
+    {value:'360 min',label:'T_operativo (450 − 90)',tone:'amber'},
+    {value:'80.00%',label:'Disponibilidad (A)',tone:'violet'},
+  ])}
+
+  ${buildPhaseCard('Cálculo','Memoria numérica completa','calc','amber', `
+    <ul>
+      <li><strong>T_turno</strong> = <code>480 min</code>. Parada planificada = <code>30 min</code>.</li>
+      <li><strong>T_plan</strong> = <code>480 − 30 = 450 min</code>.</li>
+      <li><strong>Paradas no planificadas</strong> = <code>35 (desalineación) + 45 (E-Stop guillotina) + 10 (calibración) = 90 min</code>.</li>
+      <li><strong>T_operativo</strong> = <code>450 − 90 = 360 min</code>.</li>
+    </ul>
+    ${buildDivider()}
+    <h5 style="font-weight:600;margin-top:12px">Cálculo de Factores</h5>
+    <ul>
+      <li><strong>Disponibilidad (A):</strong> <code>360 / 450 = 80.00%</code>.</li>
+      <li><strong>Producción Teórica:</strong> <code>360 min × 2.5 m/min = 900 metros</code>.</li>
+      <li><strong>Rendimiento (P):</strong> <code>810 / 900 = 90.00%</code>.</li>
+      <li><strong>Metros Conformes:</strong> <code>810 − (54 + 16) = 740 metros</code>.</li>
+      <li><strong>Calidad (Q):</strong> <code>740 / 810 = 91.36%</code>.</li>
+    </ul>
+    ${buildDivider()}
+    <h5 style="font-weight:600;margin-top:12px">OEE Total</h5>
+    ${buildFormula('OEE = 0.8000 × 0.9000 × 0.9136 = 0.6578 → 65.78%')}
+  `)}
+
+  ${buildCallout('success','Conclusión clave del caso', `La mayor pérdida de efectividad provino de la <strong>Disponibilidad (80.00%)</strong>, provocada directamente por la falla de oportunidad en la transmisión del dato de temperatura, lo que transformó una advertencia preventiva en una detención de emergencia prolongada con alto riesgo de atrapamiento.`)}
+
+  ${buildStatGrid([
+    {value:'80.00%',label:'Disponibilidad (A)',tone:'rose'},
+    {value:'90.00%',label:'Rendimiento (P)',tone:'amber'},
+    {value:'91.36%',label:'Calidad (Q)',tone:'teal'},
+    {value:'65.78%',label:'OEE Total',tone:'violet'},
+  ])}
+  `;
+};
+
+/* ============================================================
+   TABS DEFINITION
+   ============================================================ */
+const TABS = [
+  { id: 'unidad', label: 'Unidad I', shortLabel: 'Unidad I', icon: 'book' },
+  { id: 'caso-bebidas', label: 'Caso "Bebidas del Valle"', shortLabel: 'Bebidas del Valle', icon: 'building' },
+  { id: 'taller', label: 'Taller Exprés', shortLabel: 'Taller Exprés', icon: 'clock' },
+  { id: 'tarea', label: 'Tarea Asincrónica', shortLabel: 'Tarea Asinc.', icon: 'clipboard' },
+  { id: 'caso-laminados', label: 'Caso "Laminados del Pacífico"', shortLabel: 'Laminados', icon: 'factory' },
+];
+
+const PROGRESS_KEY = 'tic-course-progress-v1';
+const THEME_KEY = 'tic-course-theme-v1';
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let activeTab = 'unidad';
+let searchOpen = false;
+let searchQuery = '';
+let searchMatches = [];
+let searchCurrentIdx = -1;
+let userScrolled = false;
+
+/* ============================================================
+   PROGRESS STORAGE
+   ============================================================ */
+function readProgress() {
+  try { return JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}'); }
+  catch { return {}; }
+}
+function writeProgress(state) {
+  try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(state)); } catch {}
+}
+
+/* ============================================================
+   TABS RENDERING
+   ============================================================ */
+function renderTabs() {
+  const tabsList = document.getElementById('tabs-list');
+  const mobileNavList = document.getElementById('mobile-nav-list');
+  const stored = readProgress();
+
+  tabsList.innerHTML = TABS.map(t => {
+    const isActive = t.id === activeTab;
+    const pct = isActive ? (currentTabProgress()) : (stored[t.id] || 0);
+    const badge = renderProgressBadge(pct);
+    return `<button class="tab-trigger ${isActive ? 'active' : ''}" data-tab="${t.id}">
+      ${icon(t.icon)}
+      <span>${t.label}</span>
+      ${badge}
+    </button>`;
+  }).join('');
+
+  mobileNavList.innerHTML = TABS.map(t => {
+    const isActive = t.id === activeTab;
+    const pct = isActive ? (currentTabProgress()) : (stored[t.id] || 0);
+    const badge = renderProgressBadge(pct);
+    return `<button class="mobile-nav-item ${isActive ? 'active' : ''}" data-tab="${t.id}">
+      ${icon(t.icon)}
+      <span>${t.label}</span>
+      ${badge}
+    </button>`;
+  }).join('');
+
+  // Attach listeners
+  document.querySelectorAll('.tab-trigger, .mobile-nav-item').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+}
+
+function renderProgressBadge(pct) {
+  if (pct >= 100) return `<span class="badge badge-completed">✓ Completado</span>`;
+  if (pct > 0) return `<span class="badge badge-reading">⏱ ${pct}%</span>`;
+  return `<span class="badge badge-unread">○ Sin leer</span>`;
+}
+
+function currentTabProgress() {
+  // Compute scroll progress for current tab
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const livePct = docHeight > 0 ? Math.min(100, Math.round((scrollTop / docHeight) * 100)) : 0;
+  const stored = readProgress();
+  const storedPct = stored[activeTab] || 0;
+  return Math.max(livePct, storedPct);
+}
+
+function switchTab(tabId) {
+  if (tabId === activeTab) return;
+  activeTab = tabId;
+  userScrolled = false;
+  // Update URL hash
+  history.replaceState(null, '', '#' + tabId);
+  // Re-render tabs (badges)
+  renderTabs();
+  // Render content
+  renderContent();
+  // Render TOC
+  setTimeout(renderToc, 250);
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Update progress display
+  setTimeout(updateProgressIndicator, 300);
+  // Close mobile nav
+  document.getElementById('mobile-nav').classList.remove('open');
+}
+
+function renderContent() {
+  const content = document.getElementById('content');
+  content.innerHTML = TAB_CONTENTS[activeTab]();
+  // Render the active panel as visible
+}
+
+/* ============================================================
+   TOC
+   ============================================================ */
+function renderToc() {
+  const tocList = document.getElementById('toc-list');
+  // Get all h2/h3 in the content (excluding accordion triggers and "Ver respuesta" boilerplate)
+  const headings = Array.from(document.querySelectorAll('#content h2, #content h3'))
+    .filter(h => {
+      if (h.closest('.accordion-trigger')) return false;
+      const text = h.textContent || '';
+      if (text.startsWith('Ver respuesta')) return false;
+      if (text.startsWith('Retroalimentación')) return false;
+      if (text.startsWith('Solucionario')) return false;
+      if (text.startsWith('Respuesta:')) return false;
+      if (text.startsWith('Respuesta modelo')) return false;
+      if (!text.trim()) return false;
+      return true;
+    });
+
+  // Generate unique IDs
+  const seen = {};
+  const items = headings.map(h => {
+    let slug = h.textContent.trim().toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    if (!slug) slug = 'seccion';
+    if (seen[slug]) { seen[slug]++; slug = `${slug}-${seen[slug]}`; } else seen[slug] = 1;
+    h.id = slug;
+    return { id: slug, text: h.textContent.trim(), level: parseInt(h.tagName.substring(1), 10) };
+  });
+
+  tocList.innerHTML = items.map(i => {
+    const cls = i.level === 2 ? 'h2' : 'h3';
+    const truncText = i.text.length > 60 ? i.text.substring(0, 58) + '…' : i.text;
+    return `<li class="${cls}"><a href="#${i.id}" data-toc-link="${i.id}">${truncText}</a></li>`;
+  }).join('');
+
+  // Attach smooth scroll
+  tocList.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const el = document.getElementById(a.dataset.tocLink);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top, behavior: 'smooth' });
+        history.replaceState(null, '', '#' + a.dataset.tocLink);
+      }
+    });
+  });
+}
+
+/* ============================================================
+   READING PROGRESS BAR + TAB PROGRESS
+   ============================================================ */
+function updateReadingProgress() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('reading-progress-bar').style.width = Math.min(100, Math.max(0, pct)) + '%';
+}
+
+function updateTabProgress() {
+  if (!userScrolled) return;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? Math.min(100, Math.round((scrollTop / docHeight) * 100)) : 0;
+  const stored = readProgress();
+  const storedPct = stored[activeTab] || 0;
+  const displayPct = Math.max(pct, storedPct);
+
+  // Persist if higher
+  if (pct > storedPct) {
+    if (pct >= (storedPct + 5) || pct === 100) {
+      stored[activeTab] = pct;
+      writeProgress(stored);
+    }
+  }
+
+  // Update progress indicator
+  document.getElementById('progress-indicator-fill').style.width = displayPct + '%';
+  document.getElementById('progress-indicator-text').textContent = displayPct + '%';
+
+  // Update tab badge if changed
+  const activeBadge = document.querySelector('.tab-trigger.active .badge, .mobile-nav-item.active .badge');
+  if (activeBadge) {
+    const newBadge = renderProgressBadge(displayPct);
+    // Update all badges for the active tab
+    document.querySelectorAll('.tab-trigger.active .badge, .mobile-nav-item.active .badge').forEach(b => {
+      b.outerHTML = newBadge;
+    });
+  }
+}
+
+function updateProgressIndicator() {
+  const stored = readProgress();
+  const storedPct = stored[activeTab] || 0;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const livePct = docHeight > 0 ? Math.min(100, Math.round((scrollTop / docHeight) * 100)) : 0;
+  const displayPct = Math.max(livePct, storedPct);
+  document.getElementById('progress-indicator-fill').style.width = displayPct + '%';
+  document.getElementById('progress-indicator-text').textContent = displayPct + '%';
+}
+
+function updateCourseProgress() {
+  const stored = readProgress();
+  let sum = 0, done = 0;
+  TABS.forEach(t => {
+    const p = stored[t.id] || 0;
+    sum += p;
+    if (p >= 100) done++;
+  });
+  const overall = Math.round(sum / TABS.length);
+  document.getElementById('course-progress-fill').style.width = overall + '%';
+  document.getElementById('overall-percent').textContent = overall;
+  document.getElementById('completed-count').textContent = done;
+  document.getElementById('course-complete-msg').style.display = overall >= 100 ? 'inline' : 'none';
+}
+
+/* ============================================================
+   BACK TO TOP
+   ============================================================ */
+function updateBackToTop() {
+  const btn = document.getElementById('back-to-top');
+  if (window.scrollY > 400) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+}
+
+/* ============================================================
+   THEME
+   ============================================================ */
+function applyTheme(theme) {
+  if (theme === 'system') {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+  } else {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+  // Update toggle icon
+  const current = document.documentElement.getAttribute('data-theme');
+  document.getElementById('theme-toggle').textContent = current === 'dark' ? '☀️' : '🌙';
+  // Mark active item
+  document.querySelectorAll('[data-theme-value]').forEach(it => {
+    it.classList.toggle('active', it.dataset.themeValue === theme);
+  });
+}
+
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY) || 'light';
+  applyTheme(saved);
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    const cur = localStorage.getItem(THEME_KEY);
+    if (cur === 'system') applyTheme('system');
+  });
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+function clearSearchHighlights() {
+  document.querySelectorAll('mark[data-search-match]').forEach(m => {
+    const parent = m.parentNode;
+    if (parent) {
+      parent.replaceChild(document.createTextNode(m.textContent), m);
+      parent.normalize();
+    }
+  });
+  searchMatches = [];
+  searchCurrentIdx = -1;
+  document.getElementById('search-counter').textContent = '';
+}
+
+function performSearch(q) {
+  clearSearchHighlights();
+  if (!q.trim()) return;
+
+  const panel = document.querySelector('#content');
+  if (!panel) return;
+
+  const lowerQuery = q.toLowerCase();
+  const highlighted = [];
+  const walker = document.createTreeWalker(panel, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent) return NodeFilter.FILTER_REJECT;
+      if (['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+      if (parent.closest('mark[data-search-match]')) return NodeFilter.FILTER_REJECT;
+      if (getComputedStyle(parent).display === 'none') return NodeFilter.FILTER_REJECT;
+      if (node.nodeValue && node.nodeValue.toLowerCase().includes(lowerQuery)) return NodeFilter.FILTER_ACCEPT;
+      return NodeFilter.FILTER_REJECT;
+    },
+  });
+
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  textNodes.forEach(textNode => {
+    const text = textNode.nodeValue || '';
+    const lowerText = text.toLowerCase();
+    let pos = lowerText.indexOf(lowerQuery);
+    const parent = textNode.parentElement;
+    if (!parent) return;
+
+    while (pos !== -1) {
+      const range = document.createRange();
+      range.setStart(textNode, pos);
+      range.setEnd(textNode, pos + q.length);
+      try {
+        const mark = document.createElement('mark');
+        mark.setAttribute('data-search-match', 'true');
+        mark.textContent = text.substring(pos, pos + q.length);
+        range.deleteContents();
+        range.insertNode(mark);
+        highlighted.push(mark);
+        // Continue search in subsequent text nodes
+        break;
+      } catch { break; }
+    }
+  });
+
+  searchMatches = highlighted;
+  if (highlighted.length > 0) {
+    searchCurrentIdx = 0;
+    highlighted[0].classList.add('current');
+    highlighted[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.getElementById('search-counter').textContent = `1/${highlighted.length}`;
+  } else {
+    document.getElementById('search-counter').textContent = '0/0';
+    toast('Sin resultados', `No se encontraron coincidencias para "${q}".`);
+  }
+}
+
+function navigateSearch(direction) {
+  if (searchMatches.length === 0) return;
+  searchMatches[searchCurrentIdx]?.classList.remove('current');
+  if (direction === 'next') {
+    searchCurrentIdx = (searchCurrentIdx + 1) % searchMatches.length;
+  } else {
+    searchCurrentIdx = (searchCurrentIdx - 1 + searchMatches.length) % searchMatches.length;
+  }
+  const target = searchMatches[searchCurrentIdx];
+  target.classList.add('current');
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('search-counter').textContent = `${searchCurrentIdx + 1}/${searchMatches.length}`;
+}
+
+function openSearch() {
+  searchOpen = true;
+  document.getElementById('search-bar').style.display = 'flex';
+  setTimeout(() => document.getElementById('search-input').focus(), 50);
+}
+
+function closeSearch() {
+  searchOpen = false;
+  clearSearchHighlights();
+  document.getElementById('search-input').value = '';
+  searchQuery = '';
+  document.getElementById('search-bar').style.display = 'none';
+}
+
+/* ============================================================
+   EVENT LISTENERS
+   ============================================================ */
+function attachListeners() {
+  // Scroll listener (throttled)
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        userScrolled = true;
+        updateReadingProgress();
+        updateTabProgress();
+        updateBackToTop();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    updateReadingProgress();
+    updateProgressIndicator();
+  }, { passive: true });
+
+  // Back to top
+  document.getElementById('back-to-top').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Menu toggle (mobile)
+  document.getElementById('menu-toggle').addEventListener('click', () => {
+    document.getElementById('mobile-nav').classList.toggle('open');
+  });
+
+  // Theme toggle
+  document.getElementById('theme-toggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.getElementById('theme-menu').classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dropdown')) {
+      document.getElementById('theme-menu').classList.remove('open');
+    }
+  });
+  document.querySelectorAll('[data-theme-value]').forEach(item => {
+    item.addEventListener('click', () => {
+      const theme = item.dataset.themeValue;
+      localStorage.setItem(THEME_KEY, theme);
+      applyTheme(theme);
+      document.getElementById('theme-menu').classList.remove('open');
+    });
+  });
+
+  // Search toggle
+  document.getElementById('search-toggle').addEventListener('click', () => {
+    if (searchOpen) closeSearch(); else openSearch();
+  });
+  document.getElementById('search-close').addEventListener('click', closeSearch);
+  document.getElementById('search-prev').addEventListener('click', () => navigateSearch('prev'));
+  document.getElementById('search-next').addEventListener('click', () => navigateSearch('next'));
+
+  let searchTimer;
+  document.getElementById('search-input').addEventListener('input', (e) => {
+    searchQuery = e.target.value;
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => performSearch(searchQuery), 250);
+  });
+  document.getElementById('search-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); navigateSearch(e.shiftKey ? 'prev' : 'next'); }
+    if (e.key === 'Escape') closeSearch();
+  });
+
+  // Global keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 'Escape' && searchOpen) closeSearch();
+  });
+
+  // Share button
+  document.getElementById('share-btn').addEventListener('click', async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'TICs Aplicadas a la Ingeniería', url });
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(url);
+        toast('Enlace copiado', 'URL copiada al portapapeles.');
+      }
+    } catch {}
+  });
+
+  // Print button
+  document.getElementById('print-btn').addEventListener('click', () => {
+    // Open all accordions before printing
+    document.querySelectorAll('.accordion-content').forEach(c => c.classList.add('open'));
+    document.querySelectorAll('.accordion-trigger').forEach(t => t.classList.add('open'));
+    setTimeout(() => window.print(), 100);
+  });
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init() {
+  // Read initial tab from URL hash
+  const hash = window.location.hash.replace('#', '');
+  if (hash && TABS.find(t => t.id === hash)) activeTab = hash;
+
+  initTheme();
+  renderTabs();
+  renderContent();
+  attachListeners();
+
+  // Initial updates after content renders
+  setTimeout(() => {
+    renderToc();
+    updateProgressIndicator();
+    updateCourseProgress();
+    updateReadingProgress();
+  }, 400);
+
+  // Periodic refresh of course progress
+  setInterval(updateCourseProgress, 2000);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
