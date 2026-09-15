@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Disponibilidad de Máquina y OEE — Práctica con Google Colab</title>
+<meta name="description" content="Guía paso a paso para calcular la Disponibilidad de una máquina (métrica OEE) usando Python en Google Colab. Ingeniería Industrial — 1er Semestre." />
+<style>
+/* ============ RESET + VARIABLES ============ */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+:root {
+  --amber-50: #fffbeb; --amber-100: #fef3c7; --amber-200: #fde68a; --amber-300: #fcd34d;
+  --amber-500: #f59e0b; --amber-600: #d97706; --amber-700: #b45309;
+  --teal-50: #f0fdfa; --teal-100: #ccfbf1; --teal-200: #99f6e4; --teal-500: #14b8a6; --teal-600: #0d9488; --teal-700: #0f766e;
+  --violet-50: #f5f3ff; --violet-100: #ede9fe; --violet-200: #ddd6fe; --violet-500: #8b5cf6; --violet-700: #6d28d9;
+  --rose-50: #fff1f2; --rose-100: #ffe4e6; --rose-200: #fecdd3; --rose-500: #f43f5e; --rose-700: #be123c;
+  --emerald-50: #ecfdf5; --emerald-100: #d1fae5; --emerald-200: #a7f3d0; --emerald-500: #10b981; --emerald-600: #059669; --emerald-700: #047857;
+  --sky-50: #f0f9ff; --sky-100: #e0f2fe; --sky-200: #bae6fd; --sky-500: #0ea5e9; --sky-700: #0369a1;
+  --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0; --slate-300: #cbd5e1;
+  --slate-400: #94a3b8; --slate-500: #64748b; --slate-600: #475569; --slate-700: #334155;
+  --slate-800: #1e293b; --slate-900: #0f172a; --slate-950: #020617;
+  --bg: #ffffff; --bg-soft: #f8fafc; --fg: #0f172a; --fg-soft: #475569; --fg-muted: #64748b;
+  --border: #e2e8f0; --card-bg: #ffffff;
+  --radius: 0.625rem;
+  --header-h: 64px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", Menlo, Monaco, "Courier New", monospace;
+}
+[data-theme="dark"] {
+  --bg: #020617; --bg-soft: #0f172a; --fg: #f8fafc; --fg-soft: #cbd5e1; --fg-muted: #94a3b8;
+  --border: #1e293b; --card-bg: #0f172a;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: linear-gradient(to bottom, var(--bg-soft), var(--bg));
+  color: var(--fg);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ============ HEADER ============ */
+.header {
+  position: sticky; top: 0; z-index: 40;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 95%, transparent);
+  backdrop-filter: blur(8px);
+}
+.header-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 1rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: var(--header-h); gap: 1rem;
+}
+.brand { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
+.brand-logo {
+  width: 40px; height: 40px; border-radius: 0.75rem;
+  background: linear-gradient(135deg, var(--emerald-500), var(--teal-500));
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 700; font-size: 1.1rem; flex-shrink: 0;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+.brand-text { min-width: 0; }
+.brand-title { font-size: 0.875rem; font-weight: 700; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand-subtitle { font-size: 0.6875rem; color: var(--fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header-actions { display: flex; align-items: center; gap: 0.25rem; flex-shrink: 0; }
+
+/* ============ BUTTONS ============ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
+  padding: 0.5rem 0.75rem; border-radius: 0.375rem;
+  border: 1px solid transparent; background: transparent;
+  color: var(--fg); cursor: pointer; font-size: 0.875rem; font-weight: 500;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  font-family: inherit;
+}
+.btn:hover { background: var(--slate-100); }
+[data-theme="dark"] .btn:hover { background: var(--slate-800); }
+.btn-icon { width: 36px; height: 36px; padding: 0; }
+.btn-outline { border-color: var(--border); background: var(--bg); }
+.btn-outline:hover { background: var(--slate-50); }
+[data-theme="dark"] .btn-outline:hover { background: var(--slate-800); }
+.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; height: 32px; }
+
+/* ============ READING PROGRESS ============ */
+.reading-progress {
+  position: fixed; top: var(--header-h); left: 0; right: 0;
+  height: 3px; z-index: 30; pointer-events: none;
+}
+.reading-progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(to right, var(--emerald-500), var(--teal-500), var(--sky-500));
+  transition: width 0.15s ease-out;
+}
+
+/* ============ MAIN LAYOUT ============ */
+.main {
+  flex: 1; max-width: 1100px; margin: 0 auto;
+  padding: 1.5rem 1rem; width: 100%;
+}
+@media (min-width: 1280px) {
+  .main { padding: 2rem 1.5rem; }
+  .content-grid { display: grid; grid-template-columns: 1fr 18rem; gap: 2rem; align-items: start; }
+}
+
+/* ============ ACTION BAR ============ */
+.action-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0.75rem; margin-bottom: 1rem;
+}
+.action-buttons { display: flex; gap: 0.5rem; }
+
+/* ============ TOC SIDEBAR ============ */
+.toc-sidebar {
+  position: sticky; top: calc(var(--header-h) + 1.5rem);
+  max-height: calc(100vh - var(--header-h) - 4rem);
+  overflow-y: auto;
+  padding-right: 8px;
+}
+.toc-card {
+  border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem;
+  background: var(--card-bg);
+}
+.toc-title {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--fg-muted); font-weight: 600; margin-bottom: 0.75rem;
+}
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 0.8125rem; }
+.toc-list a {
+  display: block; padding: 2px 0; text-decoration: none; color: var(--fg-soft);
+  transition: color 0.15s;
+}
+.toc-list a:hover { color: var(--emerald-700); }
+[data-theme="dark"] .toc-list a:hover { color: var(--emerald-300); }
+.toc-list .h2 { font-weight: 600; color: var(--fg); }
+.toc-list .h3 { padding-left: 12px; border-left: 1px solid var(--border); }
+.toc-list .h4 { padding-left: 24px; font-size: 0.75rem; color: var(--fg-muted); }
+
+@media (max-width: 1279px) { .toc-sidebar { display: none; } }
+
+/* ============ CONTENT ============ */
+.content { max-width: none; color: var(--fg); }
+.content p { margin-bottom: 1rem; font-size: 0.9375rem; line-height: 1.7; }
+.content strong { font-weight: 600; color: var(--fg); }
+.content em { font-style: italic; }
+.content h2, .content h3, .content h4 { scroll-margin-top: calc(var(--header-h) + 1rem); }
+.content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
+.content h3 { font-size: 1.125rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+.content h4 { font-size: 1rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; }
+.content ul, .content ol { margin: 0.75rem 0 1rem 1.5rem; }
+.content li { margin-bottom: 0.5rem; font-size: 0.9375rem; line-height: 1.7; }
+.content code { font-family: var(--font-mono); background: var(--slate-100); padding: 2px 6px; border-radius: 4px; font-size: 0.875em; color: var(--rose-700); }
+[data-theme="dark"] .content code { background: var(--slate-800); color: var(--rose-300); }
+
+/* ============ HERO ============ */
+.hero {
+  background: linear-gradient(135deg, var(--slate-900), var(--slate-700));
+  color: white; padding: 2rem; border-radius: 1rem; margin-bottom: 1.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+.hero-badge {
+  display: inline-block; padding: 4px 10px; border-radius: 9999px;
+  background: var(--emerald-400); color: var(--slate-900);
+  font-size: 0.75rem; font-weight: 600; margin-bottom: 0.75rem;
+}
+.hero-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.2; }
+@media (min-width: 640px) { .hero-title { font-size: 1.875rem; } }
+.hero-subtitle { font-size: 0.9375rem; opacity: 0.85; margin-bottom: 1rem; line-height: 1.6; }
+.hero-meta {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;
+}
+@media (min-width: 640px) { .hero-meta { grid-template-columns: repeat(4, 1fr); } }
+.hero-meta-item {
+  background: rgba(255,255,255,0.1); border-radius: 0.5rem; padding: 0.625rem;
+  backdrop-filter: blur(8px);
+}
+.hero-meta-label { font-size: 0.6875rem; opacity: 0.7; }
+.hero-meta-value { font-size: 0.8125rem; font-weight: 600; margin-top: 2px; }
+
+/* ============ SECTION HEADING ============ */
+.section-heading {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 1rem 1.25rem; border-radius: 0.75rem;
+  margin-bottom: 1.5rem; border: 1px solid;
+}
+.section-heading .icon-wrap {
+  flex-shrink: 0; padding: 8px; border-radius: 0.5rem;
+  background: rgba(255,255,255,0.7);
+}
+[data-theme="dark"] .section-heading .icon-wrap { background: rgba(0,0,0,0.2); }
+.section-heading .icon-wrap svg { width: 20px; height: 20px; }
+.section-heading h2 { margin: 0; font-size: 1.25rem; font-weight: 700; }
+.section-heading .subtitle { font-size: 0.8125rem; opacity: 0.8; margin-top: 2px; }
+.sh-amber { background: linear-gradient(135deg, color-mix(in srgb, var(--amber-500) 15%, transparent), color-mix(in srgb, var(--amber-500) 5%, transparent)); color: var(--amber-700); border-color: var(--amber-200); }
+.sh-teal { background: linear-gradient(135deg, color-mix(in srgb, var(--teal-500) 15%, transparent), color-mix(in srgb, var(--teal-500) 5%, transparent)); color: var(--teal-700); border-color: var(--teal-200); }
+.sh-violet { background: linear-gradient(135deg, color-mix(in srgb, var(--violet-500) 15%, transparent), color-mix(in srgb, var(--violet-500) 5%, transparent)); color: var(--violet-700); border-color: var(--violet-200); }
+.sh-emerald { background: linear-gradient(135deg, color-mix(in srgb, var(--emerald-500) 15%, transparent), color-mix(in srgb, var(--emerald-500) 5%, transparent)); color: var(--emerald-700); border-color: var(--emerald-200); }
+.sh-sky { background: linear-gradient(135deg, color-mix(in srgb, var(--sky-500) 15%, transparent), color-mix(in srgb, var(--sky-500) 5%, transparent)); color: var(--sky-700); border-color: var(--sky-200); }
+.sh-rose { background: linear-gradient(135deg, color-mix(in srgb, var(--rose-500) 15%, transparent), color-mix(in srgb, var(--rose-500) 5%, transparent)); color: var(--rose-700); border-color: var(--rose-200); }
+[data-theme="dark"] .sh-amber { color: var(--amber-300); border-color: var(--amber-700); }
+[data-theme="dark"] .sh-teal { color: var(--teal-300); border-color: var(--teal-700); }
+[data-theme="dark"] .sh-violet { color: var(--violet-300); border-color: var(--violet-700); }
+[data-theme="dark"] .sh-emerald { color: var(--emerald-300); border-color: var(--emerald-700); }
+[data-theme="dark"] .sh-sky { color: var(--sky-200); border-color: var(--sky-700); }
+[data-theme="dark"] .sh-rose { color: var(--rose-300); border-color: var(--rose-700); }
+
+/* ============ CALLOUT ============ */
+.callout {
+  display: flex; gap: 12px; padding: 0.875rem 1rem;
+  border: 1px solid; border-radius: 0.5rem; margin: 1rem 0;
+  font-size: 0.875rem; line-height: 1.6;
+}
+.callout svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+.callout-title { font-weight: 600; margin-bottom: 4px; }
+.callout-body { flex: 1; }
+.callout-info { border-color: var(--sky-200); background: var(--sky-50); color: var(--sky-700); }
+.callout-warning { border-color: var(--amber-200); background: var(--amber-50); color: var(--amber-700); }
+.callout-tip { border-color: var(--violet-200); background: var(--violet-50); color: var(--violet-700); }
+.callout-success { border-color: var(--emerald-200); background: var(--emerald-50); color: var(--emerald-700); }
+.callout-danger { border-color: var(--rose-200); background: var(--rose-50); color: var(--rose-700); }
+.callout-note { border-color: var(--slate-200); background: var(--slate-50); color: var(--slate-700); }
+[data-theme="dark"] .callout-info { background: color-mix(in srgb, var(--sky-950, #0c4a6e) 40%, transparent); border-color: var(--sky-700, #0369a1); color: var(--sky-200, #bae6fd); }
+[data-theme="dark"] .callout-warning { background: color-mix(in srgb, var(--amber-950, #451a03) 40%, transparent); border-color: var(--amber-700); color: var(--amber-200); }
+[data-theme="dark"] .callout-tip { background: color-mix(in srgb, var(--violet-950, #2e1065) 40%, transparent); border-color: var(--violet-700); color: var(--violet-200); }
+[data-theme="dark"] .callout-success { background: color-mix(in srgb, var(--emerald-950, #022c22) 40%, transparent); border-color: var(--emerald-700); color: var(--emerald-200); }
+[data-theme="dark"] .callout-danger { background: color-mix(in srgb, var(--rose-950, #4c0519) 40%, transparent); border-color: var(--rose-700); color: var(--rose-200); }
+[data-theme="dark"] .callout-note { background: color-mix(in srgb, var(--slate-900) 40%, transparent); border-color: var(--slate-700); color: var(--slate-200); }
+
+/* ============ CONCEPT CARDS ============ */
+.card-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.5rem 0; }
+@media (min-width: 640px) { .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); } }
+.concept-card {
+  border: 1px solid var(--border); border-radius: 0.5rem; overflow: hidden;
+  background: var(--card-bg);
+}
+.concept-card-header {
+  padding: 0.75rem 1rem; font-weight: 600; font-size: 0.9375rem;
+  display: flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--slate-50), var(--slate-100));
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="dark"] .concept-card-header { background: linear-gradient(135deg, var(--slate-900), var(--slate-800)); }
+.concept-card-header svg { width: 16px; height: 16px; color: var(--emerald-600); }
+.concept-card-body { padding: 1rem; font-size: 0.875rem; line-height: 1.6; }
+
+/* ============ STEP CARD ============ */
+.step-card {
+  border: 1px solid var(--border); border-left: 4px solid;
+  border-radius: 0.5rem; margin: 1.25rem 0; background: var(--card-bg);
+  overflow: hidden;
+}
+.step-card.emerald { border-left-color: var(--emerald-500); }
+.step-card.teal { border-left-color: var(--teal-500); }
+.step-card.amber { border-left-color: var(--amber-500); }
+.step-card.violet { border-left-color: var(--violet-500); }
+.step-card.sky { border-left-color: var(--sky-500); }
+.step-card-header {
+  padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+  background: var(--slate-50); border-bottom: 1px solid var(--border);
+}
+[data-theme="dark"] .step-card-header { background: var(--slate-900); }
+.step-badge {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%; color: white;
+  font-weight: 700; font-size: 0.9375rem; flex-shrink: 0;
+}
+.step-badge.emerald { background: var(--emerald-500); }
+.step-badge.teal { background: var(--teal-500); }
+.step-badge.amber { background: var(--amber-500); }
+.step-badge.violet { background: var(--violet-500); }
+.step-badge.sky { background: var(--sky-500); }
+.step-card-title { font-weight: 600; font-size: 0.9375rem; flex: 1; min-width: 0; }
+.step-card-subtitle { font-size: 0.75rem; color: var(--fg-muted); font-style: italic; }
+.step-card-body { padding: 1rem; font-size: 0.875rem; line-height: 1.7; }
+
+/* ============ TABLE ============ */
+.table-wrap { margin: 1rem 0; border: 1px solid var(--border); border-radius: 0.5rem; overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.875rem; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { background: var(--slate-100); font-weight: 600; }
+[data-theme="dark"] th { background: var(--slate-800); }
+tr:last-child td { border-bottom: none; }
+td.center { text-align: center; }
+td.bold { font-weight: 600; }
+.table-emerald { color: var(--emerald-700); font-weight: 600; }
+[data-theme="dark"] .table-emerald { color: var(--emerald-300); }
+.table-rose { color: var(--rose-700); font-weight: 600; }
+[data-theme="dark"] .table-rose { color: var(--rose-300); }
+
+/* ============ CODE BLOCK ============ */
+.code-block {
+  margin: 1rem 0; border: 1px solid var(--slate-700); border-radius: 0.5rem;
+  overflow: hidden;
+}
+.code-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px; background: var(--slate-800); color: var(--slate-200);
+  font-size: 0.75rem; font-family: var(--font-mono);
+}
+.code-header .lang-badge {
+  background: var(--emerald-500); color: white;
+  padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.6875rem;
+}
+.code-header.python .lang-badge { background: var(--amber-500); }
+.code-header.markdown .lang-badge { background: var(--sky-500); }
+.code-header.python { background: linear-gradient(to right, var(--slate-800), color-mix(in srgb, var(--amber-500) 20%, var(--slate-800))); }
+.code-header.markdown { background: linear-gradient(to right, var(--slate-800), color-mix(in srgb, var(--sky-500) 20%, var(--slate-800))); }
+.code-block pre {
+  background: var(--slate-900); color: var(--slate-100);
+  padding: 1rem; overflow-x: auto; font-size: 0.8125rem; line-height: 1.7;
+  font-family: var(--font-mono);
+}
+.code-block pre .kw { color: #ff79c6; }
+.code-block pre .str { color: #f1fa8c; }
+.code-block pre .num { color: #bd93f9; }
+.code-block pre .com { color: #6272a4; font-style: italic; }
+.code-block pre .fn { color: #50fa7b; }
+.code-block pre .op { color: #ff79c6; }
+.code-block pre .var { color: #8be9fd; }
+
+/* ============ FORMULA ============ */
+.formula {
+  margin: 1rem 0; padding: 1rem 1.25rem; text-align: center;
+  border: 1px solid var(--border); border-radius: 0.5rem;
+  background: var(--slate-50); font-family: var(--font-mono);
+  font-size: 0.9375rem; overflow-x: auto; line-height: 1.8;
+}
+[data-theme="dark"] .formula { background: color-mix(in srgb, var(--slate-900) 60%, transparent); }
+.formula-result {
+  display: inline-block; padding: 4px 12px; border-radius: 6px;
+  background: var(--emerald-100); color: var(--emerald-700);
+  font-weight: 700; font-size: 1.0625rem; margin-top: 6px;
+}
+[data-theme="dark"] .formula-result { background: color-mix(in srgb, var(--emerald-950, #022c22) 50%, transparent); color: var(--emerald-300); }
+.formula-caption { font-size: 0.75rem; color: var(--fg-muted); margin-top: 0.5rem; font-family: var(--font-sans); }
+
+/* ============ STAT BLOCKS ============ */
+.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin: 1rem 0; }
+@media (min-width: 640px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
+.stat-block {
+  padding: 1rem; border-radius: 0.75rem; text-align: center; color: white;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+.stat-block.emerald { background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600)); }
+.stat-block.teal { background: linear-gradient(135deg, var(--teal-500), var(--teal-600)); }
+.stat-block.amber { background: linear-gradient(135deg, var(--amber-500), var(--amber-600)); }
+.stat-block.violet { background: linear-gradient(135deg, var(--violet-500), var(--violet-600)); }
+.stat-block.sky { background: linear-gradient(135deg, var(--sky-500), var(--sky-700)); }
+.stat-block.rose { background: linear-gradient(135deg, var(--rose-500), var(--rose-700)); }
+.stat-value { font-size: 1.5rem; font-weight: 700; }
+@media (min-width: 640px) { .stat-value { font-size: 1.875rem; } }
+.stat-label { font-size: 0.75rem; opacity: 0.9; margin-top: 4px; }
+
+/* ============ KEY-VALUE GRID ============ */
+.kv-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin: 1rem 0; }
+@media (min-width: 640px) { .kv-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .kv-grid { grid-template-columns: repeat(3, 1fr); } }
+.kv-item {
+  border: 1px solid var(--border); border-radius: 0.5rem;
+  padding: 0.75rem; background: var(--slate-50);
+}
+[data-theme="dark"] .kv-item { background: color-mix(in srgb, var(--slate-900) 40%, transparent); }
+.kv-label { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-muted); font-weight: 600; }
+.kv-value { font-size: 0.875rem; font-weight: 500; margin-top: 4px; }
+
+/* ============ DIVIDER ============ */
+.divider { margin: 1.5rem 0; border-bottom: 1px solid var(--border); }
+.divider-label {
+  display: flex; align-items: center; gap: 12px; margin: 1.5rem 0;
+}
+.divider-label::before, .divider-label::after {
+  content: ''; flex: 1; border-bottom: 1px solid var(--border);
+}
+.divider-label span {
+  font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--fg-muted); font-weight: 600;
+}
+
+/* ============ TERMINAL OUTPUT ============ */
+.terminal {
+  margin: 1rem 0; border: 1px solid var(--slate-700); border-radius: 0.5rem;
+  overflow: hidden; background: var(--slate-900);
+}
+.terminal-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px; background: var(--slate-800); color: var(--slate-300);
+  font-size: 0.75rem; font-family: var(--font-mono);
+}
+.terminal-header .dots { display: flex; gap: 4px; }
+.terminal-header .dots span {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.terminal-header .dots .r { background: #ff5f56; }
+.terminal-header .dots .y { background: #ffbd2e; }
+.terminal-header .dots .g { background: #27c93f; }
+.terminal-body {
+  padding: 1rem; color: var(--slate-100);
+  font-family: var(--font-mono); font-size: 0.8125rem; line-height: 1.7;
+}
+.terminal-body .out-line { white-space: pre-wrap; }
+.terminal-body .out-sep { color: var(--slate-500); }
+.terminal-body .out-ok { color: var(--emerald-400); }
+.terminal-body .out-label { color: var(--sky-300); }
+.terminal-body .out-result { color: var(--amber-300); font-weight: 700; }
+
+/* ============ FOOTER ============ */
+.footer {
+  margin-top: auto; border-top: 1px solid var(--border);
+  background: var(--bg); padding: 1.5rem 1rem;
+}
+.footer-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 0.75rem;
+  font-size: 0.75rem; color: var(--fg-muted);
+}
+@media (min-width: 640px) { .footer-inner { flex-direction: row; align-items: center; justify-content: space-between; } }
+.footer-main { font-weight: 500; color: var(--fg); }
+.footer-meta { display: flex; align-items: center; gap: 8px; }
+
+/* ============ BACK TO TOP ============ */
+.back-to-top {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 40;
+  width: 44px; height: 44px; border-radius: 9999px;
+  background: var(--slate-900); color: white; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  opacity: 0; transform: translateY(12px); pointer-events: none;
+  transition: all 0.3s ease-out;
+}
+[data-theme="dark"] .back-to-top { background: var(--slate-100); color: var(--slate-900); }
+.back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.back-to-top svg { width: 20px; height: 20px; }
+
+/* ============ THEME DROPDOWN ============ */
+.dropdown { position: relative; display: inline-block; }
+.dropdown-menu {
+  position: absolute; right: 0; top: calc(100% + 4px);
+  min-width: 144px; border: 1px solid var(--border); border-radius: 0.5rem;
+  background: var(--bg); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  padding: 4px; z-index: 50; display: none;
+}
+.dropdown-menu.open { display: block; }
+.dropdown-item {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 6px 8px; border: none; background: transparent;
+  cursor: pointer; font-size: 0.875rem; color: var(--fg);
+  border-radius: 4px; text-align: left; font-family: inherit;
+}
+.dropdown-item:hover { background: var(--slate-100); }
+[data-theme="dark"] .dropdown-item:hover { background: var(--slate-800); }
+.dropdown-item.active { background: var(--slate-100); }
+[data-theme="dark"] .dropdown-item.active { background: var(--slate-800); }
+
+/* ============ TOAST ============ */
+.toast {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  background: var(--slate-900); color: white; padding: 0.75rem 1rem;
+  border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+  z-index: 100; font-size: 0.875rem; max-width: 90vw;
+}
+[data-theme="dark"] .toast { background: var(--slate-100); color: var(--slate-900); }
+
+/* ============ HIGHLIGHT ============ */
+mark[data-search-match] { background: var(--amber-200); color: inherit; border-radius: 2px; padding: 0 2px; }
+[data-theme="dark"] mark[data-search-match] { background: color-mix(in srgb, var(--amber-500) 50%, transparent); }
+mark[data-search-match].current { box-shadow: 0 0 0 2px var(--rose-500); }
+
+/* ============ SEARCH BAR ============ */
+.search-bar {
+  position: fixed; top: 80px; right: 16px; z-index: 40;
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px; border: 1px solid var(--border); border-radius: 0.5rem;
+  background: var(--bg); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  width: 288px;
+}
+@media (min-width: 640px) { .search-bar { width: 320px; } }
+.search-bar input {
+  flex: 1; border: none; outline: none; background: transparent;
+  color: var(--fg); font-size: 0.875rem; padding: 4px;
+  font-family: inherit;
+}
+.search-bar .counter {
+  font-family: var(--font-mono); font-size: 0.75rem; color: var(--fg-muted);
+  white-space: nowrap; padding: 0 4px;
+}
+.search-bar .btn-icon { width: 28px; height: 28px; }
+
+/* ============ INLINE FORMULA ============ */
+.if { font-family: var(--font-mono); background: var(--slate-100); padding: 1px 6px; border-radius: 3px; font-size: 0.875em; }
+[data-theme="dark"] .if { background: var(--slate-800); }
+
+/* ============ BADGE ============ */
+.badge {
+  display: inline-block; padding: 2px 10px; border-radius: 9999px;
+  font-size: 0.6875rem; font-weight: 600; border: 1px solid var(--border);
+}
+.badge-emerald { background: var(--emerald-100); color: var(--emerald-700); border-color: var(--emerald-200); }
+.badge-amber { background: var(--amber-100); color: var(--amber-700); border-color: var(--amber-200); }
+.badge-sky { background: var(--sky-100); color: var(--sky-700); border-color: var(--sky-200); }
+
+/* ============ PRINT ============ */
+@media print {
+  @page { margin: 1.5cm 1.8cm; size: A4; }
+  html, body { background: white !important; color: black !important; font-size: 10pt; line-height: 1.4; }
+  .header, .footer, .toc-sidebar, .action-bar, .reading-progress, .back-to-top, .search-bar { display: none !important; }
+  .main { padding: 0 !important; max-width: 100% !important; }
+  .content-grid { display: block !important; }
+  .hero, .section-heading, .callout, .concept-card-header, .step-card-header {
+    background: white !important; color: black !important; border: 1px solid #999 !important;
+  }
+  .hero { color: black !important; }
+  .hero-badge { background: #ddd !important; color: black !important; }
+  .hero-meta-item { background: #f4f4f4 !important; color: black !important; }
+  .code-block pre, .terminal-body { background: #f4f4f4 !important; color: #111 !important; border: 1px solid #ddd !important; }
+  table { border-collapse: collapse !important; }
+  th, td { border: 1px solid #999 !important; }
+  th { background: #eee !important; }
+  .stat-block, .step-badge, .badge { background: #ddd !important; color: black !important; }
+  .formula { background: #f9f9f9 !important; }
+  h2, h3, h4 { page-break-after: avoid; }
+  .card-grid, .stat-grid, .step-card { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="reading-progress" aria-hidden="true">
+    <div class="reading-progress-bar" id="reading-progress-bar"></div>
+  </div>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo">⚙️</div>
+        <div class="brand-text">
+          <div class="brand-title">Disponibilidad y OEE con Google Colab</div>
+          <div class="brand-subtitle">Ingeniería Industrial · 1er Semestre · Práctica Python</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-icon" id="search-toggle" aria-label="Buscar en el contenido" title="Buscar (Ctrl+F)">🔍</button>
+        <div class="dropdown">
+          <button class="btn btn-icon" id="theme-toggle" aria-label="Cambiar tema">🌙</button>
+          <div class="dropdown-menu" id="theme-menu">
+            <button class="dropdown-item" data-theme-value="light">☀️ <span>Claro</span></button>
+            <button class="dropdown-item" data-theme-value="dark">🌙 <span>Oscuro</span></button>
+            <button class="dropdown-item" data-theme-value="system">💻 <span>Sistema</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="action-bar">
+      <div></div>
+      <div class="action-buttons">
+        <button class="btn btn-outline btn-sm" id="share-btn">🔗 <span>Compartir</span></button>
+        <button class="btn btn-outline btn-sm" id="print-btn">🖨️ <span>Imprimir / PDF</span></button>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="content">
+        <!-- ============ HERO ============ -->
+        <div class="hero">
+          <span class="hero-badge">PRÁCTICA 1 · OEE</span>
+          <h1 class="hero-title">Disponibilidad de Máquina: Metría OEE con Python en Google Colab</h1>
+          <p class="hero-subtitle">Guía paso a paso para calcular el porcentaje de tiempo real que una máquina opera durante un turno de trabajo, aplicando validaciones de seguridad y reportes industriales.</p>
+          <div class="hero-meta">
+            <div class="hero-meta-item"><div class="hero-meta-label">Asignatura</div><div class="hero-meta-value">TICs Aplicadas</div></div>
+            <div class="hero-meta-item"><div class="hero-meta-label">Nivel</div><div class="hero-meta-value">1er Semestre</div></div>
+            <div class="hero-meta-item"><div class="hero-meta-label">Herramienta</div><div class="hero-meta-value">Google Colab</div></div>
+            <div class="hero-meta-item"><div class="hero-meta-label">Lenguaje</div><div class="hero-meta-value">Python</div></div>
+          </div>
+        </div>
+
+        <!-- ============ INTRODUCCIÓN ============ -->
+        <div class="section-heading sh-emerald">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <h2>¿Por qué medir la Disponibilidad?</h2>
+            <div class="subtitle">El primer indicador de la metodología OEE</div>
+          </div>
+        </div>
+
+        <p>En las plantas de producción, medir cuánto tiempo trabaja realmente una máquina frente al tiempo que se planeó que trabajara es vital. Este indicador se llama <strong>Disponibilidad</strong> y forma parte de una metodología industrial clave: la <strong>Efectividad Global de los Equipos (Overall Equipment Effectiveness, OEE)</strong>.</p>
+
+        <div class="callout callout-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div class="callout-body">
+            <div class="callout-title">¿Qué es el OEE?</div>
+            El OEE (<em>Overall Equipment Effectiveness</em>) es una métrica compuesta por tres factores multiplicativos: <strong>Disponibilidad × Rendimiento × Calidad</strong>. Esta práctica se enfoca exclusivamente en el primer factor: la Disponibilidad (<code>A</code>).
+          </div>
+        </div>
+
+        <!-- ============ CONCEPTO INDUSTRIAL ============ -->
+        <div class="section-heading sh-teal">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20M4 20V8l5 4V8l5 4V8l5 4v8M9 14h0M14 14h0"/></svg>
+          </div>
+          <div>
+            <h2>El Concepto Industrial (Sin Código)</h2>
+            <div class="subtitle">Imaginemos un torno o una fresadora en un taller</div>
+          </div>
+        </div>
+
+        <div class="card-grid cols-3">
+          <div class="concept-card">
+            <div class="concept-card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Tiempo programado (T<sub>prog</sub>)</span>
+            </div>
+            <div class="concept-card-body">
+              Es la jornada laboral asignada a la máquina. Por ejemplo, un turno completo de 8 horas equivale a <code>480 minutos</code>.
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="concept-card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>Tiempo de paradas (T<sub>paradas</sub>)</span>
+            </div>
+            <div class="concept-card-body">
+              Es el tiempo que la máquina estuvo apagada o detenida por fallas mecánicas, falta de material o cambio de herramientas (en el ejemplo, <code>40 minutos</code> por ajuste de cuchillas).
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="concept-card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span>Tiempo operativo (T<sub>operativo</sub>)</span>
+            </div>
+            <div class="concept-card-body">
+              Es el tiempo en el que la máquina realmente produjo piezas. Se calcula como la diferencia entre el tiempo programado y el tiempo de paradas.
+            </div>
+          </div>
+        </div>
+
+        <div class="formula">
+          T<sub>operativo</sub> = T<sub>prog</sub> − T<sub>paradas</sub>
+        </div>
+
+        <p>La disponibilidad (<code>A</code>) responde a la pregunta: <em>¿Qué porcentaje del tiempo planeado estuvo la máquina realmente encendida y disponible para producir?</em></p>
+
+        <div class="formula">
+          A = ( T<sub>operativo</sub> / T<sub>prog</sub> ) × 100<br/>
+          A = ( (480.0 − 40.0) / 480.0 ) × 100<br/>
+          A = ( 440.0 / 480.0 ) × 100
+          <div class="formula-result">A = 91.67%</div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-block emerald"><div class="stat-value">91.67%</div><div class="stat-label">Disponibilidad calculada</div></div>
+          <div class="stat-block teal"><div class="stat-value">440 min</div><div class="stat-label">Tiempo operativo real</div></div>
+          <div class="stat-block amber"><div class="stat-value">40 min</div><div class="stat-label">Tiempo perdido en paradas</div></div>
+        </div>
+
+        <!-- ============ GOOGLE COLAB ============ -->
+        <div class="section-heading sh-sky">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div>
+            <h2>¿Qué es Google Colab y cómo funciona?</h2>
+            <div class="subtitle">El cuaderno digital en la nube para Python</div>
+          </div>
+        </div>
+
+        <p>Google Colab es un cuaderno digital en la nube. Funciona alternando dos tipos de bloques o celdas:</p>
+
+        <div class="card-grid cols-2">
+          <div class="concept-card">
+            <div class="concept-card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+              <span>Celdas de Texto (Markdown)</span>
+            </div>
+            <div class="concept-card-body">
+              Sirven para documentar el proceso, colocar el título, fórmulas matemáticas y explicaciones teóricas de planta. No se ejecutan: solo muestran texto formateado.
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="concept-card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <span>Celdas de Código (Python)</span>
+            </div>
+            <div class="concept-card-body">
+              Sirven para escribir instrucciones en Python que la computadora calcula al presionar el botón de reproducción (<strong>▶</strong>) o las teclas <code>Shift + Enter</code>.
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ PASO A PASO ============ -->
+        <div class="section-heading sh-violet">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div>
+            <h2>Paso a Paso en Google Colab para Principiantes</h2>
+            <div class="subtitle">4 pasos para crear tu primera práctica de planta</div>
+          </div>
+        </div>
+
+        <!-- PASO 1 -->
+        <div class="step-card emerald">
+          <div class="step-card-header">
+            <div class="step-badge emerald">1</div>
+            <div class="step-card-title">Abrir Google Colab</div>
+            <div class="step-card-subtitle">Crear el archivo en la nube</div>
+          </div>
+          <div class="step-card-body">
+            <ol>
+              <li>Ir a <code>colab.research.google.com</code> con una cuenta de Google abierta.</li>
+              <li>Hacer clic en el botón azul <strong>Nuevo cuaderno</strong>.</li>
+              <li>En la esquina superior izquierda, cambiar el nombre de <code>Untitled.ipynb</code> a <code>Calculo_Disponibilidad_OEE.ipynb</code>.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- PASO 2 -->
+        <div class="step-card sky">
+          <div class="step-card-header">
+            <div class="step-badge sky">2</div>
+            <div class="step-card-title">Crear la Celda de Explicación</div>
+            <div class="step-card-subtitle">Documentación didáctica</div>
+          </div>
+          <div class="step-card-body">
+            <p>Hacer clic en el botón <strong>+ Texto</strong> y escribir el contexto del problema para que cualquier operador o compañero entienda qué calcula el archivo:</p>
+            <div class="code-block">
+              <div class="code-header markdown"><span class="lang-badge">MARKDOWN</span><span>Celda de Texto</span></div>
+              <pre><span class="kw">#</span><span class="kw"> </span>Práctica 1: Disponibilidad de Máquina (Métrica OEE)
+Este programa calcula el porcentaje de tiempo real que una máquina opera durante un turno de trabajo.</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 3 -->
+        <div class="step-card amber">
+          <div class="step-card-header">
+            <div class="step-badge amber">3</div>
+            <div class="step-card-title">Crear la Celda de la Función (La 'Calculadora')</div>
+            <div class="step-card-subtitle">La fórmula automatizada</div>
+          </div>
+          <div class="step-card-body">
+            <p>Hacer clic en <strong>+ Código</strong> y escribir la función que hace las operaciones. En programación, una función es como una fórmula de Excel que guardamos para usarla muchas veces:</p>
+            <div class="code-block">
+              <div class="code-header python"><span class="lang-badge">PYTHON</span><span>Celda de Código — definición de función</span></div>
+              <pre><span class="kw">def</span> <span class="fn">calcular_disponibilidad</span>(tiempo_programado_min, tiempo_paradas_min):
+    <span class="com"># 1. Filtros de seguridad (evitan ingresar datos absurdos)</span>
+    <span class="kw">if</span> tiempo_programado_min &lt;= <span class="num">0</span>:
+        <span class="kw">raise</span> <span class="fn">ValueError</span>(
+            <span class="str">"El turno de trabajo no puede ser 0 ni un número negativo."</span>
+        )
+
+    <span class="kw">if</span> tiempo_paradas_min &lt; <span class="num">0</span>:
+        <span class="kw">raise</span> <span class="fn">ValueError</span>(<span class="str">"El tiempo de parada no puede ser negativo."</span>)
+
+    <span class="kw">if</span> tiempo_paradas_min &gt; tiempo_programado_min:
+        <span class="kw">raise</span> <span class="fn">ValueError</span>(
+            <span class="str">"La máquina no puede estar parada más tiempo del que dura el turno."</span>
+        )
+
+    <span class="com"># 2. Operación matemática</span>
+    tiempo_operativo = tiempo_programado_min - tiempo_paradas_min
+    disponibilidad = (tiempo_operativo / tiempo_programado_min) * <span class="num">100.0</span>
+
+    <span class="com"># 3. Entrega el resultado redondeado a dos decimales</span>
+    <span class="kw">return</span> <span class="fn">round</span>(disponibilidad, <span class="num">2</span>)</pre>
+            </div>
+            <div class="callout callout-tip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+              <div class="callout-body">
+                <div class="callout-title">Importante</div>
+                Presionar el botón <strong>▶</strong> a la izquierda de la celda para guardarla en memoria. Si no lo haces, las celdas posteriores no podrán llamar a la función.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 4 -->
+        <div class="step-card violet">
+          <div class="step-card-header">
+            <div class="step-badge violet">4</div>
+            <div class="step-card-title">Crear la Celda de Ejecución (El Turno Real)</div>
+            <div class="step-card-subtitle">Poner a prueba los datos reales</div>
+          </div>
+          <div class="step-card-body">
+            <p>Hacer clic en <strong>+ Código</strong> debajo de la anterior e ingresar los datos del caso de estudio:</p>
+            <div class="code-block">
+              <div class="code-header python"><span class="lang-badge">PYTHON</span><span>Celda de Código — ejecución con datos reales</span></div>
+              <pre><span class="com"># Datos registrados en planta</span>
+minutos_turno = <span class="num">480.0</span>      <span class="com"># Turno de 8 horas</span>
+minutos_detenida = <span class="num">40.0</span>  <span class="com"># Parada por cambio de cuchillas</span>
+
+<span class="com"># Intentamos realizar el cálculo</span>
+<span class="kw">try</span>:
+    resultado = <span class="fn">calcular_disponibilidad</span>(minutos_turno, minutos_detenida)
+    <span class="fn">print</span>(<span class="str">"--- REPORTE DE PLANTA ---"</span>)
+    <span class="fn">print</span>(<span class="str">f"Turno planificado: {minutos_turno} minutos"</span>)
+    <span class="fn">print</span>(<span class="str">f"Tiempo perdido por paradas: {minutos_detenida} minutos"</span>)
+    <span class="fn">print</span>(<span class="str">f"Disponibilidad de la máquina: {resultado}%"</span>)
+<span class="kw">except</span> <span class="fn">ValueError</span> <span class="kw">as</span> error:
+    <span class="fn">print</span>(<span class="str">f"Alerta: Los datos ingresados son erróneos -&gt; {error}"</span>)</pre>
+            </div>
+            <p>Presionar <strong>▶</strong> para ver el reporte generado. La salida esperada en pantalla será:</p>
+            <div class="terminal">
+              <div class="terminal-header">
+                <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+                <span>Salida de la celda — ejecución exitosa</span>
+              </div>
+              <div class="terminal-body">
+                <div class="out-line"><span class="out-sep">---</span> <span class="out-label">REPORTE DE PLANTA</span> <span class="out-sep">---</span></div>
+                <div class="out-line">Turno planificado: <span class="out-result">480.0 minutos</span></div>
+                <div class="out-line">Tiempo perdido por paradas: <span class="out-result">40.0 minutos</span></div>
+                <div class="out-line">Disponibilidad de la máquina: <span class="out-ok">91.67%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ VALIDACIONES ============ -->
+        <div class="section-heading sh-rose">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <h2>¿Por qué incluimos validaciones de seguridad en el código?</h2>
+            <div class="subtitle">Candados lógicos contra errores humanos</div>
+          </div>
+        </div>
+
+        <p>Un error común al alimentar sistemas de control en ingeniería es ingresar datos erróneos por distracción humana. Las líneas con <code>raise ValueError</code> son <strong>candados lógicos</strong>:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:30%">Escenario Erróneo</th>
+                <th style="width:35%">¿Qué pasaría sin validación?</th>
+                <th style="width:35%">¿Qué hace la validación?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="bold">Poner 0 en el turno</td>
+                <td>La computadora colapsa por división entre cero (<code>x / 0</code>).</td>
+                <td>Detiene el proceso y avisa: <em>"El turno debe ser mayor a cero"</em>.</td>
+              </tr>
+              <tr>
+                <td class="bold">Poner paradas de −15 min</td>
+                <td>Daría una disponibilidad irreal mayor al <code>100%</code>.</td>
+                <td>Detiene el cálculo: <em>"El tiempo no puede ser negativo"</em>.</td>
+              </tr>
+              <tr>
+                <td class="bold">Paradas de 500 min en turno de 480 min</td>
+                <td>Daría un número negativo absurdo.</td>
+                <td>Detiene el cálculo: <em>"Las paradas no pueden superar el turno"</em>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-warning">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="callout-body">
+            <div class="callout-title">Lección clave de ingeniería de datos</div>
+            En sistemas SCADA, MES y ERP industriales, una validación omitida puede disparar alertas falsas, paradas fantasma o reportes OEE incorrectos que afectan decisiones gerenciales. <strong>El código defensivo no es opcional: es estándar profesional.</strong>
+          </div>
+        </div>
+
+        <!-- ============ VALIDACIÓN DE INTEGRIDAD ============ -->
+        <div class="section-heading sh-emerald">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div>
+            <h2>Validación de Integridad</h2>
+            <div class="subtitle">Interpretación del resultado obtenido</div>
+          </div>
+        </div>
+
+        <p>El resultado obtenido (<code>91.67%</code>) confirma que la celda operó correctamente. En la industria manufacturera, un estándar de disponibilidad de <strong>Clase Mundial</strong> suele ubicarse por encima del <code>90%</code>, por lo que la línea evaluada cumple con el umbral óptimo de operación.</p>
+
+        <div class="stat-grid">
+          <div class="stat-block emerald"><div class="stat-value">91.67%</div><div class="stat-label">Disponibilidad obtenida</div></div>
+          <div class="stat-block sky"><div class="stat-value">90%</div><div class="stat-label">Estándar Clase Mundial</div></div>
+          <div class="stat-block violet"><div class="stat-value">✓</div><div class="stat-label">Cumple el umbral óptimo</div></div>
+        </div>
+
+        <div class="callout callout-success">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div class="callout-body">
+            <div class="callout-title">Conclusión de la práctica</div>
+            La línea evaluada cumple con el umbral óptimo de operación. Sin embargo, los <code>40 minutos</code> perdidos por ajuste de cuchillas representan una oportunidad de mejora: si se reduce esa parada a la mitad (<code>20 min</code>), la disponibilidad subiría a <strong>95.83%</strong>, acercándose al estándar de excelencia Seiichi Nakajima (TPM).
+          </div>
+        </div>
+
+        <!-- ============ RESUMEN FINAL ============ -->
+        <div class="section-heading sh-amber">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div>
+            <h2>Resumen de la Práctica</h2>
+            <div class="subtitle">Lo que aprendiste en esta lección</div>
+          </div>
+        </div>
+
+        <div class="card-grid cols-2">
+          <div class="concept-card">
+            <div class="concept-card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Concepto industrial</span>
+            </div>
+            <div class="concept-card-body">
+              <ul>
+                <li>Disponibilidad = tiempo operativo / tiempo programado</li>
+                <li>Forma parte del OEE junto con Rendimiento y Calidad</li>
+                <li>Estándar Clase Mundial: ≥ 90%</li>
+              </ul>
+            </div>
+          </div>
+          <div class="concept-card">
+            <div class="concept-card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <span>Habilidad digital</span>
+            </div>
+            <div class="concept-card-body">
+              <ul>
+                <li>Crear cuadernos en Google Colab</li>
+                <li>Definir funciones Python con validaciones</li>
+                <li>Generar reportes formateados con <code>print</code> y <code>f-strings</code></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TOC SIDEBAR ============ -->
+      <aside class="toc-sidebar">
+        <div class="toc-card">
+          <div class="toc-title">📋 <span>Índice</span></div>
+          <ul class="toc-list" id="toc-list"></ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-main">Práctica 1 — Disponibilidad de Máquina (Métrica OEE)</div>
+        <div>Ingeniería Industrial · 1er Semestre · TICs Aplicadas · Google Colab + Python</div>
+      </div>
+      <div class="footer-meta">⚙️ <span>Material educativo estructurado</span></div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" aria-label="Volver al inicio">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+  </button>
+</div>
+
+<div class="search-bar" id="search-bar" style="display:none">
+  <span>🔍</span>
+  <input type="text" id="search-input" placeholder="Buscar en esta página…" />
+  <span class="counter" id="search-counter"></span>
+  <button class="btn btn-icon btn-sm" id="search-prev" title="Anterior (Shift+Enter)">▲</button>
+  <button class="btn btn-icon btn-sm" id="search-next" title="Siguiente (Enter)">▼</button>
+  <button class="btn btn-icon btn-sm" id="search-close" title="Cerrar (Esc)">✕</button>
+</div>
+
+<script>
+/* ============ STATE ============ */
+const THEME_KEY = 'tic-disp-theme-v1';
+let searchOpen = false;
+let searchMatches = [];
+let searchCurrentIdx = -1;
+
+/* ============ TOAST ============ */
+function toast(title, desc) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<div style="font-weight:600">${title}</div>${desc ? `<div style="opacity:0.8;font-size:0.75rem;margin-top:2px">${desc}</div>` : ''}`;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; }, 2500);
+  setTimeout(() => t.remove(), 2900);
+}
+
+/* ============ TOC ============ */
+function renderToc() {
+  const tocList = document.getElementById('toc-list');
+  // Get all h2/h3 inside .content, EXCLUDING those inside .section-heading
+  // (because the section-heading already has its own h2 we want to use, but it's
+  // nested inside the section-heading wrapper — we want TOC entries from those).
+  // Actually, the h2 we want is the one INSIDE .section-heading. So:
+  // - For h2: include if it's inside .section-heading (it's the section title)
+  // - For h3/h4: exclude if inside .section-heading (those are just visual h2 subtitles)
+  const headings = Array.from(document.querySelectorAll('.content h2, .content h3, .content h4'))
+    .filter(h => {
+      const text = (h.textContent || '').trim();
+      if (!text) return false;
+      const inSH = !!h.closest('.section-heading');
+      // The h2 inside .section-heading IS the section title — keep it.
+      // Other h3/h4 inside .section-heading are subtitles — skip them.
+      if (inSH && h.tagName === 'H2') return true;
+      if (inSH) return false;
+      // Hero h1 should not appear (we only query h2/h3/h4 anyway)
+      return true;
+    });
+
+  const seen = {};
+  const items = headings.map(h => {
+    let slug = h.textContent.trim().toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    if (!slug) slug = 'seccion';
+    if (seen[slug]) { seen[slug]++; slug = `${slug}-${seen[slug]}`; } else seen[slug] = 1;
+    h.id = slug;
+    return { id: slug, text: h.textContent.trim(), level: parseInt(h.tagName.substring(1), 10) };
+  });
+
+  tocList.innerHTML = items.map(i => {
+    const cls = i.level === 2 ? 'h2' : i.level === 3 ? 'h3' : 'h4';
+    const truncText = i.text.length > 55 ? i.text.substring(0, 53) + '…' : i.text;
+    return `<li class="${cls}"><a href="#${i.id}" data-toc-link="${i.id}">${truncText}</a></li>`;
+  }).join('');
+
+  tocList.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const el = document.getElementById(a.dataset.tocLink);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top, behavior: 'smooth' });
+        history.replaceState(null, '', '#' + a.dataset.tocLink);
+      }
+    });
+  });
+}
+
+/* ============ READING PROGRESS ============ */
+function updateReadingProgress() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('reading-progress-bar').style.width = Math.min(100, Math.max(0, pct)) + '%';
+}
+
+/* ============ BACK TO TOP ============ */
+function updateBackToTop() {
+  const btn = document.getElementById('back-to-top');
+  if (window.scrollY > 400) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+}
+
+/* ============ THEME ============ */
+function applyTheme(theme) {
+  if (theme === 'system') {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+  } else {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+  const current = document.documentElement.getAttribute('data-theme');
+  document.getElementById('theme-toggle').textContent = current === 'dark' ? '☀️' : '🌙';
+  document.querySelectorAll('[data-theme-value]').forEach(it => {
+    it.classList.toggle('active', it.dataset.themeValue === theme);
+  });
+}
+
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY) || 'light';
+  applyTheme(saved);
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    const cur = localStorage.getItem(THEME_KEY);
+    if (cur === 'system') applyTheme('system');
+  });
+}
+
+/* ============ SEARCH ============ */
+function clearSearchHighlights() {
+  document.querySelectorAll('mark[data-search-match]').forEach(m => {
+    const parent = m.parentNode;
+    if (parent) {
+      parent.replaceChild(document.createTextNode(m.textContent), m);
+      parent.normalize();
+    }
+  });
+  searchMatches = [];
+  searchCurrentIdx = -1;
+  document.getElementById('search-counter').textContent = '';
+}
+
+function performSearch(q) {
+  clearSearchHighlights();
+  if (!q.trim()) return;
+
+  const panel = document.querySelector('.content');
+  if (!panel) return;
+
+  const lowerQuery = q.toLowerCase();
+  const highlighted = [];
+  const walker = document.createTreeWalker(panel, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent) return NodeFilter.FILTER_REJECT;
+      if (['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+      if (parent.closest('mark[data-search-match]')) return NodeFilter.FILTER_REJECT;
+      if (getComputedStyle(parent).display === 'none') return NodeFilter.FILTER_REJECT;
+      if (node.nodeValue && node.nodeValue.toLowerCase().includes(lowerQuery)) return NodeFilter.FILTER_ACCEPT;
+      return NodeFilter.FILTER_REJECT;
+    },
+  });
+
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  textNodes.forEach(textNode => {
+    const text = textNode.nodeValue || '';
+    const lowerText = text.toLowerCase();
+    let pos = lowerText.indexOf(lowerQuery);
+    const parent = textNode.parentElement;
+    if (!parent) return;
+    while (pos !== -1) {
+      const range = document.createRange();
+      range.setStart(textNode, pos);
+      range.setEnd(textNode, pos + q.length);
+      try {
+        const mark = document.createElement('mark');
+        mark.setAttribute('data-search-match', 'true');
+        mark.textContent = text.substring(pos, pos + q.length);
+        range.deleteContents();
+        range.insertNode(mark);
+        highlighted.push(mark);
+        break;
+      } catch { break; }
+    }
+  });
+
+  searchMatches = highlighted;
+  if (highlighted.length > 0) {
+    searchCurrentIdx = 0;
+    highlighted[0].classList.add('current');
+    highlighted[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.getElementById('search-counter').textContent = `1/${highlighted.length}`;
+  } else {
+    document.getElementById('search-counter').textContent = '0/0';
+    toast('Sin resultados', `No se encontraron coincidencias para "${q}".`);
+  }
+}
+
+function navigateSearch(direction) {
+  if (searchMatches.length === 0) return;
+  searchMatches[searchCurrentIdx]?.classList.remove('current');
+  if (direction === 'next') {
+    searchCurrentIdx = (searchCurrentIdx + 1) % searchMatches.length;
+  } else {
+    searchCurrentIdx = (searchCurrentIdx - 1 + searchMatches.length) % searchMatches.length;
+  }
+  const target = searchMatches[searchCurrentIdx];
+  target.classList.add('current');
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('search-counter').textContent = `${searchCurrentIdx + 1}/${searchMatches.length}`;
+}
+
+function openSearch() {
+  searchOpen = true;
+  document.getElementById('search-bar').style.display = 'flex';
+  setTimeout(() => document.getElementById('search-input').focus(), 50);
+}
+
+function closeSearch() {
+  searchOpen = false;
+  clearSearchHighlights();
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-bar').style.display = 'none';
+}
+
+/* ============ LISTENERS ============ */
+function attachListeners() {
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateReadingProgress();
+        updateBackToTop();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', updateReadingProgress, { passive: true });
+
+  document.getElementById('back-to-top').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.getElementById('theme-toggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.getElementById('theme-menu').classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dropdown')) {
+      document.getElementById('theme-menu').classList.remove('open');
+    }
+  });
+  document.querySelectorAll('[data-theme-value]').forEach(item => {
+    item.addEventListener('click', () => {
+      const theme = item.dataset.themeValue;
+      localStorage.setItem(THEME_KEY, theme);
+      applyTheme(theme);
+      document.getElementById('theme-menu').classList.remove('open');
+    });
+  });
+
+  document.getElementById('search-toggle').addEventListener('click', () => {
+    if (searchOpen) closeSearch(); else openSearch();
+  });
+  document.getElementById('search-close').addEventListener('click', closeSearch);
+  document.getElementById('search-prev').addEventListener('click', () => navigateSearch('prev'));
+  document.getElementById('search-next').addEventListener('click', () => navigateSearch('next'));
+
+  let searchTimer;
+  document.getElementById('search-input').addEventListener('input', (e) => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => performSearch(e.target.value), 250);
+  });
+  document.getElementById('search-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); navigateSearch(e.shiftKey ? 'prev' : 'next'); }
+    if (e.key === 'Escape') closeSearch();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 'Escape' && searchOpen) closeSearch();
+  });
+
+  document.getElementById('share-btn').addEventListener('click', async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Disponibilidad y OEE con Google Colab', url });
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(url);
+        toast('Enlace copiado', 'URL copiada al portapapeles.');
+      }
+    } catch {}
+  });
+
+  document.getElementById('print-btn').addEventListener('click', () => setTimeout(() => window.print(), 100));
+}
+
+/* ============ INIT ============ */
+function init() {
+  initTheme();
+  attachListeners();
+  setTimeout(() => {
+    renderToc();
+    updateReadingProgress();
+  }, 300);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
