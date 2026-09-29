@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TI Aplicadas a la Ingeniería - Clase 3</title>
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #283593;
+            --accent: #ffca28;
+            --bg: #f5f5f5;
+            --text: #212121;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        nav {
+            background-color: var(--secondary);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            font-size: 0.9em;
+            transition: background 0.3s;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        nav a:hover, nav a.active {
+            background-color: var(--accent);
+            color: var(--primary);
+            font-weight: bold;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        h1, h2, h3, h4 { color: var(--primary); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+        pre {
+            background-color: #263238;
+            color: #eceff1;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        .math-block {
+            text-align: center;
+            font-style: italic;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #e8eaf6;
+            border-left: 4px solid var(--primary);
+        }
+        .locked-section {
+            border: 2px dashed #c62828;
+            padding: 20px;
+            margin-top: 30px;
+            background-color: #ffebee;
+            border-radius: 4px;
+        }
+        .unlock-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .unlock-form input {
+            padding: 8px;
+            border: 1px solid #c62828;
+            border-radius: 4px;
+        }
+        .unlock-form button {
+            padding: 8px 15px;
+            background-color: #c62828;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .solution-content {
+            display: none;
+            background: #e8f5e9;
+            padding: 15px;
+            border: 1px solid #2e7d32;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Tecnologías de la Información y Comunicación Aplicadas a la Ingeniería</h1>
+    <p>Clase 3 | Ingeniería Industrial & Seguridad y Salud Ocupacional</p>
+</header>
+
+<nav>
+    <a href="#tab1">1. TI: Fundamentos y Tipos</a>
+    <a href="#tab2">2. Caso Península Gas</a>
+    <a href="#tab3">3. Taller OEE Monitoreo</a>
+    <a href="#tab4">4. Taller Soldadura Robotizada</a>
+    <a href="#tab5">5. Taller Auditoría Ciberseguridad</a>
+    <a href="#tab6">6. Taller RCA Ishikawa</a>
+</nav>
+
+<div class="container">
+
+    <!-- PESTAÑA 1 -->
+    <div id="tab1" class="tab-content">
+        <h2>1. Tecnologías de la Información (TI): Fundamentos y Tipos en Entornos de Ingeniería</h2>
+        <p>Las Tecnologías de la Información (TI) comprenden el conjunto convergente de arquitecturas de hardware, plataformas de software, redes de telecomunicaciones y protocolos de gestión de datos diseñados para la captura, procesamiento, almacenamiento, transmisión y protección de datos estructurados y no estructurados.</p>
+        <p>En los dominios de la Ingeniería Industrial y la Ingeniería en Seguridad y Salud Ocupacional, las TI actúan como la infraestructura base sobre la cual opera la convergencia entre la Tecnología Operativa (Operational Technology, OT) y la Tecnología de la Información (Information Technology, IT).</p>
+        <pre>
+[ Entorno Físico / Planta ]
+│
+▼
+[ Sistemas de Sensores / Actuadores / PLC / RTU ] (Capa Periférica - OT)
+│
+▼ Protocolos de Red (OPC UA, MQTT, Modbus TCP, Ethernet/IP)
+[ Servidores Edge / Gateways Industriales ]
+│
+▼ Red de Planta / Backhaul IP (IEEE 802.3 / 802.11)
+[ Infraestructura TI Central ]
+┌───────────────────────┬────────────────────────┬──────────────────────┐
+│ Servidores On-Premise │ Data Centers / Cloud │ Almacenamiento NAS │
+│ (Bases de Datos, SQL) │ (Analítica Predictiva) │ / SAN │
+└───────────────────────┴────────────────────────┴──────────────────────┘
+│
+▼ Interfaces Lógicas y de Visualización
+[ Sistemas de Decisión: SCADA, MES, ERP, Plataformas HSE ]
+        </pre>
+
+        <h3>Tipos de Tecnologías de la Información según su Dominio Operativo</h3>
+        <h4>Sistemas de Procesamiento y Cómputo (Compute Infrastructure):</h4>
+        <ul>
+            <li><strong>Estaciones de Trabajo y Servidores:</strong> Procesamiento de alto rendimiento (High-Performance Computing, HPC) para cálculos de Elementos Finitos (FEA), dinámica de fluidos computacional (CFD) y optimización combinatoria de rutas de producción.</li>
+            <li><strong>Cómputo en el Borde (Edge Computing):</strong> Unidades de cómputo embebidas situadas en la proximidad de los activos físicos que ejecutan inferencia de modelos de Machine Learning en tiempo real para detección de paradas mecánicas o intrusiones en perímetros de riesgo.</li>
+        </ul>
+
+        <h4>Sistemas de Telecomunicaciones y Conectividad Industrial:</h4>
+        <ul>
+            <li>Redes de área local industrial (Industrial Local Area Networks, Industrial LAN), redes de área amplia (Wide Area Networks, WAN) y redes inalámbricas industriales estructuradas bajo topologías tolerantes a fallos (anillo redundante bajo norma IEC 62439-3).</li>
+            <li>Protocolos de transporte y serialización de datos: MQTT (Message Queuing Telemetry Transport), AMQP y OPC UA (Open Platform Communications Unified Architecture), los cuales garantizan interoperabilidad semántica e integridad en la telemetría de planta.</li>
+        </ul>
+
+        <h4>Sistemas de Gestión de Datos y Analítica (Storage & Analytics):</h4>
+        <ul>
+            <li>Motores de bases de datos relacionales (RDBMS) estructuradas mediante SQL (e.g., PostgreSQL) para el seguimiento de variables operacionales e historización de registros de eventos de seguridad (incidencias, dosimetrías de ruido, niveles de material particulado).</li>
+            <li>Repositorios de series temporales (Time-Series Databases, TSDB como InfluxDB o TimescaleDB) dedicados a registrar variables continuas de máquinas con marcas de tiempo de resolución en milisegundos.</li>
+        </ul>
+
+        <h4>Sistemas Ciberfísicos (CPS) e Internet Industrial de las Cosas (IIoT):</h4>
+        <ul>
+            <li>Redes de sensores inalámbricos (Wireless Sensor Networks, WSN) desplegadas para el monitoreo de límites permisibles de contaminantes (e.g., detección electroquímica de gases tóxicos, monitoreo de estrés térmico WBGT).</li>
+        </ul>
+
+        <h2>2. Clasificación de los Sistemas Operativos: Arquitecturas y Dominios de Aplicación</h2>
+        <p>Un Sistema Operativo (SO) es el software de base que administra de forma directa los recursos de hardware (procesador, memoria volátil, almacenamiento secundario, buses e interfaces de entrada/salida) y proporciona una capa de abstracción uniforme mediante llamadas al sistema (system calls) para la ejecución de procesos de software.</p>
+        
+        <table>
+            <tr><th>Criterio de Clasificación</th><th>Tipo de Sistema Operativo</th><th>Características Arquitecturales</th><th>Relevancia en Ingeniería y Planta</th></tr>
+            <tr><td rowspan="3">Determinismo Temporal</td><td>Tiempo Real Estricto (Hard RTOS)</td><td>El incumplimiento de un plazo (deadline) temporal constituye un fallo catastrófico del sistema. Latencias de interrupción garantizadas en microsegundos (eE., FreeRTOS, VxWorks, QNX).</td><td>Control de paradas de emergencia en prensas hidráulicas, corte CNC, enclavamientos de seguridad funcional (SIL 3 / IEC 61508).</td></tr>
+            <tr><td>Tiempo Real Blando (Soft RTOS)</td><td>La degradación en el cumplimiento temporal reduce la calidad del servicio (QoS), pero no destruye la integridad operativa (e.g., Linux con parche PREEMPT_RT>).</td><td>Registro de telemetría de monitoreo ambiental y actualización de pantallas HMI (Human-Machine Interface).</td></tr>
+            <tr><td>Tiempo Compartido (General Purpose OS)</td><td>Prioriza el rendimiento global (throughput) y la equidad (fairness) de recursos mediante algoritmos de planificación preventiva multinivel (e.g., Windows 11, distribuciones Linux estándar, macOS).</td><td>Ejecución de plataformas CAD/CAM, cálculos estadísticos, gestión administrativa e ingeniería de métodos.</td></tr>
+            <tr><td>Capacidad de Concurrencia</td><td>Monotarea vs. Multitarea Preemptiva</td><td>En arquitecturas preemptivas, el planificador del kernel suspende forzosamente procesos mediante interrupciones de relo: a conmutar el contexto (context switch), garantizando uso equitativo de la CPU.</td><td>Prevención de bloqueos en software de captura de datos concurrentes en estaciones de trabajo industriales*.</td></tr>
+            <tr><td>Administración de Usuarios</td><td>Monousuario vs. Multiusuario</td><td>Los sistemas multiusuario aíslan rigurosamente espacios de memoria de usuario y descriptores de archivos mediante anillos de protección de hardware (ring protection).</td><td>Servidores centralizados de mantenimiento industrial donde múltiples ingenieros acceden a bitácoras de fallas concurrentemente.</td></tr>
+            <tr><td>Topología de Cómputo</td><td>Sistemas Distribuidos (NOS / Dist-OS)</td><td>Múltiples nodos computacionales independientes se coordinan sobre una red física transparente al usuario (e.g., clústeres basados en Kubernetes / nodos Linux).</td><td>Computación paralela para optimización de cadenas de suministro masivas y análisis predictivo en grandes plantas.</td></tr>
+        </table>
+
+        <h2>3. Paradigmas de Licenciamiento y Desarrollo: Software Abierto vs. Software Cerrado</h2>
+        <p>La selección entre software de código abierto (Open Source Software, OSS) y software privativo/cerrado impacta la mantenibilidad a largo plazo, la trazabilidad técnica, la seguridad y los costos del ciclo de vida del sistema.</p>
+        
+        <h3>Comparativa Técnica y Estratégica</h3>
+        <table>
+            <tr><th>Dimensión</th><th>Software Abierto (Open Source)</th><th>Software Cerrado (Privativo / PropCerrado)</th></tr>
+            <tr><td>Acceso al Código Fuente</td><td>Acceso público sin restricciones; posibilidad de auditoría, compilación local y modificación directa del código fuente.</td><td>Binarios precompilados; código fuente protegido como secreto comercial y restringido por contratos de licencia (EULA).</td></tr>
+            <tr><td>Modelos de Licencia</td><td>Permisivas (MIT, Apache 2.0, BSD) y Copyleft/Recíprocas (GNU GPLv3, AGPL). Obligan o facultan la redistribución bajo términos estandarizados.</td><td>Licenciamiento por asiento, por núcleo (core-based), suscripciones anuales con mecanismos criptográficos de validación de licencias (DRM).</td></tr>
+            <tr><td>Auditoría y Ciberseguridad</td><td>Inspección directa de vulnerabilidades por pares (principio de Kerckhoffs); capacidad de parcheo autónomo inmediato ante fallos de día cero (zero-day).</td><td>Auditoría externa restringida; el cliente depende exclusivamente del ciclo de desarrollo y liberación de parches del fabricante.</td></tr>
+            <tr><td>Interoperabilidad Técnica</td><td>Orientado a estándares abiertos, formatos de texto estructurado (JSON, YAML, CSV) y protocolos de red transparentes.</td><td>Frecuente uso de protocolos e interfaces binarias propietarias, generando cautiverio de proveedor (vendor lock'lock-in).</td></tr>
+            <tr><td>Costo Total de Propiedad (TCO)</td><td>Inversión nula en licencias base, pero mayor requerimiento de personal calificado interno para mantenimiento, despliegue y soporte.</td><td>Alta inversión en licencias iniciales y mantenimiento anual; transferencias de responsabilidad técnica respaldadas por Acuerdos de Nivel de Servicio (SLA).</td></tr>
+            <tr><td>Ejemplos en Entornos de Ingeniería</td><td>Linux Kernel, PostgreSQL, FreeCAD, ScadaBR, Python/SciPy, Wireshark.</td><td>Microsoft Windows Server, Siemens TIA Portal% Portal, Rockwell Studio 5000, AutoCAD, SAP S/4HANA.</td></tr>
+        </table>
+
+        <h2>4. Funciones Críticas de un Sistema Operativo</h2>
+        <p>El sistema operativo actúa como el árbitro de hardware mediante un módulo central ejecutado en espacio privilegiado (Kernel Mode o Anillo 0). Desarrolla cinco funciones cardinales:</p>
+        <pre>
+┌────────────────────────────────────────────────────────────────────────┐
+│ APLICACIONES DE USUARIO │
+└─────────────────────────────────── B────────G────────────────────────────┘
+│ System Calls (read, fork, mmap...)
+┌───────────────────────────────────▼────────────────────────────────────┐
+│ KERNEL DEL SISTEMA OPERATIVO │3 D 2 1 │
+│ │
+│ ┌──────────────────────┐ ┌───────────────────┐ ┌─────────────────────┐ │
+│ │ Gestión de CPU / │ │ Gestión de │ │ Gestión del │ │
+│ │ Planificación │ │ Memoria (MMU, │ │ Almacenamiento │ │
+│ │ (Round Robin, CFS) │ │ Paginación) │ │ (VFS, Bloques, I/O)│ │
+│ └──────────────────────┘ └───────────────────┘ └─────────────────────┘ │
+│ ┌──────────────────────┐ ┌───────────────────┐ │
+│ │ Manejo de E/S │ │ Mecanismos de │ │
+│ │ (Drivers, DMA, IRQ) │ │ Protección y Auth │ │
+│ └──────────────────────┘ └───────────────────┘ │
+└───────────────────────────────────B────────G────────────────────────────┘
+│ Instrucciones de Hardware
+┌───────────────────────────────────▼────────────────────────────────────┐
+│ HARDWARE FÍSICO │
+│ CPU (Registers/ALU) │ Memoria RAM │ Buses │ Dispositivos │
+└────────────────────────────────────────────────────────────────────────┘
+        </pre>
+        <p><strong>A. Gestión del Procesador (CPU Scheduling):</strong> El procesador ejecuta flujos de instrucciones secuenciales. El SO administra qué proceso adquiere tiempo de cómputo, cuándo debe ser desalojado y cómo preservar su estado. Algoritmos Estándar: Planificador Completamente Justo (CFS en Linux), Round-Robin y Planificación por Prioridad Estricta.</p>
+        <p><strong>B. Gestión de Memoria Principal (Paginación y Memoria Virtual):</strong> El SO aísla el espacio de direcciones lógicas de cada programa del direccionamiento físico real mediante la Unidad de Manejo de Memoria (MMU). Mecanismo: Paginación por Demanda y Swap para evitar el colapso bajo la condición de que la tasa de fallos de página no genere hiperpaginación (thrashing).</p>
+        <p><strong>C. Abstracción del Sistema de Archivos y Almacenamiento:</strong> Transforma las direcciones físicas en una jerarquía lógica. Implementa una capa de abstracción unificada mediante el Sistema Virtual de Archivos (VFS).</p>
+        <p><strong>D. Gestión y Control de Entrada/Salida (I/O Subsystem):</strong> Controladores de Dispositivos (Device Drivers), Manejo de Interrupciones (IRQ) y Acceso Directo a Memoria (DMA).</p>
+        <p><strong>E. Seguridad, Protección y Control de Accesos:</strong> Mantiene la separación estricta entre el modo usuario y el modo kernel. Control de Acceso Discrecional (DAC) y Control de Acceso Obligatorio (MAC).</p>
+
+        <h2>5. Diferenciación Estructural: Programas de Sistema vs. Programas de Aplicación</h2>
+        <pre>
++--------------------------------------------------------------+
+| PROGRAMAS DE APLICACIÓN |
+| (Software CAD/CAM, Sistemas ERP/MES, Algoritmos Python, |
+| Plataformas de Modelado Estadístico y Ergonomía) |
++--------------------------------------------------------------+
+│ Consumen servicios de
+▼
++--------------------------------------------------------------+
+| PROGRAMAS DE SISTEMA |
+| (Compiladores, Intérpretes de Línea de Comandos [Bash/PS], |
+| Demonios de Diagnóstico, Herramientas de Mantenimiento) |
++--------------------------------------------------------------+
+│ Llamadas al Sistema
+▼
++--------------------------------------------------------------+
+| NÚCLEO DEL SISTEMA OPERATIVO |
+| (Planificación, Memoria, VFS, Drivers, Red, IPC) |
++--------------------------------------------------------------+
+│ Instrucciones de Máquina
+▼
++--------------------------------------------------------------+
+| HARDWARE |
+| (CPU, Memoria RAM, Buses, Discos) |
++--------------------------------------------------------------+
+        </pre>
+        <table>
+            <tr><th>Criterio de Comparación</th><th>Programas de Sistema (System Software)</th><th>Programas de Aplicación (Application Software)</th></tr>
+            <tr><td>Propósito Principal</td><td>Facilitar el funcionamiento, diagnóstico, seguridad, compilación y administración eficiente del computador y su SO.</td><td>Resolver tareas concretas orientadas al usuario final, flujos de ingeniería o necesidades operacionales del negocio.</td></tr>
+            <tr><td>Nivel de Abstracción</td><td>Próximo al núcleo y al hardware; interactúa directamente con llamadas del sistema (syscalls de bajo nivel).</td><td>Alto nivel de abstracción; depende de librerías del sistema, capas de runtime y APIs de alto nivel.</td></tr>
+            <tr><td>Entorno de Ejecución</td><td>Servicios de fondo (daemons) ejecutados en segundo plano sin interfaz gráfica obligatoria; herramientas CLI.</td><td>Ejecución bajo demanda, predominantemente asistida por interfaces gráficas de usuario (GUI) o paneles web.</td></tr>
+            <tr><td>Consecuencia de Fallo</td><td>Alta criticidad. La caída de un servicio puede inhabilitar todo el equipo.</td><td>Aislada. El fallo crítico produce un crash del proceso que el SO liquida sin desestabilizar el sistema base.</td></tr>
+            <tr><td>Ejemplos en Ingeniería</td><td>Administradores de discos, servidores SSH, compiladores (GCC, Clang), utilitarios de red, programadores de tareas.</td><td>ANSYS, SolidWorks, Microsoft Excel, ScadaBR, paquetes de simulación FlexSim, scripts propios de optimización.</td></tr>
+        </table>
+
+        <h2>6. Validación de Integridad Operativa en la Gestión de TI</h2>
+        <p>Para asegurar que la implementación de estas tecnologías en laboratorios, centros de cómputo y plantas piloto cumpla con estándares de arquitectura limpia y confiabilidad:</p>
+        <ul>
+            <li><strong>Monitoreo de Disponibilidad de Servidores e HMI:</strong> La tasa de disponibilidad del sistema base para las aplicaciones críticas se modela mediante: <div class="math-block">Disponibilidad = MTBF / (MTBF + MTTR)</div> donde MTBF es el Tiempo Medio Entre Fallos y MTTR es el Tiempo Medio de Reparación. Un sistema operativo mal configurado o saturado por hiperpaginación reduce drásticamente el MTBF computacional, afectando la métrica de OEE.</li>
+            <li><strong>Aislamiento de Privilegios en Software de Seguridad Industrial:</strong> Todo software de monitoreo de variables críticas de seguridad debe ejecutarse bajo cuentas de servicio no privilegiadas, implementando políticas de reinicio automático gestionadas por el sistema operativo con registro inmutable en archivos de bitácora centralizados mediante el protocolo Syslog seguro (RFC 5424 / TLS).</li>
+        </ul>
+    </div>
+
+    <!-- PESTAÑA 2 -->
+    <div id="tab2" class="tab-content">
+        <h2>Estudio de Caso: Colapso Operativo y Fallo Crítico de Monitoreo en la Planta Procesadora "Península Gas & Derivados"</h2>
+        <p><strong>Duración Total:</strong> 20 minutos | <strong>Cátedra:</strong> TIC Aplicadas a la Ingeniería | <strong>Metodología:</strong> Exposición socrática dirigida por el docente.</p>
+        
+        <h3>Estructura Temporal de la Sesión (20 Minutos)</h3>
+        <table>
+            <tr><th>Bloque</th><th>Intervalo</th><th>Fase Didáctica</th><th>Objetivo de Aprendizaje</th></tr>
+            <tr><td>Parte 1</td><td>Min 00:00 - 04:00</td><td>Planteamiento del Caso y Síntomas de Falla</td><td>Identificar el conflicto entre software de sistema, software de aplicación y degradación del hardware.</td></tr>
+            <tr><td>Parte 2</td><td>Min 04:00 - 10:00</td><td>Diagnóstico Técnico Profundo (Arquitectura del SO)</td><td>Analizar fallos en gestión de memoria, hiperpaginación (thrashing) y ausencia de determinismo temporal.</td></tr>
+            <tr><td>Parte 3</td><td>Min 10:00 - 15:00</td><td>Análisis de Impacto en Ingeniería: OEE y Riesgo HSE</td><td>Cuantificar matemáticamente la pérdida de OEE y la brecha normativa de seguridad ocupacional.</td></tr>
+            <tr><td>Parte 4</td><td>Min 15:00 - 20:00</td><td>Rediseño de Arquitectura y Validación de Integridad</td><td>Diseñar la solución desacoplada (RTOS vs GPOS, OSS vs Privativo, servicios de sistema).</td></tr>
+        </table>
+
+        <h3>Parte 1: Planteamiento del Caso y Contexto Operativo</h3>
+        <p>La planta procesadora de hidrocarburos ligeros "Península Gas & Derivados" cuenta con una estación de compresión, fraccionamiento y despacho. Opera 24/7 con capacidad nominal de 1200 barriles equivalentes por turno de 8 horas.</p>
+        <p><strong>La Infraestructura Informática Desplegada:</strong> Por reducción de costos, se instaló una única estación basada en GPOS Windows 10 Pro (4 núcleos, 8 GB RAM). Cargas concurrentes:</p>
+        <ul>
+            <li><strong>Monitoreo HSE:</strong> Software GUI pesada que lee vía Modbus TCP/IP 48 sensores de H2S y LEL. Debe generar disparo ESD si H2S > 10 ppm o LEL > 20%.</li>
+            <li><strong>Control de Producción (MES/SCADA):</strong> Adquisición de datos en tiempo real conectada a PLCs de compresores.</li>
+            <li><strong>Ingeniería de Planta:</strong> Uso de la misma terminal para planos CAD (SolidWorks/AutoCAD), Excel masivo y reportes.</li>
+        </ul>
+        <p><strong>El Evento Crítico:</strong> A las 03:14:22, fuga incipiente de H2S en cabezal compresor C-102. Simultáneamente, ingeniero abrió ensamble CAD de 3.2 GB y macro Excel. Consecuencia: Pantalla congelada, CPU 100%, Disco 100%. A las 03:15:10, H2S superó 35 ppm (IDLH). No disparó alarma ni válvula solenoide. Dos operadores intoxicados (rescatados con SCBA). Compresor colapsó por sobrepresión, parando planta 3.5 horas.</p>
+
+        <h3>Parte 2: Diagnóstico Técnico - Arquitectura del Sistema Operativo</h3>
+        <pre>
+[ APLICACIONES: CAD (3.2 GB) + Excel + SCADA + Monitor HSE (H2S/LEL) ] <- Espacio de Usuario
+│
+Demanda total de memoria = 11.4 GB > Capacidad física (RAM: 8 GB)
+│
+┌───────────────────────────────▼───────────────────────────────┐
+│ KERNEL GPOS (Windows): │
+│ - Planificador CFS / Round-Robin: Asigna tiempo equitativo │
+│ a la GUI de CAD en vez de priorizar la alerta HSE. │
+│ - Gestor de Memoria (MMU): Agotamiento de páginas físicas. │
+│ Inicia Paginación por Demanda hacia archivo de paginación │
+│ (swapfile.sys) en disco mecánico SATA. │
+└───────────────────────────────B────────G───────────────────────────────┘
+│
+I/O Bottleneck: Fallos de Página
+│
+┌───────────────────────────────▼───────────────────────────────┐
+│ HARDWARE: │
+│ - Disco saturado (100% ocupación) │
+│ - CPU atrapada en conmutación de contexto e interrupciones │
+│ = HIPERPAGINACIÓN (THRASHING). Latencia de red > 45 s. │
+└───────────────────────────────────────────────────────────────────┘
+        </pre>
+        <p><strong>1. Ausencia de Determinismo Temporal:</strong> Un GPOS prioriza equidad, no garantía de latencia acotada. La rutina Modbus no estaba en núcleo Hard RTOS.</p>
+        <p><strong>2. Colapso del Gestor de Memoria:</strong> Huella de memoria (11.4 GB) > RAM (8 GB). MMU transfiere marcos a disco. Velocidad disco vs RAM genera hiperpaginación. CPU al 94% en fallos de página.</p>
+        <p><strong>3. Confusión entre Programa de Sistema y Aplicación:</strong> Detección de gas diseñada como App con GUI (.NET), no como servicio daemon con prioridad SCHED_FIFO.</p>
+
+        <h3>Parte 3: Análisis de Impacto en Ingeniería - OEE y Riesgo HSE</h3>
+        <p><strong>A. Impacto en OEE:</strong> Turno 8h (480 min).</p>
+        <ul>
+            <li>Disponibilidad: T. Operación Planificado (450 min) - T. Muerto (210 min) = 240 min. A = 240/450 = 0.5333</li>
+            <li>Rendimiento: Prod. Teórica (3600 bbl) vs Real procesado (1800 bbl). P = 1800/3600 = 0.5000</li>
+            <li>Calidad: 1800 total, 450 fuera de spec. Q = 1350/1800 = 0.7500</li>
+            <li>OEE = 0.5333 * 0.5000 * 0.7500 = 0.2000 (20%)</li>
+        </ul>
+        <p><strong>B. Impacto HSE:</strong> Incumplimiento D.E. 2393. Fallo de Función Instrumentada de Seguridad (SIF) viola IEC 61508.</p>
+
+        <h3>Parte 4: Rediseño de Arquitectura y Validación de Integridad</h3>
+        <pre>
+NIVEL FÍSICO / SENSORES
+Sensores H2S / LEL (4-20 mA) Presión / Flujo Compresor
+│ │
+▼ ▼
+[ PLC / RTOS Dedicado ] [ PLC de Proceso ]
+(SIL 3 - IEC 61508) (Control Secuencial)
+│ │
+├──────────────────────┐ │
+▼ (Lazo Cableado) ▼ (OPC UA) ▼ (Modbus TCP)
+[ Disparo Físico ESD ] [ Servidor Edge Linux Industrial ]
+(Válvula Solenoide) - Kernel con PREEMPT_RT
+- Daemon: 'hsed_monitor' (C/POSIX)
+- Almacenamiento: TSDB (InfluxDB)
+│
+▼ Red de Planta Segura
+[ Terminal de Operación (GPOS) ]
+- Visualización HMI / Dashboards
+- Estación CAD/Ingeniería AISLADA
+        </pre>
+        <table>
+            <tr><th>Componente</th><th>Configuración Defectuosa</th><th>Rediseño Propuesto</th></tr>
+            <tr><td>Sistema Operativo para Seguridad</td><td>GPOS Windows 10 mononodo</td><td>Desacoplamiento Estricto: PLC Hard RTOS. Servidor telemetría Linux Industrial PREEMPT_RT.</td></tr>
+            <tr><td>Clasificación de Software</td><td>App monolítica con GUI en sesión usuario</td><td>Daemon POSIX: sin GUI, prioridad fija, mlockall() en RAM.</td></tr>
+            <tr><td>Software Abierto vs. Cerrado</td><td>Licencias cerradas sin optimizar kernel</td><td>OSS (Linux, Python, PostgreSQL/TimescaleDB, OPC UA, MQTT).</td></tr>
+            <tr><td>Estaciones CAD/Ofimática</td><td>Compartidas con control planta</td><td>Aisladas en VLAN de oficina técnica.</td></tr>
+        </table>
+        <p><strong>Pregunta Socrática:</strong> "Ingenieros: Si en una auditoría de planta encuentran que el monitoreo de contaminantes químicos de la norma D.E. 2393 está programado como una aplicación de escritorio convencional sobre el mismo computador donde el personal hace reportes en Excel y diseño mecánico, ¿qué parámetros de hardware, gestión del sistema operativo y disponibilidad operativa del OEE deben objetar de inmediato en su informe técnico?"</p>
+    </div>
+
+    <!-- PESTAÑA 3 -->
+    <div id="tab3" class="tab-content">
+        <h2>Taller Práctico de Aula: Diagnóstico de Arquitectura TI y Evaluación de OEE en Sistema de Monitoreo Crítico</h2>
+        <p><strong>Asignatura:</strong> TIC Aplicadas a la Ingeniería | <strong>Complejidad:</strong> Medio | <strong>Duración:</strong> 20 minutos</p>
+
+        <h3>1. Contexto Operativo del Problema</h3>
+        <p>Planta de solventes químicos (tolueno y xileno). Turno estándar de 480 min, velocidad nominal 120 unidades/min. Infraestructura única: 8 GB RAM, HDD SATA, CPU 4 núcleos. Tareas: Control de Producción y Visión (GUI pesada), Supervisión HSE (VOCs y O2 vía Modbus cada 500ms), Ofimática.</p>
+        <p><strong>Evento:</strong> Ejecución de macro consolidación inventario + visión a máxima velocidad. Demanda memoria 11.4 GB > 8 GB RAM. Hiperpaginación, CPU 100%, latencia HSE de 500ms a 12s. Derrame por rebose, tolueno supera umbrales D.E. 2393. Enclavamiento no cerr(ó electro)válvula en tiempo seguro. Parada mecánica manual. Línea detenida 90 min no planificados + 30 min planificados. Producción restante: 37200 unidades, 1860 defectuosas.</p>
+
+        <h3>2. Cronograma de Ejecución (20 Minutos)</h3>
+        <table>
+            <tr><th>Fase</th><th>Intervalo</th><th>Actividad</th></tr>
+            <tr><td>Fase 1</td><td>Min 00:00 - 05:00</td><td>Lectura y Modelado</td></tr>
+            <tr><td>Fase 2</td><td>Min 05:00 - 12:00</td><td>Resolución Cuantitativa OEE</td></tr>
+            <tr><td>Fase 3</td><td>Min 12:00 - 17:00</td><td>Propuesta de Arquitectura</td></tr>
+            <tr><td>Fase 4</td><td>Min 17:00 - 20:00</td><td>Validación de Integridad</td></tr>
+        </table>
+
+        <h3>3. Entregables Requeridos</h3>
+        <p><strong>Tarea A: Evaluación OEE</strong> -> Deducir Disponibilidad, Rendimiento, Calidad y OEE Consolidado.</p>
+        <p><strong>Tarea B: Diagnóstico SO y TI</strong> -> Explicar hiperpaginación y latencia; indicar diferencias estructura App vs Servicio de sistema.</p>
+        <p><strong>Tarea C: Matriz Rediseño</strong> -> Completar matriz Solución Tecnológica Correctiva (SO, Paradigma Software, Ubicación Ofimática).</p>
+
+        <div class="locked-section">
+            <h3>4. Guía de Solución y Rúbrica de Calificación (Protegido)</h3>
+            <div id="unlock-form-tab3" class="unlock-form">
+                <label>Ingrese clave del docente:</label>
+                <input type="password" id="pass-tab3" placeholder="Clave">
+                <button onclick="checkPass('tab3')">Desbloquear</button>
+            </div>
+            <div id="locked-tab3" class="solution-content">
+                <h4>Solución Numérica de la Tarea A</h4>
+                <ul>
+                    <li>Disponibilidad (A): T. Op. Planificado (450 min), T. Op. Real (360 min). A = 360/450 = 0.8000</li>
+                    <li>Rendimiento (P): Prod. Teórica (43200 unidades), Prod. Real (37200 unidades). P = 37200/43200 = 0.8611</li>
+                    <li>Calidad (Q): Q = (37200-1860)/37200 = 35340/37200 = 0.9500</li>
+                    <li>OEE Total = 0.8000 * 0.8611 * 0.9500 = 0.6544 (65.44%)</li>
+                </ul>
+                <h4>Solución Técnica Esperada (Tareas B y C)</h4>
+                <p><strong>Diagnóstico de Memoria:</strong> Al superar la memoria física (8GB), el kernel del GPOS dedicó ciclos de CPU a resolver fallos de página intercambiando bloques con el disco SATA. El planificador no ofrece determinismo temporal, degradando tiempo de respuesta a 12s.</p>
+                <p><strong>Programa de Sistema vs. Aplicación:</strong> Servicios/demonios corren en segundo plano sin GUI, pueden fijar páginas en RAM (mlockall) para evitar swap, y se les asigna prioridad estricta en tiempo real.</p>
+                <p><strong>Solución de Arquitectura:</strong> Enclavamiento a PLC de seguridad Hard RTOS (IEC 61508). Servidor telemetría Linux OSS (PostgreSQL/TimescaleDB). Tareas ofimáticas aisladas en VLAN separada.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PESTAÑA 4 -->
+    <div id="tab4" class="tab-content">
+        <h2>Taller Práctico de Aula: Diagnóstico de Concurrencia de SO, Latencia de Seguridad y Pérdida de OEE en Estación de Soldadura Robotizada</h2>
+        <p><strong>Complejidad:</strong> Medio | <strong>Tiempo Límite:</strong> 20 minutos</p>
+
+        <h3>1. Contexto Operativo y Planteamiento de la Falla</h3>
+        <p>Celda robotizada GMAW. Turno 480 min, capacidad nominal 45 unidades/min. PC Industrial limitada: 4 núcleos, 8GB RAM, HDD SATA. GPOS Windows 10 Pro. Cargas: Lazo HSE (humos metálicos, barreras fotoeléctricas Modbus 250ms), Control Telemetría, Uso Auxiliar CAD/Excel.</p>
+        <p><strong>Incidente:</strong> Verificación ensamble CAD + volcado BD. Memoria 12.5 GB > 8 GB. Hiperpaginación. Tasa fallos página satura I/O, planificador prioriza CAD. Latencia HSE de 250ms a 3200ms. Operario ingresa a zona alcance, cortina fotoeléctrica tarda en procesarse, robot colisiona. Parada no planificada 120 min, planificada 30 min. Producción 13500 unidades, 675 defectuosas.</p>
+
+        <h3>2. Cronograma de Gestión (20 Minutos)</h3>
+        <table>
+            <tr><th>Intervalo</th><th>Fase</th></tr>
+            <tr><td>00:00 - 04:00</td><td>Extracción Variables</td></tr>
+            <tr><td>04:00 - 11:00</td><td>Cuantificación OEE y Seguridad</td></tr>
+            <tr><td>11:00 - 17:00</td><td>Rediseño Arquitectura TI</td></tr>
+            <tr><td>17:00 - 20:00</td><td>Validación Integridad</td></tr>
+        </table>
+
+        <h3>3. Hoja de Trabajo y Reactivos</h3>
+        <p><strong>Bloque A:</strong> Modelado OEE (Disponibilidad, Rendimiento, Calidad, OEE).</p>
+        <p><strong>Bloque B:</strong> Mecanismo Hiperpaginación y Planificación; Programa de Sistema vs Aplicación.</p>
+        <p><strong>Bloque C:</strong> Matriz Rediseño Tecnológico (Lazo Parada, Monitoreo Históricos, Diseño/Ofimática).</p>
+
+        <div class="locked-section">
+            <h3>4. Pauta de Corrección y Criterios de Evaluación (Protegido)</h3>
+            <div id="unlock-form-tab4" class="unlock-form">
+                <label>Ingrese clave del docente:</label>
+                <input type="password" id="pass-tab4" placeholder="Clave">
+                <button onclick="checkPass('tab4')">Desbloquear</button>
+            </div>
+            <div id="locked-tab4" class="solution-content">
+                <h4>Solución Numérica Bloque A</h4>
+                <ul>
+                    <li>Disponibilidad (A): T. Op. Planificado (450 min), T. Op. Real (330 min). A = 330/450 = 0.7333</li>
+                    <li>Rendimiento (P): Prod. Teórica (14850 unidades), Prod. Real (13500 unidades). P = 13500/14850 = 0.9091</li>
+                    <li>Calidad (Q): Q = (13500-675)/13500 = 12825/13500 = 0.9500</li>
+                    <li>OEE Consolidado = 0.7333 * 0.9091 * 0.9500 = 0.6333 (63.33%)</li>
+                </ul>
+                <h4>Criterios Validación Técnica (Bloques B y C)</h4>
+                <p><strong>Diagnóstico MMU:</strong> GPOS divide memoria en marcos. Al superarse RAM, kernel traslada páginas a HDD. Disco 3 órdenes magnitud inferior, CPU se entrampa (thrashing). Planificador persigue equidad, hilo Modbus postergado.</p>
+                <p><strong>Programa de Sistema:</strong> Sin GUI, demonio de fondo, bloqueo páginas RAM (mlockall).</p>
+                <p><strong>Rediseño:</strong> Seguridad a PLC Hard RTOS (IEC 62061). Telemetría Linux PREEMPT_RT + TSDB. Ofimática a VLAN corporativa.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PESTAÑA 5 -->
+    <div id="tab5" class="tab-content">
+        <h2>Taller de Auditoría Técnica y Dictamen Pericial Simulado en Ciberseguridad Operativa y Sistemas de Control</h2>
+        <p><strong>Complejidad:</strong> Medio | <strong>Duración:</strong> 20 minutos</p>
+
+        <h3>1. Expediente Pericial del Siniestro (Causa N.º 2026-IND-HSE-042)</h3>
+        <p><strong>Activo:</strong> Extrusora-Moldeadora Hidráulica EH-01. Turno 480 min, velocidad 150 unidades/min. Normativa: D.E. 2393, ISO 13849-1, IEC 61508.</p>
+        <p><strong>Hechos:</strong> Sobrecalentamiento crítico (412°C, max admisible 350°C). Servidor Windows 10 Pro, 8GB RAM, HDD. Procesos: HSE WPF (Modbus 500ms), Cámara Calidad, AutoCAD + Excel. Demanda 12.8 GB > 8GB RAM. Hard page faults 1000/s, cola disco 100%, Thrashing. Disparo sobretemperatura censado, llamada write() bloqueada en planificador. Retraso 70 segundos. Sello hidráulico reventado, quemaduras operadores.</p>
+        <p>Parada no programada 180 min, planificada 30 min. Producción real 31500, rechazos 1575.</p>
+
+        <h3>2. Cronograma Auditoría (20 Minutos)</h3>
+        <table>
+            <tr><th>Intervalo</th><th>Fase</th></tr>
+            <tr><td>00:00 - 04:00</td><td>Admisión y Reconstrucción</td></tr>
+            <tr><td>04:00 - 10:00</td><td>Determinación Pericial OEE</td></tr>
+            <tr><td>10:00 - 16:00</td><td>Dictamen Causalidad Técnica</td></tr>
+            <tr><td>16:00 - 20:00</td><td>Fallo y Pliego Prescripciones</td></tr>
+        </table>
+
+        <h3>3. Hoja de Dictamen Pericial</h3>
+        <p><strong>SECCIÓN I:</strong> Valoración Cuantitativa OEE.</p>
+        <p><strong>SECCIÓN II:</strong> Análisis Causa-Raíz (Determinismo e Hiperpaginación, Defecto Clasificación Software).</p>
+        <p><strong>SECCIÓN III:</strong> Dictamen y Prescripciones (Capa Control ESD, Arquitectura Monitoreo, Régimen Licenciamiento, Segmentación Tareas).</p>
+
+        <div class="locked-section">
+            <h3>4. Baremo de Evaluación y Guía de Resolución (Protegido)</h3>
+            <div id="unlock-form-tab5" class="unlock-form">
+                <label>Ingrese clave del docente:</label>
+                <input type="password" id="pass-tab5" placeholder="Clave">
+                <button onclick="checkPass('tab5')">Desbloquear</button>
+            </div>
+            <div id="locked-tab5" class="solution-content">
+                <h4>Resolución Analítica Numérica</h4>
+                <ul>
+                    <li>Disponibilidad (A): T. Op. Planificado (450 min), T. Op. Real (270 min). A = 270/450 = 0.6000</li>
+                    <li>Rendimiento (P): Prod. Teórica (40500 unidades), Prod. Real (31500 unidades). P = 31500/40500 = 0.7778</li>
+                    <li>Calidad (Q): Q = (31500-1575)/31500 = 29925/31500 = 0.9500</li>
+                    <li>OEE Global = 0.6000 * 0.7778 * 0.9500 = 0.4433 (44.33%)</li>
+                </ul>
+                <h4>Fundamentación Forense</h4>
+                <p><strong>Falla GPOS:</strong> Planificación balanceada, no restricción temporal. MMU pagin(ó a HDD, cuello botella I/O, CPU 100% en thrashing, hilo corte encolado.</p>
+                <p><strong>App vs Sistema:</strong> App depende subsistema ventanas. Daemon acopla librerías RT, mlockall(), prioridad estricta SCHED_FIFO.</p>
+                <p><strong>Matriz Solución:</strong> PLC SIL 2/3 PLe, Daemon sin GUI + TSDB, Linux PREEMPT_RT, Prohibición CAD en nodos control.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PESTAÑA 6 -->
+    <div id="tab6" class="tab-content">
+        <h2>Taller Avanzado: Retos de Análisis de Causa Raíz (RCA) y Diagramas de Ishikawa Cuantitativos en Arquitecturas de TI Industrial</h2>
+        <p><strong>Nivel de Complejidad:</strong> Avanzado / Maestría Técnica | <strong>Duración:</strong> 20 minutos</p>
+
+        <h3>1. Planteamiento del Reto Operativo (Caso de Estudio Forense)</h3>
+        <p>Planta de polimerización, línea inyección monómero. Turno 480 min, capacidad 60 unidades/min. Estación mononodo GPOS privativo, 4 núcleos, 8GB RAM, HDD. Colapso lazo seguridad por ejecución renderizado simulación CAD 3D (4.5GB en memoria) concurrente con adquisición datos presión/temperatura críticos. Hiperpaginación severa, retardo inyección monómero, reacción exotérmica descontrolada, activación tardía alarma, parada emergencia manual tras exposición térmica operario.</p>
+        <p>Datos afectación: Parada no planificada 240 min, planificada 30 min. Producción 8100 unidades, 891 defectuosas (degradación química por pico térmico).</p>
+
+        <h3>Instrucciones del Taller</h3>
+        <p>1. Calcular el OEE del turno de operación afectado.</p>
+        <p>2. Construir un Diagrama de Ishikawa cuantitativo asignando pesos porcentuales de contribución a la falla en las espinas: Hardware (RAM/Disco), Software (GPOS vs RTOS), Personas (Ingeniero abriendo CAD), y Métodos (Política de costos TI).</p>
+        <p>3. Proponer rediseño de arquitectura desacoplada bajo estándares IEC 61508.</p>
+
+        <div class="locked-section">
+            <h3>Solución del Taller Avanzado (Protegido)</h3>
+            <div id="unlock-form-tab6" class="unlock-form">
+                <label>Ingrese clave del docente:</label>
+                <input type="password" id="pass-tab6" placeholder="Clave">
+                <button onclick="checkPass('tab6')">Desbloquear</button>
+            </div>
+            <div id="locked-tab6" class="solution-content">
+                <h4>1. Resolución OEE</h4>
+                <ul>
+                    <li>Disponibilidad (A): T. Op. Planificado (450 min), T. Op. Real (210 min). A = 210/450 = 0.4667</li>
+                    <li>Rendimiento (P): Prod. Teórica (12600 unidades), Prod. Real (8100 unidades). P = 8100/12600 = 0.6429</li>
+                    <li>Calidad (Q): Q = (8100-891)/8100 = 7209/8100 = 0.8900</li>
+                    <li>OEE Consolidado = 0.4667 * 0.6429 * 0.8900 = 0.2670 (26.70%)</li>
+                </ul>
+                <h4>2. Diagrama Ishikawa (Distribución Causal Estimada)</h4>
+                <ul>
+                    <li><strong>Hardware (30%):</strong> Insuficiente RAM (8GB), HDD lento causa thrashing.</li>
+                    <li><strong>Software (40%):</strong> GPOS sin determinismo, App GUI dependiente de sesión usuario, falta de aislamiento de prioridades.</li>
+                    <li><strong>Personas (15%):</strong> Violación procedimiento operativo al ejecutar CAD en terminal crítica.</li>
+                    <li><strong>Métodos (15%):</strong> Política de reducción de costos de licenciamiento que forzó mononodo GPOS compartido.</li>
+                </ul>
+                <h4>3. Rediseño Arquitectura</h4>
+                <p>Implementar PLC SIL 3 para lazo PID de inyección y ESD térmica. Migrar estación telemetría a Linux RT con daemon de adquisición aislado. Segmentación estricta de red (VLAN) y prohibición de estaciones de trabajo de ingeniería en la red de control de seguridad funcional.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Lógica de Pestañas con URL Independientes
+    function openTab(hash) {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].classList.remove("active");
+        }
+        tablinks = document.getElementsByTagName("nav")[0].getElementsByTagName("a");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
+        
+        if (document.getElementById(hash)) {
+            document.getElementById(hash).classList.add("active");
+        }
+        
+        for (i = 0; i < tablinks.length; i++) {
+            if (tablinks[i].getAttribute("href") === "#" + hash) {
+                tablinks[i].classList.add("active");
+            }
+        }
+    }
+
+    window.onload = function() {
+        let hash = window.location.hash.substring(1);
+        if (!hash) hash = "tab1"; // Default tab
+        openTab(hash);
+    };
+
+    window.onhashchange = function() {
+        let hash = window.location.hash.substring(1);
+        openTab(hash);
+    };
+
+    // Lógica de Seguridad (Clave ofuscada: 1985)
+    function checkPass(tabId) {
+        let inputVal = document.getElementById('pass-' + tabId).value;
+        // 49 = '1', 57 = '9', 56 = '8', 53 = '5'
+        let secret = String.fromCharCode(49,57,56,53); 
+        
+        if(inputVal === secret) {
+            document.getElementById('locked-' + tabId).style.display = 'block';
+            document.getElementById('unlock-form-' + tabId).style.display = 'none';
+        } else {
+            alert('Clave incorrecta. Acceso denegado.');
+            document.getElementById('pass-' + tabId).value = '';
+        }
+    }
+</script>
+
+</body>
+</html>
