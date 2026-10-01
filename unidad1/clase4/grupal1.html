@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad Grupal · Unidad 1 · Fundamentos de TI | Guía Docente</title>
+<meta name="author" content="Cátedra de Ingeniería de Sistemas Industriales">
+<meta name="description" content="Guía docente para actividad grupal en 7 grupos: asignación de temas, rúbrica de evaluación, cronograma y hojas de observación para la Unidad 1 de Fundamentos de TI y Arquitectura de Sistemas.">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Source+Sans+Pro:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul-marino:#0A2A5E;
+  --azul-oscuro:#06214C;
+  --azul-medio:#1E4A8C;
+  --azul-claro:#E8EEF8;
+  --dorado:#C8A04A;
+  --dorado-claro:#F4E9C9;
+  --gris-claro:#F5F6F8;
+  --gris-medio:#D9DDE3;
+  --gris-oscuro:#4A4F57;
+  --texto:#1F2A37;
+  --texto-claro:#5A6573;
+  --verde-correcto:#2E7D5B;
+  --rojo-alerta:#B23A48;
+  --borde:#C7CFDD;
+  --sombra:0 4px 18px rgba(10,42,94,.10);
+  --sombra-fuerte:0 10px 30px rgba(10,42,94,.18);
+  --max:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Source Sans Pro','Helvetica Neue',Arial,sans-serif;
+  font-size:17px;
+  line-height:1.7;
+  color:var(--texto);
+  background:var(--gris-claro);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,h5{font-family:'Merriweather',Georgia,serif;color:var(--azul-marino);font-weight:700;line-height:1.3}
+h1{font-size:1.95rem;letter-spacing:-.01em}
+h2{font-size:1.55rem;margin:2.2rem 0 1rem;padding-bottom:.4rem;border-bottom:3px solid var(--dorado)}
+h3{font-size:1.22rem;color:var(--azul-medio);margin:1.5rem 0 .6rem}
+h4{font-size:1.05rem;color:var(--azul-oscuro);margin:1.1rem 0 .4rem;font-weight:700}
+p{margin:.6rem 0 1rem}
+a{color:var(--azul-medio);text-decoration:none;border-bottom:1px dotted var(--azul-medio)}
+a:hover{color:var(--azul-marino);border-bottom-style:solid}
+code{font-family:'Source Code Pro',monospace;background:var(--azul-claro);color:var(--azul-oscuro);padding:.1em .35em;border-radius:4px;font-size:.92em}
+ul,ol{margin:.5rem 0 1.2rem 1.6rem}
+li{margin:.3rem 0}
+strong{color:var(--azul-marino);font-weight:700}
+em{color:var(--texto-claro)}
+blockquote{border-left:5px solid var(--dorado);background:var(--dorado-claro);padding:1rem 1.4rem;margin:1.5rem 0;border-radius:0 8px 8px 0;font-style:italic}
+blockquote p{margin:.3rem 0}
+table{border-collapse:collapse;width:100%;margin:1.2rem 0;font-size:.95rem;background:#fff;box-shadow:var(--sombra);border-radius:6px;overflow:hidden}
+thead{background:var(--azul-marino);color:#fff}
+th{padding:.85rem 1rem;text-align:left;font-weight:700;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase}
+td{padding:.75rem 1rem;border-top:1px solid var(--gris-medio);vertical-align:top}
+tbody tr:nth-child(even){background:var(--azul-claro)}
+tbody tr:hover{background:var(--dorado-claro)}
+hr{border:none;border-top:1px solid var(--borde);margin:2.5rem 0}
+
+/* === HEADER === */
+header.university{
+  background:linear-gradient(135deg,var(--azul-oscuro) 0%,var(--azul-marino) 60%,var(--azul-medio) 100%);
+  color:#fff;padding:1.2rem 0 1.4rem;box-shadow:var(--sombra-fuerte);position:relative;
+}
+header.university::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--dorado) 0%,#E8C879 50%,var(--dorado) 100%)}
+.university-inner{max-width:var(--max);margin:0 auto;padding:0 1.4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.escudo{display:flex;align-items:center;gap:.85rem}
+.escudo-circ{width:48px;height:48px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--azul-marino);font-family:'Merriweather',serif;font-weight:900;font-size:1.35rem;box-shadow:0 0 0 3px var(--dorado),0 0 0 6px rgba(255,255,255,.18)}
+.university-meta{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dorado-claro);font-weight:600;margin-bottom:.1rem}
+.university-title{font-family:'Merriweather',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.2}
+.course-tag{font-size:.78rem;color:rgba(255,255,255,.85);margin-top:.25rem}
+.header-actions{display:flex;gap:.6rem;flex-wrap:wrap}
+.btn-action{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.4);padding:.55rem 1rem;border-radius:6px;font-family:'Source Sans Pro',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;transition:all .2s ease;text-decoration:none;border-bottom:1.5px solid rgba(255,255,255,.4)}
+.btn-action:hover{background:#fff;color:var(--azul-marino);border-color:#fff;border-bottom:1.5px solid #fff}
+.btn-action svg{width:14px;height:14px;fill:currentColor}
+
+/* === SUB-NAV (índice flotante) === */
+nav.subnav{background:#fff;box-shadow:0 2px 8px rgba(10,42,94,.06);position:sticky;top:0;z-index:50;border-bottom:1px solid var(--borde)}
+.subnav-inner{max-width:var(--max);margin:0 auto;padding:.6rem 1.4rem;display:flex;gap:.4rem;flex-wrap:wrap;font-size:.85rem;align-items:center}
+.subnav-label{color:var(--texto-claro);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem;margin-right:.4rem}
+.subnav-link{padding:.4rem .65rem;border-radius:4px;color:var(--texto-claro);text-decoration:none;border-bottom:none;font-weight:600;transition:all .2s}
+.subnav-link:hover{background:var(--azul-claro);color:var(--azul-marino)}
+.subnav-link.active{background:var(--azul-marino);color:#fff}
+
+/* === MAIN === */
+main{max-width:var(--max);margin:0 auto;padding:2.2rem 1.4rem 4rem}
+
+.panel-header{background:linear-gradient(135deg,var(--azul-marino) 0%,var(--azul-medio) 100%);color:#fff;padding:2rem 2.2rem;border-radius:12px;margin-bottom:2rem;box-shadow:var(--sombra);position:relative;overflow:hidden}
+.panel-header::before{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(200,160,74,.25) 0%,transparent 70%)}
+.panel-header .kicker{font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dorado-claro);font-weight:600;margin-bottom:.6rem}
+.panel-header h1{color:#fff;margin:0 0 .5rem;font-size:1.85rem}
+.panel-header p{color:rgba(255,255,255,.88);margin:.4rem 0 0;font-size:1rem;max-width:780px}
+.panel-header .meta-row{display:flex;gap:1.6rem;flex-wrap:wrap;margin-top:1rem;font-size:.82rem;color:var(--dorado-claro);letter-spacing:.04em}
+.panel-header .meta-row span{display:inline-flex;align-items:center;gap:.4rem}
+.panel-header .meta-row span::before{content:"●";color:var(--dorado)}
+
+/* === SECTION CARD === */
+.section-card{background:#fff;border:1px solid var(--borde);border-radius:10px;padding:2rem 2.2rem;margin:1.5rem 0;box-shadow:var(--sombra)}
+.section-card h2:first-child{margin-top:0}
+
+.callout{border-radius:8px;padding:1.2rem 1.4rem;margin:1.4rem 0;border-left:5px solid;display:flex;gap:1rem;align-items:flex-start}
+.callout .icon{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Merriweather',serif}
+.callout-info{background:var(--azul-claro);border-color:var(--azul-medio);color:var(--azul-oscuro)}
+.callout-info .icon{background:var(--azul-medio);color:#fff}
+.callout-warn{background:#FFF6E5;border-color:var(--dorado);color:#7A5A1A}
+.callout-warn .icon{background:var(--dorado);color:#fff}
+.callout-key{background:#EAF5EE;border-color:var(--verde-correcto);color:#1A5C40}
+.callout-key .icon{background:var(--verde-correcto);color:#fff}
+.callout p{margin:.2rem 0}
+.callout-title{font-weight:700;margin-bottom:.3rem;font-family:'Merriweather',serif}
+
+/* Toolbar */
+.toolbar{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.5rem 0;padding:1rem 1.2rem;background:#fff;border:1px solid var(--borde);border-radius:8px;align-items:center}
+.toolbar .toolbar-label{font-size:.78rem;color:var(--texto-claro);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-right:.4rem}
+.btn-tool{background:var(--azul-claro);color:var(--azul-marino);border:1px solid var(--azul-medio);padding:.5rem .9rem;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;transition:all .2s;text-decoration:none;border-bottom:1px solid var(--azul-medio)}
+.btn-tool:hover{background:var(--azul-marino);color:#fff;border-color:var(--azul-marino);border-bottom:1px solid var(--azul-marino)}
+.btn-tool svg{width:14px;height:14px;fill:currentColor}
+.copy-feedback{font-size:.82rem;color:var(--verde-correcto);font-weight:600;margin-left:.4rem;display:none}
+.copy-feedback.visible{display:inline-block;animation:fadeIn .2s ease}
+
+/* Grupo card */
+.grupo-card{background:#fff;border:1px solid var(--borde);border-radius:10px;margin:1.5rem 0;overflow:hidden;box-shadow:var(--sombra);border-left:5px solid var(--dorado)}
+.grupo-header{background:linear-gradient(135deg,var(--azul-marino) 0%,var(--azul-medio) 100%);color:#fff;padding:1rem 1.4rem;display:flex;align-items:center;gap:1rem}
+.grupo-num{background:var(--dorado);color:var(--azul-oscuro);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Merriweather',serif;font-weight:900;font-size:1.2rem;flex:0 0 auto}
+.grupo-header h3{color:#fff;margin:0;font-size:1.1rem}
+.grupo-header .grupo-tag{font-size:.78rem;color:var(--dorado-claro);margin-top:.2rem}
+.grupo-body{padding:1.4rem 1.6rem}
+
+/* Rúbrica nivel cards */
+.rubrica-criterio{margin:1.5rem 0;padding:1.4rem 1.6rem;background:#fff;border:1px solid var(--borde);border-radius:10px;box-shadow:var(--sombra);border-left:5px solid var(--azul-medio)}
+.rubrica-criterio h3{margin-top:0;color:var(--azul-marino)}
+.nivel-grid{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.nivel{padding:1rem 1.2rem;border-radius:6px;border-left:4px solid}
+.nivel-0{background:#FFE9EC;border-left-color:var(--rojo-alerta)}
+.nivel-1{background:#FFF6E5;border-left-color:var(--dorado)}
+.nivel-2{background:var(--azul-claro);border-left-color:var(--azul-medio)}
+.nivel-3{background:#EAF5EE;border-left-color:var(--verde-correcto)}
+.nivel-titulo{font-weight:700;font-family:'Merriweather',serif;font-size:.95rem;margin-bottom:.3rem;display:flex;justify-content:space-between;align-items:center}
+.nivel-puntaje{font-size:.78rem;font-weight:700;padding:.2rem .6rem;border-radius:4px;background:rgba(255,255,255,.7);color:inherit}
+.nivel-0 .nivel-puntaje{color:var(--rojo-alerta)}
+.nivel-1 .nivel-puntaje{color:#7A5A1A}
+.nivel-2 .nivel-puntaje{color:var(--azul-medio)}
+.nivel-3 .nivel-puntaje{color:var(--verde-correcto)}
+.nivel-desc{font-size:.9rem;line-height:1.6}
+
+/* Hoja observación */
+.hoja-obs{background:#fff;border:1px solid var(--borde);border-radius:10px;margin:1.5rem 0;overflow:hidden;box-shadow:var(--sombra)}
+.hoja-header{background:linear-gradient(135deg,#3D2A1A 0%,#5A3E1A 100%);color:#fff;padding:1rem 1.4rem;display:flex;align-items:center;gap:1rem}
+.hoja-num{background:var(--dorado);color:var(--azul-oscuro);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Merriweather',serif;font-weight:900;font-size:1.2rem;flex:0 0 auto}
+.hoja-header h3{color:#fff;margin:0;font-size:1.1rem}
+.hoja-header .hoja-tag{font-size:.78rem;color:var(--dorado-claro);margin-top:.2rem}
+.hoja-body{padding:1.4rem 1.6rem}
+.hoja-bloque{margin-bottom:1.5rem}
+.hoja-bloque-titulo{font-weight:700;color:var(--azul-marino);font-family:'Merriweather',serif;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:2px solid var(--dorado)}
+.campo-linea{display:flex;align-items:center;padding:.4rem 0;border-bottom:1px dashed var(--gris-medio);gap:1rem}
+.campo-linea .campo-label{flex:0 0 35%;font-weight:600;color:var(--azul-marino);font-size:.92rem}
+.campo-linea .campo-valor{flex:1;color:var(--texto-claro);font-size:.92rem}
+.campo-espacio{display:inline-block;min-width:140px;border-bottom:1px dotted var(--gris-oscuro);height:1.1em;margin:0 .3rem}
+
+/* Casilla rúbrica en hoja */
+.tabla-rubrica-hoja{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem}
+.tabla-rubrica-hoja th{background:var(--azul-marino);color:#fff;padding:.5rem;text-align:center;font-size:.78rem;font-weight:700}
+.tabla-rubrica-hoja td{padding:.5rem;border:1px solid var(--gris-medio);text-align:center}
+.tabla-rubrica-hoja td.crit{font-weight:700;color:var(--azul-marino);text-align:left;background:var(--azul-claro);font-size:.85rem}
+.tabla-rubrica-hoja td.total{background:var(--dorado);color:#fff;font-weight:700}
+.casilla{display:inline-block;width:24px;height:24px;border:2px solid var(--azul-medio);border-radius:4px;background:#fff;font-size:1rem;line-height:20px;color:transparent}
+.casilla:hover{border-color:var(--dorado);cursor:pointer}
+
+/* Footer */
+footer.university{background:var(--azul-oscuro);color:rgba(255,255,255,.7);padding:2rem 0;margin-top:3rem;border-top:4px solid var(--dorado)}
+.footer-inner{max-width:var(--max);margin:0 auto;padding:0 1.4rem;font-size:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-inner strong{color:#fff;display:block;margin-bottom:.3rem;font-family:'Merriweather',serif;font-size:.95rem}
+
+/* Tabla roles */
+.tabla-roles td:first-child{font-weight:700;color:var(--azul-marino);background:var(--azul-claro)}
+.tabla-roles{font-size:.92rem}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+@media print{
+  header.university,nav.subnav,.toolbar,footer.university{display:none!important}
+  .section-card,.grupo-card,.hoja-obs,.rubrica-criterio{break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+  body{background:#fff;font-size:11pt}
+}
+@media(max-width:780px){
+  body{font-size:16px}
+  h1{font-size:1.55rem}
+  h2{font-size:1.3rem}
+  .panel-header{padding:1.5rem 1.4rem}
+  .panel-header h1{font-size:1.4rem}
+  .section-card{padding:1.4rem 1.2rem}
+  .grupo-body,.hoja-body{padding:1.1rem 1rem}
+  .subnav-inner{padding:.4rem .6rem;overflow-x:auto;flex-wrap:nowrap}
+  .subnav-link{white-space:nowrap}
+  table{font-size:.85rem}
+  th,td{padding:.5rem .6rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER UNIVERSITARIO ============ -->
+<header class="university">
+  <div class="university-inner">
+    <div class="escudo">
+      <div class="escudo-circ">U</div>
+      <div>
+        <div class="university-meta">Cátedra · Ingeniería de Sistemas Industriales</div>
+        <div class="university-title">Actividad Grupal · Unidad 1</div>
+        <div class="course-tag">Guía docente · Rúbrica de evaluación · 7 grupos</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a class="btn-action" href="#" onclick="descargarHTML();return false;" title="Descargar esta página como archivo .html">
+        <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg> Descargar .html
+      </a>
+      <a class="btn-action" href="#" onclick="copiarCodigo();return false;" title="Copiar el código fuente completo">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Copiar código
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ SUB-NAV (índice flotante) ============ -->
+<nav class="subnav" role="navigation">
+  <div class="subnav-inner">
+    <span class="subnav-label">Índice:</span>
+    <a class="subnav-link" href="#sec-1">1. Justificación</a>
+    <a class="subnav-link" href="#sec-2">2. Grupos y temas</a>
+    <a class="subnav-link" href="#sec-3">3. Objetivos por grupo</a>
+    <a class="subnav-link" href="#sec-4">4. Dinámica</a>
+    <a class="subnav-link" href="#sec-5">5. Rúbrica</a>
+    <a class="subnav-link" href="#sec-6">6. Cronograma</a>
+    <a class="subnav-link" href="#sec-7">7. Hoja observación</a>
+    <a class="subnav-link" href="#sec-8">8. Anexo</a>
+  </div>
+</nav>
+
+<main>
+
+  <div class="panel-header">
+    <div class="kicker">Guía docente · Actividad grupal</div>
+    <h1>Unidad 1 · Fundamentos de TI y Arquitectura de Sistemas</h1>
+    <p>Estrategia didáctica de exposición distribuida en siete grupos (4 estudiantes cada uno), con asignación de las secciones 1.1 a 1.7 de la página HTML de la Unidad 1, dinámica de 20 minutos por grupo y rúbrica analítica de cinco criterios con cuatro niveles de desempeño.</p>
+    <div class="meta-row">
+      <span>7 grupos × 4 estudiantes</span>
+      <span>20 min/grupo (15 exposición + 5 preguntas)</span>
+      <span>2 sesiones · 110 min cada una</span>
+      <span>Rúbrica: 5 criterios × 4 niveles</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="toolbar-label">Herramientas:</span>
+    <a class="btn-tool" href="#" onclick="descargarHTML();return false;"><svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg> Descargar .html</a>
+    <a class="btn-tool" href="#" onclick="copiarCodigo();return false;"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Copiar código</a>
+    <a class="btn-tool" href="#" onclick="window.print();return false;"><svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg> Imprimir / PDF</a>
+  </div>
+
+<!-- HEADER_END -->
+
+<!-- ============ SECCIÓN 1: JUSTIFICACIÓN Y OBJETIVOS ============ -->
+<section class="section-card" id="sec-1">
+  <h2>1. Justificación y objetivos de la actividad</h2>
+
+  <p>La presente actividad grupal se enmarca en la Unidad 1 del curso de Ingeniería de Sistemas Industriales —Fundamentos de Tecnologías de la Información y Arquitectura de Sistemas— y constituye la estrategia didáctica central para garantizar que el estudiantado se apropie de los siete bloques conceptuales que estructuran la unidad. La enseñanza universitaria contemporánea en disciplinas técnicas ha abandonado el modelo exclusivamente magistral en favor de metodologías activas que sitúan al estudiante en el centro del proceso de aprendizaje; la división de la materia en segmentos temáticos que cada grupo investiga, sintetiza y expone públicamente frente a sus pares es una de las formas más eficaces de lograr esa apropiación, dado que combina la profundización temática con el desarrollo de competencias comunicativas y de trabajo colaborativo que la ingeniería industrial demanda de sus profesionales.</p>
+
+  <p>La elección de siete grupos, uno por sección temática (de la 1.1 a la 1.7), no es arbitraria: responde a la segmentación natural del contenido elaborado en la página HTML de la Unidad 1, donde cada apartado cubre un dominio conceptual autónomo pero interconectado con los demás. Esta segmentación permite a cada grupo profundizar en un área concreta —definiciones, componentes, taxonomía empresarial, convergencia IT/OT, arquitecturas, marcos de referencia e implicaciones profesionales— mientras mantiene la visión de conjunto mediante la asistencia a las exposiciones de los otros seis grupos. El estudiante deja así de ser receptor pasivo de un extenso cuerpo teórico para convertirse, simultáneamente, en especialista de un tema y en audiencia crítica de los seis restantes, lo que favorece la metacognición y la construcción colectiva del conocimiento.</p>
+
+  <h3>1.1 Objetivos generales</h3>
+  <ul>
+    <li>Garantizar la cobertura integral del contenido teórico de la Unidad 1 mediante un reparto equitativo de temas entre los siete grupos, asegurando que cada bloque conceptual sea investigado y comunicado por el propio estudiantado.</li>
+    <li>Desarrollar en el estudiantado las competencias transversales de comunicación oral, trabajo en equipo, gestión del tiempo y diseño de material visual de apoyo, todas ellas fundamentales en el perfil del ingeniero industrial contemporáneo.</li>
+    <li>Promover la apropiación profunda del contenido técnico mediante el principio de que «para enseñar algo hay que haberlo comprendido», de modo que cada grupo interiorice su sección hasta el punto de poder exponerla, ejemplificarla y defenderla ante preguntas críticas.</li>
+    <li>Generar un repositorio de apuntes sintéticos producidos por los grupos que el estudiantado conservará como material de estudio y referencia durante el resto de la asignatura y en su ejercicio profesional.</li>
+  </ul>
+
+  <h3>1.2 Objetivos específicos por grupo</h3>
+  <p>Cada grupo recibirá, junto con su asignación temática, una lista de objetivos específicos que delimitan el alcance de su exposición y orientan la selección de contenidos. El detalle completo de objetivos por grupo se presenta en la sección 3 de este documento. Como criterio general, cada exposición deberá incluir: (a) la definición rigurosa de los conceptos clave de la sección, (b) la contextualización histórica o industrial de los mismos, (c) al menos un ejemplo práctico vinculado a la ingeniería industrial real, (d) un diagrama o esquema visual propio, y (e) al menos una conexión explícita con el contenido expuesto por grupos previos.</p>
+
+  <h3>1.3 Resultados de aprendizaje esperados</h3>
+  <p>Al concluir la actividad, el estudiantado habrá desarrollado la capacidad de: explicar con propiedad los seis componentes estructurales de las TI; distinguir la taxonomía empresarial de Weill &amp; Ross (infraestructura, aplicaciones, plataformas de datos e IA, servicios de información); analizar críticamente la convergencia IT/OT y el Modelo Purdue; comparar los estilos arquitectónicos del monolito a los microservicios; relacionar los marcos ITIL, COBIT, ISO 27001 y NIST CSF con la práctica profesional; y argumentar las implicaciones estratégicas de las TI en la ingeniería industrial contemporánea. Adicionalmente, habrá fortalecido las competencias de comunicación oral técnica, defensa argumentativa y colaboración en equipos multidisciplinarios.</p>
+</section>
+
+<!-- ============ SECCIÓN 2: ASIGNACIÓN DE GRUPOS Y TEMAS ============ -->
+<section class="section-card" id="sec-2">
+  <h2>2. Asignación de grupos y temas</h2>
+
+  <p>La Unidad 1 se compone de siete secciones temáticas (de la 1.1 a la 1.7) que cubren el recorrido conceptual desde la definición de las TI hasta sus implicaciones para la ingeniería contemporánea. Cada sección se asigna a un grupo de cuatro estudiantes, identificado con un número correlativo. La asignación se presenta en la tabla siguiente, que constituye el núcleo organizativo de la actividad y debe ser comunicada al estudiantado en la primera sesión preparatoria.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Grupo</th>
+        <th>Sección</th>
+        <th>Tema asignado</th>
+        <th>Extensión (en la web)</th>
+        <th>Carácter</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Grupo 1</strong></td><td><strong>1.1</strong></td><td>Definición y evolución histórica de las Tecnologías de la Información</td><td>~580 palabras</td><td>Teórica</td></tr>
+      <tr><td><strong>Grupo 2</strong></td><td><strong>1.2</strong></td><td>Componentes estructurales de las TI (modelo ISO/ITIL)</td><td>~900 palabras</td><td>Estructural</td></tr>
+      <tr><td><strong>Grupo 3</strong></td><td><strong>1.3</strong></td><td>Taxonomía empresarial de TI (modelo Weill &amp; Ross)</td><td>~580 palabras</td><td>Estratégica</td></tr>
+      <tr><td><strong>Grupo 4</strong></td><td><strong>1.4</strong></td><td>TI vs. OT: convergencia operacional y Modelo Purdue</td><td>~640 palabras</td><td>Industrial</td></tr>
+      <tr><td><strong>Grupo 5</strong></td><td><strong>1.5</strong></td><td>Arquitecturas de sistemas: del monolito a los microservicios</td><td>~620 palabras</td><td>Arquitectónica</td></tr>
+      <tr><td><strong>Grupo 6</strong></td><td><strong>1.6</strong></td><td>Marcos de referencia: ITIL, COBIT, ISO 27001 y NIST CSF</td><td>~620 palabras</td><td>Gobernanza</td></tr>
+      <tr><td><strong>Grupo 7</strong></td><td><strong>1.7</strong></td><td>Implicaciones para la ingeniería contemporánea</td><td>~520 palabras</td><td>Integradora</td></tr>
+    </tbody>
+  </table>
+
+  <h3>2.1 Composición de cada grupo (4 estudiantes)</h3>
+  <p>Cada grupo estará integrado por cuatro estudiantes. La distribución interna de roles se deja a la autonomía del grupo, pero se recomienda seguir el reparto funcional siguiente, que el docente podrá verificar durante la sesión preparatoria y que será uno de los criterios evaluados en la rúbrica (criterio 5: Trabajo en equipo):</p>
+
+  <table class="tabla-roles">
+    <thead>
+      <tr><th>Rol</th><th>Responsable sugerido</th><th>Funciones principales</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Coordinador/a</td><td>Estudiante 1</td><td>Convoca reuniones, distribuye tareas, dialoga con el docente, garantiza plazos y coherencia del conjunto.</td></tr>
+      <tr><td>Investigador/a principal</td><td>Estudiante 2</td><td>Profundiza en el contenido técnico, selecciona fuentes, valida la precisión conceptual de la sección asignada.</td></tr>
+      <tr><td>Diseñador/a de material</td><td>Estudiante 3</td><td>Diseña las diapositivas/esquemas/tablas, cuida la coherencia visual, prepara el guion gráfico de la exposición.</td></tr>
+      <tr><td>Expositor/a principal</td><td>Estudiante 4</td><td>Conduce la exposición oral de 15 minutos, gestiona las preguntas, asegura la conexión con grupos anteriores y siguientes.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-info">
+    <div class="icon">i</div>
+    <div>
+      <div class="callout-title">Observación metodológica</div>
+      <p>El reparto de roles es una sugerencia, no una camisa de fuerza. Algunos grupos podrán rotar funciones entre sesiones o aceptar que dos estudiantes compartan un rol. Lo importante es que los cuatro miembros intervengan activamente tanto en la preparación como en la exposición, y que el coordinador pueda dar cuenta al docente del reparto real cuando se le solicite.</p>
+    </div>
+  </div>
+</section>
+<!-- SEC12_END -->
+
+<!-- ============ SECCIÓN 3: OBJETIVOS ESPECÍFICOS POR GRUPO ============ -->
+<section class="section-card" id="sec-3">
+  <h2>3. Objetivos específicos y orientaciones por grupo</h2>
+
+  <p>Esta sección detalla, para cada uno de los siete grupos, los objetivos específicos que su exposición debe alcanzar, los conceptos clave que obligatoriamente deben abordarse, las sugerencias de ejemplos prácticos y la conexión con los temas expuestos por grupos previos. El estudiantado debe utilizar esta sección como guion de preparación.</p>
+
+  <!-- Grupo 1 -->
+  <div class="grupo-card">
+    <div class="grupo-header">
+      <div class="grupo-num">1</div>
+      <div>
+        <h3>Grupo 1 · Sección 1.1 — Definición y evolución histórica de las TI</h3>
+        <div class="grupo-tag">Teórica · ~580 palabras · Apertura conceptual de la unidad</div>
+      </div>
+    </div>
+    <div class="grupo-body">
+      <h4>Objetivos específicos</h4>
+      <ul>
+        <li>Definir las TI como sistema sociotécnico integrado, citando al menos dos definiciones académicas (ANSI/IT4, ISO/IEC 20000).</li>
+        <li>Trazar las cuatro olas históricas (mainframes 1950–70; miniaturización y PC 1970–90; Internet 1990–2010; nube + IA + IoT 2010–presente) con un hito representativo de cada ola.</li>
+        <li>Diferenciar con ejemplos propios los conceptos de dato, información y conocimiento.</li>
+        <li>Argumentar por qué la definición de TI se amplía en ingeniería industrial para incluir SCADA, DCS, MES y ERP.</li>
+      </ul>
+      <h4>Conceptos clave obligatorios</h4>
+      <p>Sistema sociotécnico · Cuatro olas históricas · Dato/información/conocimiento · TPS, OAS, DSS, EIS · Carr (2003) vs. Bharadwaj et al. (2013)</p>
+      <h4>Ejemplo práctico sugerido</h4>
+      <p>Comparar el mainframe IBM System/360 (1964) con un stack cloud-native actual (microservicios sobre Kubernetes).</p>
+      <h4>Conexión con otros grupos</h4>
+      <p>Esta exposición sienta las bases; el Grupo 2 deberá partir de la definición presentada aquí.</p>
+    </div>
+  </div>
+
+  <!-- Grupo 2 -->
+  <div class="grupo-card">
+    <div class="grupo-header">
+      <div class="grupo-num">2</div>
+      <div>
+        <h3>Grupo 2 · Sección 1.2 — Componentes estructurales de las TI (ISO/ITIL)</h3>
+        <div class="grupo-tag">Estructural · ~900 palabras · La sección más extensa de la unidad</div>
+      </div>
+    </div>
+    <div class="grupo-body">
+      <h4>Objetivos específicos</h4>
+      <ul>
+        <li>Enumerar y describir los seis componentes (hardware, software, redes, datos, personas, procesos) según el modelo ISO/IEC 20000 e ITIL 4.</li>
+        <li>Ejemplificar cada componente en el dominio de la ingeniería industrial (PLCs Siemens S7-1500, SCADA Ignition, historian PI, RTOS VxWorks, etc.).</li>
+        <li>Explicar la articulación de los seis como sistema sociotécnico (Trist &amp; Bamforth, Emery &amp; Trist).</li>
+        <li>Diferenciar las capas del hardware (usuario, edge, centro de datos, nube) y las capas lógicas del software.</li>
+      </ul>
+      <h4>Conceptos clave obligatorios</h4>
+      <p>Hardware, software, redes, datos, personas, procesos · Sistema sociotécnico · Capas de hardware · Capas lógicas del software · Protocolos industriales (Profinet, OPC UA, IEC 61850)</p>
+      <h4>Ejemplo práctico sugerido</h4>
+      <p>Diagramar la arquitectura de una planta típica mostrando cada uno de los seis componentes y sus indicadores (MTBF, uptime, latencia).</p>
+      <h4>Conexión con otros grupos</h4>
+      <p>Tomar como punto de partida la definición de TI del Grupo 1; el Grupo 3 utilizará esta base para explicar la taxonomía empresarial.</p>
+    </div>
+  </div>
+
+  <!-- Grupo 3 -->
+  <div class="grupo-card">
+    <div class="grupo-header">
+      <div class="grupo-num">3</div>
+      <div>
+        <h3>Grupo 3 · Sección 1.3 — Taxonomía empresarial de TI (Weill &amp; Ross, CISR)</h3>
+        <div class="grupo-tag">Estratégica · ~580 palabras · Visión empresarial</div>
+      </div>
+    </div>
+    <div class="grupo-body">
+      <h4>Objetivos específicos</h4>
+      <ul>
+        <li>Distinguir las cuatro capas de la taxonomía empresarial: infraestructura, aplicaciones, plataformas de datos e IA, servicios de información.</li>
+        <li>Explicar el modelo operating model de CISR (Unificado, Coordinado, Diversificado, Replicado) y relacionarlo con decisiones de arquitectura.</li>
+        <li>Argumentar por qué las plataformas de datos e IA se consideran hoy una cuarta capa diferenciada.</li>
+        <li>Discutir las decisiones de portafolio TI (hacer vs. comprar, on-premise vs. cloud) en función de la taxonomía.</li>
+      </ul>
+      <h4>Conceptos clave obligatorios</h4>
+      <p>Weill &amp; Ross · CISR MIT Sloan · 4 capas (infraestructura, aplicaciones, datos/IA, servicios) · Operating model · Decisiones de portafolio</p>
+      <h4>Ejemplo práctico sugerido</h4>
+      <p>Caso de una empresa automotriz con modelo «Unificado» que requiere infraestructura muy compartida vs. un conglomerado diversificado que tolera más heterogeneidad.</p>
+      <h4>Conexión con otros grupos</h4>
+      <p>Construir sobre la sección de componentes del Grupo 2; anticipar la distinción IT/OT que el Grupo 4 desarrollará.</p>
+    </div>
+  </div>
+
+  <!-- Grupo 4 -->
+  <div class="grupo-card">
+    <div class="grupo-header">
+      <div class="grupo-num">4</div>
+      <div>
+        <h3>Grupo 4 · Sección 1.4 — TI vs. OT: convergencia y Modelo Purdue</h3>
+        <div class="grupo-tag">Industrial · ~640 palabras · Pivote hacia la ingeniería industrial</div>
+      </div>
+    </div>
+    <div class="grupo-body">
+      <h4>Objetivos específicos</h4>
+      <ul>
+        <li>Definir IT y OT con la definición canónica de Gartner y diferenciarlas en una tabla comparativa de al menos 8 dimensiones.</li>
+        <li>Explicar el Modelo Purdue (ANSI/ISA-95) niveles 0 a 5 y la zona ITDMZ entre niveles 3 y 4.</li>
+        <li>Analizar la convergencia IT/OT impulsada por Industrie 4.0 e IIoT, con sus oportunidades y riesgos.</li>
+        <li>Presentar al menos dos incidentes reales de ciberseguridad OT (TRITON/TRISIS 2017, Oldsmar 2021) y las exigencias de ANSI/ISA-62443.</li>
+      </ul>
+      <h4>Conceptos clave obligatorios</h4>
+      <p>IT vs. OT · Modelo Purdue niveles 0–5 · ITDMZ · ANSI/ISA-95 · ANSI/ISA-62443 · Convergencia IT/OT · Industrie 4.0 / IIoT</p>
+      <h4>Ejemplo práctico sugerido</h4>
+      <p>Diagramar el Modelo Purdue con un ejemplo concreto por nivel (PLC S7-1500 en N1, SCADA Ignition en N3, MES Sepasoft en N4, SAP S/4HANA en N5).</p>
+      <h4>Conexión con otros grupos</h4>
+      <p>Construir sobre la taxonomía del Grupo 3; el Grupo 5 discutirá las arquitecturas que sostienen esta convergencia.</p>
+    </div>
+  </div>
+
+  <!-- Grupo 5 -->
+  <div class="grupo-card">
+    <div class="grupo-header">
+      <div class="grupo-num">5</div>
+      <div>
+        <h3>Grupo 5 · Sección 1.5 — Arquitecturas: del monolito a los microservicios</h3>
+        <div class="grupo-tag">Arquitectónica · ~620 palabras · Patrones de diseño de software</div>
+      </div>
+    </div>
+    <div class="grupo-body">
+      <h4>Objetivos específicos</h4>
+      <ul>
+        <li>Comparar los seis estilos arquitectónicos (monolito, cliente-servidor 3-tier, SOA, microservicios, event-driven, serverless) en una tabla con ventajas, inconvenientes y cuándo es adecuado.</li>
+        <li>Explicar los cuatro principios de los microservicios (Lewis &amp; Fowler, 2014) y por qué no son una panacea.</li>
+        <li>Discutir los compromisos de cada estilo: complejidad operacional, consistencia eventual, latencia, vendor lock-in.</li>
+        <li>Argumentar la idoneidad de cada estilo en función del tamaño del sistema, número de equipos y velocidad de evolución.</li>
+      </ul>
+      <h4>Conceptos clave obligatorios</h4>
+      <p>Bass, Clements &amp; Kazman · Monolito vs. microservicios · SOA y ESB · Event-driven / Kafka · Serverless / FaaS · Kubernetes, service mesh</p>
+      <h4>Ejemplo práctico sugerido</h4>
+      <p>Caso de un ERP clásico (SAP R/3, monolito 3-tier) vs. una plataforma streaming moderna (Netflix, microservicios + event-driven).</p>
+      <h4>Conexión con otros grupos</h4>
+      <p>Construir sobre la convergencia IT/OT del Grupo 4; el Grupo 6 explicará los marcos que gobiernan estas arquitecturas.</p>
+    </div>
+  </div>
+
+  <!-- Grupo 6 -->
+  <div class="grupo-card">
+    <div class="grupo-header">
+      <div class="grupo-num">6</div>
+      <div>
+        <h3>Grupo 6 · Sección 1.6 — Marcos de referencia: ITIL, COBIT, ISO 27001, NIST CSF</h3>
+        <div class="grupo-tag">Gobernanza · ~620 palabras · Regulación y gestión</div>
+      </div>
+    </div>
+    <div class="grupo-body">
+      <h4>Objetivos específicos</h4>
+      <ul>
+        <li>Diferenciar los cuatro marcos: ITIL (gestión de servicios), COBIT (gobernanza), ISO 27001 (seguridad de la información), NIST CSF (riesgo cibernético).</li>
+        <li>Explicar las 34 prácticas de ITIL 4 y las cuatro dimensiones de la gestión de servicios.</li>
+        <li>Diferenciar gobernanza (COBIT) y management (ITIL) y mostrar su complementariedad.</li>
+        <li>Argumentar por qué las organizaciones maduras adoptan los cuatro marcos simultáneamente y los mapean entre sí.</li>
+      </ul>
+      <h4>Conceptos clave obligatorios</h4>
+      <p>ITIL 4 (SVS, 34 prácticas) · COBIT 2019 (gobernanza vs. management) · ISO/IEC 27001 (SGSI, Anexo A 93 controles) · NIST CSF 2.0 (Govern, Identify, Protect, Detect, Respond, Recover)</p>
+      <h4>Ejemplo práctico sugerido</h4>
+      <p>Caso de una organización que adopta los cuatro marcos y mapea los controles de ISO 27001 con las prácticas de ITIL y las funciones de NIST CSF.</p>
+      <h4>Conexión con otros grupos</h4>
+      <p>Construir sobre las arquitecturas del Grupo 5; el Grupo 7 integrará los marcos en una reflexión sobre la profesión.</p>
+    </div>
+  </div>
+
+  <!-- Grupo 7 -->
+  <div class="grupo-card">
+    <div class="grupo-header">
+      <div class="grupo-num">7</div>
+      <div>
+        <h3>Grupo 7 · Sección 1.7 — Implicaciones para la ingeniería contemporánea</h3>
+        <div class="grupo-tag">Integradora · ~520 palabras · Cierre conceptual de la unidad</div>
+      </div>
+    </div>
+    <div class="grupo-body">
+      <h4>Objetivos específicos</h4>
+      <ul>
+        <li>Sintetizar las tres implicaciones principales: TI como sustrato material, perfil híbrido IT/OT, gobernanza como parte de la ingeniería.</li>
+        <li>Argumentar por qué la decisión sobre arquitectura es simultáneamente técnica y de negocio.</li>
+        <li>Discutir el modelo del accidente organizacional de Reason (Swiss Cheese Model) como perspectiva para entender la multifactorialidad de los incidentes.</li>
+        <li>Cerrar con una cita significativa (Weill &amp; Ross, 2009) y una proyección profesional del rol del ingeniero industrial contemporáneo.</li>
+      </ul>
+      <h4>Conceptos clave obligatorios</h4>
+      <p>Sustrato material de la operación y estrategia · Perfil híbrido IT/OT · Gobernanza y seguridad como condiciones habilitantes · Reason 1997 / Swiss Cheese Model</p>
+      <h4>Ejemplo práctico sugerido</h4>
+      <p>Caso de un proyecto de automatización que falla por no haber considerado desde el inicio los flujos de datos, la ciberseguridad OT y la gobernanza de los datos generados.</p>
+      <h4>Conexión con otros grupos</h4>
+      <p>Es la exposición integradora: debe referenciar explícitamente aportes de los seis grupos anteriores y cerrar la unidad conceptualmente.</p>
+    </div>
+  </div>
+</section>
+<!-- SEC3_END -->
+
+<!-- ============ SECCIÓN 4: DINÁMICA DE LA ACTIVIDAD ============ -->
+<section class="section-card" id="sec-4">
+  <h2>4. Estructura y dinámica de la actividad</h2>
+
+  <p>La actividad se desarrolla en dos sesiones presenciales de 110 minutos cada una, distribuidas en días consecutivos o en una misma semana, según el calendario del curso. Cada grupo dispondrá de 20 minutos totales —15 minutos de exposición oral seguida de 5 minutos de preguntas y debate— lo que suman 140 minutos de exposición efectiva, a los que se añaden tiempos de transición, presentación del docente y la ronda final de síntesis. El esquema temporal detallado se presenta en la sección 6 de este documento (cronograma docente).</p>
+
+  <h3>4.1 Fases de la actividad</h3>
+  <p>La actividad se estructura en cuatro fases secuenciales que el docente debe gestionar de forma coordinada:</p>
+
+  <h4>Fase A · Preparación (1 semana antes de la primera sesión)</h4>
+  <ul>
+    <li>Comunicación al estudiantado de la asignación de grupos y temas (sección 2 de este documento).</li>
+    <li>Distribución de la página HTML de la Unidad 1 a cada estudiante (descargable desde la web del curso).</li>
+    <li>Reunión interna de cada grupo para distribuir roles (coordinador, investigador, diseñador, expositor).</li>
+    <li>Lectura individual previa de la sección asignada y de las secciones vecinas (anterior y posterior).</li>
+    <li>Entrega al docente, 48 horas antes de la primera sesión, del guion preliminar de exposición.</li>
+  </ul>
+
+  <h4>Fase B · Primera sesión (110 minutos) — Grupos 1 a 4</h4>
+  <ul>
+    <li>Apertura por el docente (10 min): presentación de la actividad, recordatorio de la rúbrica, instrucciones para el auditorio.</li>
+    <li>Exposición Grupo 1 (20 min) · Sección 1.1 — Definición y evolución histórica de las TI.</li>
+    <li>Transición (5 min) · Cambio de grupo y preparación del material.</li>
+    <li>Exposición Grupo 2 (20 min) · Sección 1.2 — Componentes estructurales de las TI.</li>
+    <li>Transición (5 min).</li>
+    <li>Exposición Grupo 3 (20 min) · Sección 1.3 — Taxonomía empresarial de TI.</li>
+    <li>Transición (5 min).</li>
+    <li>Exposición Grupo 4 (20 min) · Sección 1.4 — TI vs. OT y Modelo Purdue.</li>
+    <li>Cierre de la primera sesión (5 min) · Síntesis parcial por el docente.</li>
+  </ul>
+
+  <h4>Fase C · Segunda sesión (110 minutos) — Grupos 5 a 7 y cierre</h4>
+  <ul>
+    <li>Apertura (5 min) · Recuperación del estado de la actividad.</li>
+    <li>Exposición Grupo 5 (20 min) · Sección 1.5 — Arquitecturas de sistemas.</li>
+    <li>Transición (5 min).</li>
+    <li>Exposición Grupo 6 (20 min) · Sección 1.6 — Marcos de referencia.</li>
+    <li>Transición (5 min).</li>
+    <li>Exposición Grupo 7 (20 min) · Sección 1.7 — Implicaciones para la ingeniería.</li>
+    <li>Síntesis integradora por el docente (15 min).</li>
+    <li>Ronda de evaluación cruzada entre grupos (15 min) · Cada grupo comenta qué aprendizaje nuevo le aportaron los otros.</li>
+    <li>Cierre final (5 min) · Comunicación de plazos de entrega del dossier final y de la nota individual.</li>
+  </ul>
+
+  <h4>Fase D · Entrega y retroalimentación (1 semana después)</h4>
+  <ul>
+    <li>Cada grupo entrega el dossier final de su sección (PDF de diapositivas + memorias escritas de 800–1200 palabras).</li>
+    <li>El docente devuelve la rúbrica evaluada con comentarios específicos por criterio.</li>
+    <li>Sesión de retroalimentación individual opcional de 15 minutos por grupo, si el estudiantado la solicita.</li>
+  </ul>
+
+  <h3>4.2 Normas de la exposición oral</h3>
+  <p>La exposición oral es el corazón de la actividad y, por tanto, el componente más evaluado de la rúbrica. Cada grupo debe observar las siguientes normas:</p>
+  <ul>
+    <li><strong>Duración estricta:</strong> 15 minutos de exposición. El docente avisará a los 13 y a los 15 minutos. Exceder los 15 minutos penalizará el criterio de gestión del tiempo.</li>
+    <li><strong>Participación equilibrada:</strong> los cuatro miembros del grupo deben intervenir oralmente. Una distribución típica es 4–4–4–3 minutos por estudiante.</li>
+    <li><strong>Material visual:</strong> el grupo debe presentar diapositivas, esquemas o tablas proyectables. Se valorará la calidad del diseño (legibilidad, jerarquía visual, ausencia de saturación) y la originalidad (no se aceptan copias literales de la página HTML entregada).</li>
+    <li><strong>Conexión con grupos previos:</strong> cada grupo debe abrir su exposición reconociendo explícitamente al menos un concepto presentado por el grupo inmediatamente anterior, para construir una narrativa continua a lo largo de la unidad.</li>
+    <li><strong>Ejemplo práctico:</strong> cada exposición debe incluir al menos un ejemplo práctico vinculado a la ingeniería industrial real (planta de manufactura, refinería, subestación eléctrica, hospital, etc.).</li>
+    <li><strong>Cierre:</strong> la exposición debe concluir con una transición explícita al grupo siguiente, anticipando qué concepto de su sección enlaza con el tema siguiente.</li>
+  </ul>
+
+  <h3>4.3 Ronda de preguntas y debate</h3>
+  <p>Tras los 15 minutos de exposición se abren 5 minutos de preguntas. El docente modera la ronda: invita primero a preguntas del auditorio (otros grupos) y reserva la última pregunta para sí mismo, con el objetivo de profundizar en algún aspecto técnico o de aplicación. La capacidad de respuesta del grupo se evalúa en el criterio 4 de la rúbrica (preguntas y debate); se valorará la precisión, la honestidad (reconocer lo que no se sabe) y la capacidad de argumentación.</p>
+
+  <div class="callout callout-warn">
+    <div class="icon">!</div>
+    <div>
+      <div class="callout-title">Importante</div>
+      <p>El estudiantado que conforma el auditorio no es pasivo. Cada grupo, mientras escucha a los otros, debe tomar notas en la hoja de observación (sección 7) y preparar al menos una pregunta. La calidad de las preguntas hechas por cada grupo se considerará como mérito complementario al evaluar el criterio de «Trabajo en equipo».</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 5: RÚBRICA DE EVALUACIÓN ============ -->
+<section class="section-card" id="sec-5">
+  <h2>5. Rúbrica de evaluación</h2>
+
+  <p>La evaluación de cada grupo se realizará mediante una rúbrica analítica de cinco criterios y cuatro niveles de desempeño. La rúbrica se aplica tanto a la exposición oral como a la calidad del material presentado y a la dinámica grupal observada durante toda la actividad. Cada criterio se puntúa de 0 a 3 según los descriptores siguientes: <strong>0 = Insuficiente; 1 = Suficiente; 2 = Bueno; 3 = Excelente</strong>. La puntuación máxima total es de 15 puntos, que se convierten a la escala institucional según la fórmula: <code>Nota final = (Puntos obtenidos / 15) × 10</code>.</p>
+
+  <h3>5.1 Estructura general de la rúbrica</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Criterio</th>
+        <th>Descripción breve</th>
+        <th>Peso</th>
+        <th>Puntaje máx.</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>C1</strong></td><td>Contenido técnico</td><td>Profundidad conceptual, uso correcto de terminología, manejo de marcos ITIL/COBIT/ISO/NIST, precisión de definiciones.</td><td>30%</td><td>3</td></tr>
+      <tr><td><strong>C2</strong></td><td>Exposición oral</td><td>Estructura, claridad, ritmo, gestión del tiempo (15 min), dominio del lenguaje técnico.</td><td>20%</td><td>3</td></tr>
+      <tr><td><strong>C3</strong></td><td>Material visual</td><td>Calidad de diapositivas, esquemas y tablas; integración del Modelo Purdue / Ishikawa; legibilidad.</td><td>20%</td><td>3</td></tr>
+      <tr><td><strong>C4</strong></td><td>Preguntas y debate</td><td>Calidad de las respuestas; capacidad de argumentación; formulación de preguntas a otros grupos.</td><td>15%</td><td>3</td></tr>
+      <tr><td><strong>C5</strong></td><td>Trabajo en equipo</td><td>Reparto equilibrado de roles, coherencia grupal, colaboración observable, participación de los cuatro miembros.</td><td>15%</td><td>3</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5.2 Descriptores por nivel para cada criterio</h3>
+  <p>A continuación se detallan los descriptores específicos de cada nivel (0 a 3) para cada uno de los cinco criterios. El docente marcará con una X la casilla que mejor describa el desempeño observado. La puntuación final del grupo se obtiene sumando las X marcadas por criterio.</p>
+
+  <!-- Criterio 1 -->
+  <div class="rubrica-criterio">
+    <h3>Criterio 1 · Contenido técnico (30%)</h3>
+    <p>Profundidad conceptual, uso correcto de terminología, manejo de marcos de referencia.</p>
+    <div class="nivel-grid">
+      <div class="nivel nivel-0">
+        <div class="nivel-titulo">Insuficiente <span class="nivel-puntaje">0 puntos</span></div>
+        <div class="nivel-desc">Definiciones imprecisas o ausentes; terminología incorrecta recurrente; no se citan marcos ni autores; ejemplos erróneos o sin vinculación con la sección asignada.</div>
+      </div>
+      <div class="nivel nivel-1">
+        <div class="nivel-titulo">Suficiente <span class="nivel-puntaje">1 punto</span></div>
+        <div class="nivel-desc">Definiciones correctas pero superficiales; terminología adecuada con errores puntuales; menciona los marcos relevantes (ITIL/COBIT/ISO/NIST) pero sin profundizar; ejemplo práctico básico.</div>
+      </div>
+      <div class="nivel nivel-2">
+        <div class="nivel-titulo">Bueno <span class="nivel-puntaje">2 puntos</span></div>
+        <div class="nivel-desc">Definiciones precisas y completas; terminología correcta y consistente; explica los marcos relevantes con propiedad; ejemplo práctico bien elegido y bien desarrollado; integra la sección con la visión de conjunto de la unidad.</div>
+      </div>
+      <div class="nivel nivel-3">
+        <div class="nivel-titulo">Excelente <span class="nivel-puntaje">3 puntos</span></div>
+        <div class="nivel-desc">Definiciones precisas, completas y contextualizadas históricamente; terminología rigurosa y consistente; explica los marcos con matices y comparaciones; ejemplo práctico original vinculado a un caso real; integra y enriquece la sección con aportes propios; anticipa preguntas complejas y las resuelve.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Criterio 2 -->
+  <div class="rubrica-criterio">
+    <h3>Criterio 2 · Exposición oral (20%)</h3>
+    <p>Estructura, claridad, ritmo, gestión del tiempo, dominio del lenguaje técnico.</p>
+    <div class="nivel-grid">
+      <div class="nivel nivel-0">
+        <div class="nivel-titulo">Insuficiente <span class="nivel-puntaje">0 puntos</span></div>
+        <div class="nivel-desc">Exposición desorganizada; ritmo inadecuado (demasiado rápido o demasiado lento); excede o no alcanza los 15 minutos por más de 3 minutos; lectura literal de diapositivas; errores de dicción o terminología frecuentes.</div>
+      </div>
+      <div class="nivel nivel-1">
+        <div class="nivel-titulo">Suficiente <span class="nivel-puntaje">1 punto</span></div>
+        <div class="nivel-desc">Exposición con estructura básica (introducción, desarrollo, cierre); ritmo aceptable; dura entre 13 y 17 minutos; lectura parcial de diapositivas; dicción adecuada con errores menores.</div>
+      </div>
+      <div class="nivel nivel-2">
+        <div class="nivel-titulo">Bueno <span class="nivel-puntaje">2 puntos</span></div>
+        <div class="nivel-desc">Exposición bien estructurada; ritmo adecuado; dura entre 14 y 16 minutos; uso puntual de notas pero no lectura literal; dicción clara; manejo del lenguaje técnico correcto; transiciones explícitas entre subtemas.</div>
+      </div>
+      <div class="nivel nivel-3">
+        <div class="nivel-titulo">Excelente <span class="nivel-puntaje">3 puntos</span></div>
+        <div class="nivel-desc">Exposición magistral: estructura clara y atractiva; ritmo fluido; dura exactamente 15 minutos; sin lectura literal; dominio del lenguaje técnico; transiciones precisas; uso de pausas y énfasis para mantener la atención; cierre que enlaza con el grupo siguiente.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Criterio 3 -->
+  <div class="rubrica-criterio">
+    <h3>Criterio 3 · Material visual (20%)</h3>
+    <p>Calidad de diapositivas, esquemas, tablas; integración de diagramas (Modelo Purdue, Ishikawa, etc.); legibilidad.</p>
+    <div class="nivel-grid">
+      <div class="nivel nivel-0">
+        <div class="nivel-titulo">Insuficiente <span class="nivel-puntaje">0 puntos</span></div>
+        <div class="nivel-desc">Diapositivas saturadas de texto; tipografía ilegible; esquemas ausentes o confusos; copia literal de la página HTML entregada; sin jerarquía visual; uso inadecuado de color o animaciones.</div>
+      </div>
+      <div class="nivel nivel-1">
+        <div class="nivel-titulo">Suficiente <span class="nivel-puntaje">1 punto</span></div>
+        <div class="nivel-desc">Diapositivas con texto excesivo pero legible; al menos un esquema o tabla adecuada; alguna copia parcial de la página HTML; jerarquía visual básica; uso moderado de color y animaciones.</div>
+      </div>
+      <div class="nivel nivel-2">
+        <div class="nivel-titulo">Bueno <span class="nivel-puntaje">2 puntos</span></div>
+        <div class="nivel-desc">Diapositivas con buen equilibrio texto/imagen; tipografía legible y consistente; al menos dos esquemas o tablas propias (no copiadas); jerarquía visual clara; uso adecuado de color; diagramas (Purdue, Ishikawa, capas, etc.) correctamente representados.</div>
+      </div>
+      <div class="nivel nivel-3">
+        <div class="nivel-titulo">Excelente <span class="nivel-puntaje">3 puntos</span></div>
+        <div class="nivel-desc">Diapositivas excelentes: equilibrio texto/visual impecable; tipografía cuidada y consistente; múltiples esquemas/tablas originales; jerarquía visual sobresaliente; uso de color con criterio cromático; diagramas redibujados y adaptados a la sección; material reutilizable como apunte de estudio por el resto de la clase.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Criterio 4 -->
+  <div class="rubrica-criterio">
+    <h3>Criterio 4 · Preguntas y debate (15%)</h3>
+    <p>Calidad de respuestas, capacidad de argumentación, formulación de preguntas a otros grupos.</p>
+    <div class="nivel-grid">
+      <div class="nivel nivel-0">
+        <div class="nivel-titulo">Insuficiente <span class="nivel-puntaje">0 puntos</span></div>
+        <div class="nivel-desc">No responde a las preguntas o responde de forma evasiva; no formula preguntas a otros grupos; actitud defensiva o pasiva durante el debate.</div>
+      </div>
+      <div class="nivel nivel-1">
+        <div class="nivel-titulo">Suficiente <span class="nivel-puntaje">1 punto</span></div>
+        <div class="nivel-desc">Responde a las preguntas con precisión básica; formula al menos una pregunta a otro grupo durante la actividad; participación modesta en el debate.</div>
+      </div>
+      <div class="nivel nivel-2">
+        <div class="nivel-titulo">Bueno <span class="nivel-puntaje">2 puntos</span></div>
+        <div class="nivel-desc">Responde con precisión y argumentación; reconoce honestamente lo que no sabe; formula preguntas pertinentes a varios grupos; contribuye activamente al debate.</div>
+      </div>
+      <div class="nivel nivel-3">
+        <div class="nivel-titulo">Excelente <span class="nivel-puntaje">3 puntos</span></div>
+        <div class="nivel-desc">Responde con precisión, argumentación y matices; integra conocimientos de otras secciones; formula preguntas críticas que enriquecen el debate; ayuda a reformular preguntas de otros grupos; demuestra dominio del tema y apertura a la crítica.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Criterio 5 -->
+  <div class="rubrica-criterio">
+    <h3>Criterio 5 · Trabajo en equipo (15%)</h3>
+    <p>Reparto equilibrado de roles, coherencia grupal, colaboración observable, participación de los cuatro miembros.</p>
+    <div class="nivel-grid">
+      <div class="nivel nivel-0">
+        <div class="nivel-titulo">Insuficiente <span class="nivel-puntaje">0 puntos</span></div>
+        <div class="nivel-desc">Uno o dos miembros monopolizan la exposición; los otros apenas intervienen; no se observa coordinación; el coordinador no da cuenta del reparto de tareas.</div>
+      </div>
+      <div class="nivel nivel-1">
+        <div class="nivel-titulo">Suficiente <span class="nivel-puntaje">1 punto</span></div>
+        <div class="nivel-desc">Los cuatro miembros intervienen pero con desequilibrio notorio (uno expone muy poco); coordinación básica; el coordinador explica el reparto de tareas a grandes rasgos.</div>
+      </div>
+      <div class="nivel nivel-2">
+        <div class="nivel-titulo">Bueno <span class="nivel-puntaje">2 puntos</span></div>
+        <div class="nivel-desc">Los cuatro miembros intervienen de forma equilibrada; coordinación visible durante la exposición (gestos de apoyo, paso de palabra); el coordinador explica con claridad el reparto de tareas; el material muestra coherencia de estilo.</div>
+      </div>
+      <div class="nivel nivel-3">
+        <div class="nivel-titulo">Excelente <span class="nivel-puntaje">3 puntos</span></div>
+        <div class="nivel-desc">Los cuatro miembros intervienen de forma equilibrada y complementaria; coordinación ejemplar; el coordinador detalla el reparto y las reuniones realizadas; el material muestra coherencia de estilo y autoría compartida; el grupo demuestra cohesión y capacidad de autoevaluación.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>5.3 Cálculo de la nota final</h3>
+  <p>La nota final del grupo se obtiene con la fórmula siguiente:</p>
+  <blockquote>
+    <p><strong>Nota final = ( Σ puntajes por criterio / 15 ) × 10</strong></p>
+  </blockquote>
+  <p>Donde la suma de puntajes por criterio puede ir de 0 (todos los criterios en nivel Insuficiente) a 15 (todos en nivel Excelente). La equivalencia con la escala cualitativa institucional es: <strong>0–4,9 = Insuficiente</strong> (No aprueba); <strong>5,0–6,4 = Suficiente</strong>; <strong>6,5–8,4 = Bueno</strong>; <strong>8,5–10 = Excelente</strong>.</p>
+
+  <h3>5.4 Calificación individual dentro del grupo</h3>
+  <p>La nota grupal se considera la nota base de los cuatro integrantes. El docente podrá, no obstante, ajustar la nota individual hacia arriba o hacia abajo (±1 punto sobre 10) en función de: (a) la intervención observada durante la exposición oral —cuantificada por minutos de participación efectiva—; (b) la calidad de las respuestas individuales durante la ronda de preguntas; (c) las observaciones registradas en la hoja de observación (sección 7). El ajuste individual deberá comunicarse al estudiante afectado en la sesión de retroalimentación, con justificación explícita.</p>
+
+  <div class="callout callout-info">
+    <div class="icon">i</div>
+    <div>
+      <div class="callout-title">Criterio de equidad</div>
+      <p>El ajuste individual se aplica solo cuando existen diferencias evidentes entre los miembros del grupo. La nota base grupal prevalece cuando los cuatro miembros participan de forma equilibrada, lo cual debe ser la situación habitual dada la rúbrica de trabajo en equipo aquí presentada.</p>
+    </div>
+  </div>
+</section>
+<!-- SEC45_END -->
+
+<!-- ============ SECCIÓN 6: CRONOGRAMA DOCENTE ============ -->
+<section class="section-card" id="sec-6">
+  <h2>6. Cronograma docente</h2>
+
+  <p>El cronograma siguiente sintetiza la planificación temporal de la actividad. Las fechas concretas son indicativas; el docente las sustituirá por las de su calendario académico real. Se recomienda reservar las dos sesiones en días consecutivos o, como máximo, dentro de la misma semana, para preservar la continuidad narrativa entre exposiciones.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Semana</th>
+        <th>Día</th>
+        <th>Actividad</th>
+        <th>Duración</th>
+        <th>Responsable</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Sem. -1</td><td>Lun</td><td>Comunicación al estudiantado de la actividad y reparto de grupos y temas</td><td>20 min</td><td>Docente</td></tr>
+      <tr><td>Sem. -1</td><td>Lun</td><td>Distribución de la página HTML de la Unidad 1 a cada estudiante</td><td>10 min</td><td>Docente</td></tr>
+      <tr><td>Sem. -1</td><td>Mar–mié</td><td>Reuniones internas de cada grupo: reparto de roles, plan de trabajo</td><td>60 min/grupo</td><td>Grupos</td></tr>
+      <tr><td>Sem. -1</td><td>Jue–vie</td><td>Lectura individual previa de la sección asignada y secciones vecinas</td><td>120 min</td><td>Estudiantes</td></tr>
+      <tr><td>Sem. 0 (D-2)</td><td>Mié</td><td>Entrega del guion preliminar de exposición al docente</td><td>—</td><td>Grupos</td></tr>
+      <tr><td>Sem. 0 (D-1)</td><td>Jue</td><td>Retroalimentación breve del docente sobre guion preliminar (vía correo)</td><td>10 min/grupo</td><td>Docente</td></tr>
+      <tr><td><strong>Sem. 1</strong></td><td><strong>Lun</strong></td><td><strong>SESIÓN 1 · Exposiciones Grupos 1–4 + apertura y cierre</strong></td><td><strong>110 min</strong></td><td><strong>Docente + Grupos 1-4</strong></td></tr>
+      <tr><td><strong>Sem. 1</strong></td><td><strong>Mié</strong></td><td><strong>SESIÓN 2 · Exposiciones Grupos 5–7 + síntesis + evaluación cruzada</strong></td><td><strong>110 min</strong></td><td><strong>Docente + Grupos 5-7</strong></td></tr>
+      <tr><td>Sem. 2</td><td>Lun</td><td>Entrega del dossier final (PDF + memoria escrita)</td><td>—</td><td>Grupos</td></tr>
+      <tr><td>Sem. 2</td><td>Mié</td><td>Devolución de rúbricas evaluadas con comentarios</td><td>—</td><td>Docente</td></tr>
+      <tr><td>Sem. 2</td><td>Jue–vie</td><td>Sesiones de retroalimentación individual opcional (15 min/grupo)</td><td>15 min/grupo</td><td>Docente</td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.1 Recursos necesarios</h3>
+  <ul>
+    <li>Aula con proyector y pantalla (mínimo 80 pulgadas) o pizarra digital.</li>
+    <li>Equipo de sonido o micrófono si el aula es grande (más de 40 estudiantes).</li>
+    <li>Acceso a Internet en el aula para mostrar la página HTML en vivo si el docente lo requiere.</li>
+    <li>Página HTML de la Unidad 1 (descargada previamente por cada estudiante).</li>
+    <li>Copia impresa de esta guía docente y de la rúbrica para el docente y para cada grupo.</li>
+    <li>Cronómetro o temporizador visible para el control estricto de los 15 minutos.</li>
+  </ul>
+
+  <h3>6.2 Materiales de apoyo para el docente</h3>
+  <ul>
+    <li>Lista de asistencia con los siete grupos y sus cuatro integrantes.</li>
+    <li>Siete copias de la hoja de observación (una por grupo, ver sección 7).</li>
+    <li>Calculadora o plantilla Excel para aplicar la fórmula de nota final.</li>
+    <li>Acceso al correo institucional para la retroalimentación escrita tras la actividad.</li>
+  </ul>
+</section>
+
+<!-- ============ SECCIÓN 7: HOJAS DE OBSERVACIÓN ============ -->
+<section class="section-card" id="sec-7">
+  <h2>7. Hojas de observación del docente</h2>
+
+  <p>La hoja de observación es el instrumento que el docente utiliza durante la exposición de cada grupo para registrar evidencias, marcar el nivel de cada criterio en la rúbrica y anotar comentarios específicos. Se recomienda imprimir una hoja por grupo (siete hojas en total) antes del inicio de la primera sesión. La hoja se compone de cinco bloques: identificación del grupo, marca de la rúbrica por criterio y nivel, comentarios por criterio, observaciones generales y nota final calculada.</p>
+
+  <p>Cada hoja se puede imprimir individualmente. Use el botón <strong>«Imprimir esta hoja»</strong> situado al final de cada una para imprimir solo esa hoja (las demás no se imprimirán si se usa el modo «Imprimir / PDF» del navegador con la selección de páginas apropiada).</p>
+
+  <div id="contenedor-hojas">
+    <!-- Las 7 hojas se generarán dinámicamente con JavaScript abajo -->
+  </div>
+</section>
+<!-- SEC67_END -->
+
+<!-- ============ SECCIÓN 8: ANEXO ============ -->
+<section class="section-card" id="sec-8">
+  <h2>8. Anexo · Síntesis de los siete temas</h2>
+
+  <p>Este anexo proporciona un resumen muy sintético de cada uno de los siete temas, con el propósito de que el docente y los estudiantes tengan a la vista un recordatorio rápido del contenido de cada sección. Los resúmenes no sustituyen la lectura de la página HTML de la Unidad 1, sino que orientan la preparación y la escucha activa durante las exposiciones.</p>
+
+  <table>
+    <thead>
+      <tr><th>Sección</th><th>Tema</th><th>Síntesis</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1.1</strong></td>
+        <td>Definición y evolución histórica</td>
+        <td>Las TI son un sistema sociotécnico integrado por hardware, software, redes, datos, personas y procesos. Evolucionan en cuatro olas (mainframes, miniaturización/PC, Internet, nube+IA+IoT). Diferenciar dato, información y conocimiento. Importancia estratégica: de Carr (2003) a Bharadwaj et al. (2013).</td>
+      </tr>
+      <tr>
+        <td><strong>1.2</strong></td>
+        <td>Componentes estructurales (ISO/ITIL)</td>
+        <td>Seis componentes articulados: hardware (capas usuario, edge, centro de datos, nube), software (firmware, SO, middleware, BD, aplicaciones, UI), redes (OSI, TCP/IP, protocolos industriales), datos (gobernanza, clasificación), personas (roles, competencias) y procesos (ITIL 4, 34 prácticas). Sistema sociotécnico.</td>
+      </tr>
+      <tr>
+        <td><strong>1.3</strong></td>
+        <td>Taxonomía empresarial (Weill &amp; Ross)</td>
+        <td>Cuatro capas: infraestructura TI (compartida, de fondo), aplicaciones (específicas por función), plataformas de datos e IA (cuarta capa emergente), servicios de información (exposición al ecosistema). Modelo operating model de CISR: Unificado, Coordinado, Diversificado, Replicado.</td>
+      </tr>
+      <tr>
+        <td><strong>1.4</strong></td>
+        <td>IT vs. OT y Modelo Purdue</td>
+        <td>IT gestiona información; OT controla procesos físicos. Tabla de 8+ dimensiones. Modelo Purdue ANSI/ISA-95: niveles 0 (proceso) a 5 (enterprise), con ITDMZ entre 3 y 4. Convergencia IT/OT (Industrie 4.0, IIoT): oportunidades y riesgos. ANSI/ISA-62443: segmentación, RBAC, diodos de datos.</td>
+      </tr>
+      <tr>
+        <td><strong>1.5</strong></td>
+        <td>Arquitecturas de sistemas</td>
+        <td>Estilos: monolito, cliente-servidor 3-tier, SOA, microservicios, event-driven, serverless. Microservicios (Lewis &amp; Fowler 2014): equipos pequeños, despliegue independiente, APIs ligeras, datos privados. Compromisos: complejidad operacional (Kubernetes, service mesh), consistencia eventual, latencia.</td>
+      </tr>
+      <tr>
+        <td><strong>1.6</strong></td>
+        <td>Marcos de referencia</td>
+        <td>ITIL 4 (gestión de servicios, SVS, 34 prácticas, 4 dimensiones). COBIT 2019 (gobernanza: evaluar, dirigir, monitorizar; 40 objetivos). ISO/IEC 27001 (SGSI, ciclo PDCA, Anexo A 93 controles). NIST CSF 2.0 (Govern, Identify, Protect, Detect, Respond, Recover). Complementariedad: los adoptan los cuatro.</td>
+      </tr>
+      <tr>
+        <td><strong>1.7</strong></td>
+        <td>Implicaciones para la ingeniería</td>
+        <td>Tres implicaciones: TI como sustrato material de operación y estrategia; perfil híbrido IT/OT del ingeniero industrial; gobernanza y seguridad como condiciones habilitantes. Reason (1997): Swiss Cheese Model. Weill &amp; Ross (2009): la arquitectura cristaliza decisiones organizacionales. Conclusión: gobernanza = parte de la ingeniería.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>8.1 Referencias bibliográficas esenciales</h3>
+  <ul>
+    <li>Bass, L., Clements, P. &amp; Kazman, R. (2021). <em>Software Architecture in Practice</em> (4th ed.). Addison-Wesley.</li>
+    <li>Bharadwaj, A., El Sawy, O. &amp; Pavlou, P. (2013). Digital Business Strategy: Toward a Next Generation of Insights. <em>MIS Quarterly, 37</em>(2), 471-482.</li>
+    <li>Carr, N. (2003). IT Doesn't Matter. <em>Harvard Business Review, 81</em>(5), 41-49.</li>
+    <li>ISACA (2019). <em>COBIT 2019: Governance and Management Objectives</em>. ISACA.</li>
+    <li>ISO/IEC (2022). <em>ISO/IEC 27001:2022 Information security management systems</em>. ISO.</li>
+    <li>ITIL 4 Foundation (2019). Axelos. The Stationery Office.</li>
+    <li>Lewis, J. &amp; Fowler, M. (2014). Microservices. <em>martinfowler.com</em>.</li>
+    <li>NIST (2024). <em>Cybersecurity Framework (CSF) 2.0</em>. National Institute of Standards and Technology.</li>
+    <li>Reason, J. (1997). <em>Managing the Risks of Organizational Accidents</em>. Ashgate.</li>
+    <li>Weill, P. &amp; Ross, J. (2009). <em>IT Savvy: What Top Executives Must Know to Go from Pain to Gain</em>. Harvard Business Press.</li>
+    <li>ANSI/ISA-62443 (2018). <em>Security for Industrial Automation and Control Systems</em>. International Society of Automation.</li>
+    <li>ANSI/ISA-95 (2018). <em>Enterprise-Control System Integration</em>. International Society of Automation.</li>
+  </ul>
+</section>
+
+</main>
+
+<!-- ============ FOOTER UNIVERSITARIO ============ -->
+<footer class="university">
+  <div class="footer-inner">
+    <div>
+      <strong>Cátedra de Ingeniería de Sistemas Industriales</strong>
+      Guía docente · Actividad grupal · Unidad 1 · Fundamentos de TI y Arquitectura de Sistemas<br>
+      <span style="opacity:.7">Material didáctico autocontenido · 7 grupos × 4 estudiantes · Rúbrica 5 criterios × 4 niveles</span>
+    </div>
+    <div style="text-align:right">
+      <strong>Edición académica</strong>
+      Curso 2026-2027 · Versión 1.0 (HTML)<br>
+      <span style="opacity:.7">Complementa la página HTML <code>Unidad1_Fundamentos_TI_Caso_RCA.html</code></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   1) DESCARGAR HTML
+   ============================================================ */
+function descargarHTML(){
+  const doctype = '<!DOCTYPE html>\n';
+  const html = document.documentElement.outerHTML;
+  const contenido = doctype + html;
+  const blob = new Blob([contenido], {type: 'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Actividad_Grupal_Unidad1_Rubrica.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 200);
+  mostrarFeedback('descarga');
+}
+
+/* ============================================================
+   2) COPIAR CÓDIGO AL PORTAPAPELES
+   ============================================================ */
+function copiarCodigo(){
+  const doctype = '<!DOCTYPE html>\n';
+  const html = document.documentElement.outerHTML;
+  const contenido = doctype + html;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(contenido).then(function(){
+      mostrarFeedback('copia');
+    }).catch(function(){
+      fallbackCopy(contenido);
+    });
+  } else {
+    fallbackCopy(contenido);
+  }
+}
+
+function fallbackCopy(contenido){
+  const ta = document.createElement('textarea');
+  ta.value = contenido;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    mostrarFeedback('copia');
+  } catch(e){
+    mostrarFeedback('copia-error');
+  }
+  document.body.removeChild(ta);
+}
+
+function mostrarFeedback(tipo){
+  let fb = document.getElementById('feedback-' + tipo);
+  if(fb){
+    fb.classList.add('visible');
+    setTimeout(function(){ fb.classList.remove('visible'); }, 2500);
+    return;
+  }
+  const div = document.createElement('div');
+  div.id = 'feedback-' + tipo;
+  div.className = 'copy-feedback visible';
+  const msg = tipo === 'copia' ? '✓ Código copiado al portapapeles' :
+              tipo === 'descarga' ? '✓ Descarga iniciada...' :
+              '✗ No se pudo copiar. Usa el botón Descargar.';
+  div.textContent = msg;
+  const toolbar = document.querySelector('.toolbar');
+  if(toolbar){ toolbar.appendChild(div); }
+  else { document.body.appendChild(div); }
+  setTimeout(function(){
+    div.classList.remove('visible');
+    setTimeout(function(){ div.remove(); }, 250);
+  }, 2500);
+}
+
+/* ============================================================
+   3) NAVEGACIÓN ACTIVA EN SUB-NAV (resalta la sección actual)
+   ============================================================ */
+(function(){
+  const links = document.querySelectorAll('.subnav-link');
+  const secciones = document.querySelectorAll('main section[id]');
+  function actualizarActiva(){
+    let actual = null;
+    const y = window.scrollY + 120;
+    secciones.forEach(function(s){
+      if(s.offsetTop <= y) actual = s.id;
+    });
+    links.forEach(function(l){
+      const href = l.getAttribute('href').replace('#','');
+      l.classList.toggle('active', href === actual);
+    });
+  }
+  window.addEventListener('scroll', actualizarActiva, {passive:true});
+  window.addEventListener('load', actualizarActiva);
+  actualizarActiva();
+})();
+
+/* ============================================================
+   4) GENERACIÓN DINÁMICA DE LAS 7 HOJAS DE OBSERVACIÓN
+   ============================================================ */
+const GRUPOS_DATOS = [
+  {n:1, sec:'1.1', titulo:'Definición y evolución histórica de las TI'},
+  {n:2, sec:'1.2', titulo:'Componentes estructurales de las TI (ISO/ITIL)'},
+  {n:3, sec:'1.3', titulo:'Taxonomía empresarial de TI (Weill & Ross)'},
+  {n:4, sec:'1.4', titulo:'TI vs. OT: Modelo Purdue y convergencia'},
+  {n:5, sec:'1.5', titulo:'Arquitecturas: del monolito a los microservicios'},
+  {n:6, sec:'1.6', titulo:'Marcos: ITIL, COBIT, ISO 27001, NIST CSF'},
+  {n:7, sec:'1.7', titulo:'Implicaciones para la ingeniería contemporánea'}
+];
+
+const CRITERIOS = [
+  {id:'C1', nombre:'C1 · Contenido técnico (30%)'},
+  {id:'C2', nombre:'C2 · Exposición oral (20%)'},
+  {id:'C3', nombre:'C3 · Material visual (20%)'},
+  {id:'C4', nombre:'C4 · Preguntas y debate (15%)'},
+  {id:'C5', nombre:'C5 · Trabajo en equipo (15%)'}
+];
+
+function generarHojaObservacion(g){
+  // Construye el HTML de una hoja
+  const html = `
+  <div class="hoja-obs" id="hoja-grupo-${g.n}">
+    <div class="hoja-header">
+      <div class="hoja-num">${g.n}</div>
+      <div>
+        <h3>Hoja de observación — Grupo ${g.n} · Sección ${g.sec}</h3>
+        <div class="hoja-tag">${g.titulo}</div>
+      </div>
+    </div>
+    <div class="hoja-body">
+
+      <!-- Bloque 1: Identificación -->
+      <div class="hoja-bloque">
+        <div class="hoja-bloque-titulo">Bloque 1 · Identificación del grupo</div>
+        <div class="campo-linea"><span class="campo-label">Número de grupo:</span><span class="campo-valor">Grupo ${g.n}</span></div>
+        <div class="campo-linea"><span class="campo-label">Sección asignada:</span><span class="campo-valor">${g.sec} · ${g.titulo}</span></div>
+        <div class="campo-linea"><span class="campo-label">Fecha de exposición:</span><span class="campo-valor">________ / ________ / ________</span></div>
+        <div class="campo-linea"><span class="campo-label">Estudiante 1 (Coordinador/a):</span><span class="campo-valor">_______________________________</span></div>
+        <div class="campo-linea"><span class="campo-label">Estudiante 2 (Investigador/a):</span><span class="campo-valor">_______________________________</span></div>
+        <div class="campo-linea"><span class="campo-label">Estudiante 3 (Diseñador/a):</span><span class="campo-valor">_______________________________</span></div>
+        <div class="campo-linea"><span class="campo-label">Estudiante 4 (Expositor/a):</span><span class="campo-valor">_______________________________</span></div>
+        <div class="campo-linea"><span class="campo-label">Hora de inicio:</span><span class="campo-valor">_____ : _____</span></div>
+        <div class="campo-linea"><span class="campo-label">Hora de finalización:</span><span class="campo-valor">_____ : _____</span></div>
+        <div class="campo-linea"><span class="campo-label">Duración real:</span><span class="campo-valor">________ minutos</span></div>
+      </div>
+
+      <!-- Bloque 2: Rúbrica -->
+      <div class="hoja-bloque">
+        <div class="hoja-bloque-titulo">Bloque 2 · Marca de la rúbrica por criterio y nivel</div>
+        <table class="tabla-rubrica-hoja">
+          <thead>
+            <tr>
+              <th>Criterio</th>
+              <th>0 · Insuf.</th>
+              <th>1 · Sufic.</th>
+              <th>2 · Bueno</th>
+              <th>3 · Excel.</th>
+              <th>Puntaje</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${CRITERIOS.map(c => `
+              <tr>
+                <td class="crit">${c.nombre}</td>
+                <td><span class="casilla" onclick="marcarCasilla(this)">☐</span></td>
+                <td><span class="casilla" onclick="marcarCasilla(this)">☐</span></td>
+                <td><span class="casilla" onclick="marcarCasilla(this)">☐</span></td>
+                <td><span class="casilla" onclick="marcarCasilla(this)">☐</span></td>
+                <td><strong>____ / 3</strong></td>
+              </tr>
+            `).join('')}
+            <tr>
+              <td class="crit"><strong>TOTAL (máx. 15)</strong></td>
+              <td colspan="4" style="text-align:center;font-size:.78rem;color:#5A6573">Suma de puntajes por criterio</td>
+              <td class="total">___ / 15</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top:.6rem;font-size:.85rem;color:#5A6573">Nota final = ( Total / 15 ) × 10 = <strong>________ / 10</strong></p>
+      </div>
+
+      <!-- Bloque 3: Comentarios por criterio -->
+      <div class="hoja-bloque">
+        <div class="hoja-bloque-titulo">Bloque 3 · Comentarios específicos por criterio</div>
+        ${CRITERIOS.map(c => `
+          <div style="margin-bottom:.8rem">
+            <div style="font-weight:700;color:#0A2A5E;font-size:.9rem">${c.nombre}</div>
+            <div style="min-height:50px;border-bottom:1px dashed #C7CFDD;margin-top:.3rem"></div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- Bloque 4: Observaciones generales -->
+      <div class="hoja-bloque">
+        <div class="hoja-bloque-titulo">Bloque 4 · Observaciones generales del docente</div>
+        <div style="min-height:120px;border:1px solid #C7CFDD;border-radius:6px;padding:.6rem;background:#FAFBFC"></div>
+      </div>
+
+      <!-- Bloque 5: Nota final individual -->
+      <div class="hoja-bloque">
+        <div class="hoja-bloque-titulo">Bloque 5 · Nota final y ajustes individuales</div>
+        <table class="tabla-rubrica-hoja">
+          <thead>
+            <tr>
+              <th>Estudiante</th>
+              <th>Rol</th>
+              <th>Ajuste individual (±1)</th>
+              <th>Nota final individual</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>_____________________</td><td>Coordinador/a</td><td>______</td><td>____ / 10</td></tr>
+            <tr><td>_____________________</td><td>Investigador/a</td><td>______</td><td>____ / 10</td></tr>
+            <tr><td>_____________________</td><td>Diseñador/a</td><td>______</td><td>____ / 10</td></tr>
+            <tr><td>_____________________</td><td>Expositor/a</td><td>______</td><td>____ / 10</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="text-align:right;margin-top:1rem;font-size:.85rem;color:#5A6573;font-style:italic">
+        Firma del docente: ___________________________ &nbsp;&nbsp;&nbsp; Fecha: ________________
+      </div>
+
+      <div style="margin-top:1rem;text-align:center">
+        <button class="btn-tool" onclick="imprimirHoja('hoja-grupo-${g.n}')">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+          Imprimir esta hoja (Grupo ${g.n})
+        </button>
+      </div>
+    </div>
+  </div>`;
+  return html;
+}
+
+function marcarCasilla(elem){
+  // Alterna entre ☐ (vacía) y ☑ (marcada)
+  if(elem.textContent.trim() === '☐'){
+    elem.textContent = '☑';
+    elem.style.color = '#2E7D5B';
+    elem.style.borderColor = '#2E7D5B';
+    elem.style.background = '#EAF5EE';
+  } else {
+    elem.textContent = '☐';
+    elem.style.color = 'transparent';
+    elem.style.borderColor = '#1E4A8C';
+    elem.style.background = '#fff';
+  }
+}
+
+function imprimirHoja(idHoja){
+  // Imprimir solo una hoja específica
+  const hoja = document.getElementById(idHoja);
+  if(!hoja) return;
+  const ventana = window.open('', '_blank', 'width=850,height=1100');
+  const css = `
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Source Sans Pro','Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.6;color:#1F2A37;background:#fff;padding:24px}
+    h1,h2,h3,h4{font-family:'Merriweather',Georgia,serif;color:#0A2A5E;font-weight:700}
+    h3{font-size:1.1rem;margin:.6rem 0}
+    h4{font-size:.95rem;margin:.4rem 0}
+    p{margin:.4rem 0}
+    .hoja-obs{border:1px solid #C7CFDD;border-radius:8px;overflow:hidden;margin:0 auto;max-width:800px}
+    .hoja-header{background:linear-gradient(135deg,#3D2A1A 0%,#5A3E1A 100%);color:#fff;padding:.8rem 1.2rem;display:flex;align-items:center;gap:1rem}
+    .hoja-num{background:#C8A04A;color:#06214C;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Merriweather',serif;font-weight:900;font-size:1.1rem;flex:0 0 auto}
+    .hoja-header h3{color:#fff;margin:0;font-size:1rem}
+    .hoja-tag{font-size:.78rem;color:#F4E9C9;margin-top:.2rem}
+    .hoja-body{padding:1.2rem 1.4rem}
+    .hoja-bloque{margin-bottom:1.2rem}
+    .hoja-bloque-titulo{font-weight:700;color:#0A2A5E;font-family:'Merriweather',serif;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:2px solid #C8A04A}
+    .campo-linea{display:flex;padding:.4rem 0;border-bottom:1px dashed #D9DDE3;gap:1rem}
+    .campo-label{flex:0 0 38%;font-weight:600;color:#0A2A5E;font-size:.9rem}
+    .campo-valor{flex:1;color:#5A6573;font-size:.9rem}
+    table{width:100%;border-collapse:collapse;margin:.6rem 0;font-size:.82rem}
+    th{background:#0A2A5E;color:#fff;padding:.4rem;text-align:center;font-size:.78rem;font-weight:700}
+    td{padding:.4rem;border:1px solid #D9DDE3;text-align:center}
+    td.crit{font-weight:700;color:#0A2A5E;text-align:left;background:#E8EEF8;font-size:.82rem;text-align:left}
+    td.total{background:#C8A04A;color:#fff;font-weight:700}
+    .casilla{display:inline-block;width:22px;height:22px;border:2px solid #1E4A8C;border-radius:4px;text-align:center;font-size:1rem;line-height:18px}
+  `;
+  ventana.document.write(`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Hoja observación — ${idHoja}</title><style>${css}</style></head><body>`);
+  ventana.document.write(hoja.outerHTML);
+  ventana.document.write('</body></html>');
+  ventana.document.close();
+  setTimeout(function(){
+    ventana.focus();
+    ventana.print();
+  }, 300);
+}
+
+// Renderizar las 7 hojas al cargar
+(function(){
+  const contenedor = document.getElementById('contenedor-hojas');
+  if(!contenedor) return;
+  let html = '';
+  GRUPOS_DATOS.forEach(function(g){
+    html += generarHojaObservacion(g);
+  });
+  contenedor.innerHTML = html;
+})();
+</script>
+</body>
+</html>
