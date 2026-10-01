@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidad 1 · Fundamentos de TI y Arquitectura de Sistemas | Ingeniería</title>
+<meta name="author" content="Cátedra de Ingeniería de Sistemas Industriales">
+<meta name="description" content="Material didáctico universitario: Fundamentos de Tecnologías de la Información, Taxonomía Industrial y Taller práctico de Análisis de Causa Raíz (RCA) con Diagramas de Ishikawa en Infraestructura TI/OT.">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Source+Sans+Pro:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul-marino:#0A2A5E;
+  --azul-oscuro:#06214C;
+  --azul-medio:#1E4A8C;
+  --azul-claro:#E8EEF8;
+  --dorado:#C8A04A;
+  --dorado-claro:#F4E9C9;
+  --gris-claro:#F5F6F8;
+  --gris-medio:#D9DDE3;
+  --gris-oscuro:#4A4F57;
+  --texto:#1F2A37;
+  --texto-claro:#5A6573;
+  --verde-correcto:#2E7D5B;
+  --rojo-alerta:#B23A48;
+  --borde:#C7CFDD;
+  --sombra:0 4px 18px rgba(10,42,94,.10);
+  --sombra-fuerte:0 10px 30px rgba(10,42,94,.18);
+  --max:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Source Sans Pro','Helvetica Neue',Arial,sans-serif;
+  font-size:17px;
+  line-height:1.7;
+  color:var(--texto);
+  background:var(--gris-claro);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,h5{font-family:'Merriweather',Georgia,serif;color:var(--azul-marino);font-weight:700;line-height:1.3}
+h1{font-size:1.95rem;letter-spacing:-.01em}
+h2{font-size:1.55rem;margin:2.2rem 0 1rem;padding-bottom:.4rem;border-bottom:3px solid var(--dorado)}
+h3{font-size:1.22rem;color:var(--azul-medio);margin:1.5rem 0 .6rem}
+h4{font-size:1.05rem;color:var(--azul-oscuro);margin:1.1rem 0 .4rem;font-weight:700}
+p{margin:.6rem 0 1rem}
+a{color:var(--azul-medio);text-decoration:none;border-bottom:1px dotted var(--azul-medio)}
+a:hover{color:var(--azul-marino);border-bottom-style:solid}
+code{font-family:'Source Code Pro',monospace;background:var(--azul-claro);color:var(--azul-oscuro);padding:.1em .35em;border-radius:4px;font-size:.92em}
+pre{font-family:'Source Code Pro',monospace;background:var(--azul-oscuro);color:#E8EEF8;padding:1.2rem 1.4rem;border-radius:8px;overflow-x:auto;margin:1rem 0;font-size:.86rem;line-height:1.5;border-left:5px solid var(--dorado)}
+pre code{background:transparent;color:inherit;padding:0}
+ul,ol{margin:.5rem 0 1.2rem 1.6rem}
+li{margin:.3rem 0}
+strong{color:var(--azul-marino);font-weight:700}
+em{color:var(--texto-claro)}
+blockquote{border-left:5px solid var(--dorado);background:var(--dorado-claro);padding:1rem 1.4rem;margin:1.5rem 0;border-radius:0 8px 8px 0;font-style:italic}
+blockquote p{margin:.3rem 0}
+table{border-collapse:collapse;width:100%;margin:1.2rem 0;font-size:.95rem;background:#fff;box-shadow:var(--sombra);border-radius:6px;overflow:hidden}
+thead{background:var(--azul-marino);color:#fff}
+th{padding:.85rem 1rem;text-align:left;font-weight:700;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase}
+td{padding:.75rem 1rem;border-top:1px solid var(--gris-medio);vertical-align:top}
+tbody tr:nth-child(even){background:var(--azul-claro)}
+tbody tr:hover{background:var(--dorado-claro)}
+hr{border:none;border-top:1px solid var(--borde);margin:2.5rem 0}
+
+/* === HEADER === */
+header.university{
+  background:linear-gradient(135deg,var(--azul-oscuro) 0%,var(--azul-marino) 60%,var(--azul-medio) 100%);
+  color:#fff;padding:1.2rem 0 1.4rem;box-shadow:var(--sombra-fuerte);position:relative;
+}
+header.university::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--dorado) 0%,#E8C879 50%,var(--dorado) 100%)}
+.university-inner{max-width:var(--max);margin:0 auto;padding:0 1.4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.escudo{display:flex;align-items:center;gap:.85rem}
+.escudo-circ{width:48px;height:48px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--azul-marino);font-family:'Merriweather',serif;font-weight:900;font-size:1.35rem;box-shadow:0 0 0 3px var(--dorado),0 0 0 6px rgba(255,255,255,.18)}
+.university-meta{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dorado-claro);font-weight:600;margin-bottom:.1rem}
+.university-title{font-family:'Merriweather',serif;font-size:1.1rem;font-weight:700;color:#fff;line-height:1.2}
+.course-tag{font-size:.78rem;color:rgba(255,255,255,.85);margin-top:.25rem}
+.header-actions{display:flex;gap:.6rem;flex-wrap:wrap}
+.btn-action{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.4);padding:.55rem 1rem;border-radius:6px;font-family:'Source Sans Pro',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;transition:all .2s ease;text-decoration:none;border-bottom:1.5px solid rgba(255,255,255,.4)}
+.btn-action:hover{background:#fff;color:var(--azul-marino);border-color:#fff;border-bottom:1.5px solid #fff}
+.btn-action svg{width:14px;height:14px;fill:currentColor}
+
+/* === TABS NAV === */
+nav.tabs{background:#fff;box-shadow:0 2px 8px rgba(10,42,94,.06);position:sticky;top:0;z-index:50;border-bottom:1px solid var(--borde)}
+.tabs-inner{max-width:var(--max);margin:0 auto;padding:0 1.4rem;display:flex;gap:.3rem;flex-wrap:wrap}
+.tab-link{padding:1.05rem 1.4rem;font-family:'Source Sans Pro',sans-serif;font-weight:600;font-size:.92rem;color:var(--texto-claro);background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all .25s ease;display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;border-radius:0}
+.tab-link .tab-num{background:var(--gris-medio);color:var(--azul-marino);width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;font-family:'Merriweather',serif}
+.tab-link:hover{color:var(--azul-marino);background:var(--azul-claro)}
+.tab-link.active{color:var(--azul-marino);border-bottom-color:var(--dorado);background:linear-gradient(180deg,transparent 0%,var(--azul-claro) 100%)}
+.tab-link.active .tab-num{background:var(--azul-marino);color:#fff}
+
+/* === MAIN === */
+main{max-width:var(--max);margin:0 auto;padding:2.2rem 1.4rem 4rem}
+.tab-panel{display:none;animation:fadeIn .4s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.panel-header{background:linear-gradient(135deg,var(--azul-marino) 0%,var(--azul-medio) 100%);color:#fff;padding:2rem 2.2rem;border-radius:12px;margin-bottom:2rem;box-shadow:var(--sombra);position:relative;overflow:hidden}
+.panel-header::before{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(200,160,74,.25) 0%,transparent 70%)}
+.panel-header .kicker{font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dorado-claro);font-weight:600;margin-bottom:.6rem}
+.panel-header h1{color:#fff;margin:0 0 .5rem;font-size:1.85rem}
+.panel-header p{color:rgba(255,255,255,.88);margin:.4rem 0 0;font-size:1rem;max-width:780px}
+.panel-header .meta-row{display:flex;gap:1.6rem;flex-wrap:wrap;margin-top:1rem;font-size:.82rem;color:var(--dorado-claro);letter-spacing:.04em}
+.panel-header .meta-row span{display:inline-flex;align-items:center;gap:.4rem}
+.panel-header .meta-row span::before{content:"●";color:var(--dorado)}
+
+/* === SECTION CARD === */
+.section-card{background:#fff;border:1px solid var(--borde);border-radius:10px;padding:2rem 2.2rem;margin:1.5rem 0;box-shadow:var(--sombra)}
+.section-card h2:first-child{margin-top:0}
+
+.callout{border-radius:8px;padding:1.2rem 1.4rem;margin:1.4rem 0;border-left:5px solid;display:flex;gap:1rem;align-items:flex-start}
+.callout .icon{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Merriweather',serif}
+.callout-info{background:var(--azul-claro);border-color:var(--azul-medio);color:var(--azul-oscuro)}
+.callout-info .icon{background:var(--azul-medio);color:#fff}
+.callout-warn{background:#FFF6E5;border-color:var(--dorado);color:#7A5A1A}
+.callout-warn .icon{background:var(--dorado);color:#fff}
+.callout-key{background:#EAF5EE;border-color:var(--verde-correcto);color:#1A5C40}
+.callout-key .icon{background:var(--verde-correcto);color:#fff}
+.callout p{margin:.2rem 0}
+.callout-title{font-weight:700;margin-bottom:.3rem;font-family:'Merriweather',serif}
+
+.def-card{background:var(--azul-claro);border-radius:8px;padding:.2rem 1.3rem 1.1rem;margin:1.2rem 0;border-left:4px solid var(--azul-medio)}
+.def-card h4{color:var(--azul-marino);margin-top:1rem}
+
+.figura{background:#fff;border:1px dashed var(--azul-medio);border-radius:8px;padding:1.6rem 1.8rem;margin:1.6rem 0;text-align:center;overflow-x:auto}
+.figura .figura-titulo{font-family:'Merriweather',serif;font-weight:700;color:var(--azul-marino);font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.figura .figura-num{display:inline-block;background:var(--azul-marino);color:#fff;padding:.2rem .6rem;border-radius:4px;margin-right:.5rem;font-size:.78rem}
+
+/* === Purdue / Taxonomy diagram === */
+.diagram-purdue{display:flex;flex-direction:column;gap:4px;margin:1rem auto;max-width:680px}
+.purdue-level{padding:.85rem 1.1rem;border-radius:6px;color:#fff;font-weight:600;font-size:.9rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.purdue-level .lvl-num{background:rgba(255,255,255,.25);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Merriweather',serif;font-weight:700;flex:0 0 auto}
+.purdue-level .lvl-desc{font-weight:400;font-size:.82rem;opacity:.9}
+.purdue-l5{background:#6B3A8C}
+.purdue-l4{background:#0A2A5E}
+.purdue-l35{background:#C8A04A;color:#1F2A37}
+.purdue-l3{background:#1E4A8C}
+.purdue-l2{background:#2E7D5B}
+.purdue-l1{background:#B23A48}
+.purdue-l0{background:#4A4F57}
+.purdue-dmz{background:repeating-linear-gradient(45deg,var(--dorado-claro),var(--dorado-claro) 10px,#E8C879 10px,#E8C879 20px);color:#5A3E0A;text-align:center;padding:.5rem;font-size:.78rem;font-weight:600;border-radius:4px;margin:2px 0}
+
+/* Ishikawa diagram */
+.ishikawa-wrap{margin:1.5rem 0;padding:2rem 1rem 0;background:#fff;border:1px solid var(--gris-medio);border-radius:8px;overflow-x:auto}
+.ishikawa{position:relative;min-width:680px;height:380px;margin:0 auto;font-family:'Source Sans Pro',sans-serif;font-size:.78rem}
+.ishikawa .spine{position:absolute;left:0;right:60px;top:50%;height:4px;background:var(--azul-marino);transform:translateY(-50%)}
+.ishikawa .head{position:absolute;right:0;top:50%;transform:translateY(-50%);background:var(--rojo-alerta);color:#fff;padding:.6rem 1rem;border-radius:6px;font-weight:700;box-shadow:var(--sombra);font-size:.85rem;text-align:center;width:120px}
+.ishikawa .head small{display:block;font-weight:400;font-size:.7rem;opacity:.9;margin-top:.2rem}
+.ishikawa .branch{position:absolute;width:180px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.ishikawa .branch .label{background:var(--azul-medio);color:#fff;padding:.35rem .7rem;border-radius:4px;font-weight:700;margin-bottom:.3rem;width:100%;font-size:.82rem}
+.ishikawa .branch .bones{display:flex;flex-direction:column;gap:.2rem;width:100%}
+.ishikawa .branch .bone{background:var(--azul-claro);border-left:3px solid var(--dorado);padding:.25rem .5rem;border-radius:3px;font-size:.74rem;color:var(--azul-oscuro);text-align:left}
+.ishikawa .b-top{top:5%}
+.ishikawa .b-bottom{bottom:5%;flex-direction:column-reverse}
+.ishikawa .b-bottom .label{margin-top:.3rem;margin-bottom:0}
+.ishikawa .b1{left:60px}
+.ishikawa .b2{left:260px}
+.ishikawa .b3{left:460px}
+.ishikawa .connector{position:absolute;width:2px;background:var(--azul-medio);left:50%;transform:translateX(-50%)}
+
+/* === Reto card (Tab 2) === */
+.reto-card{background:#fff;border:1px solid var(--borde);border-radius:12px;margin:1.8rem 0;overflow:hidden;box-shadow:var(--sombra)}
+.reto-header{background:linear-gradient(135deg,#3D2A1A 0%,#5A3E1A 100%);color:#fff;padding:1.2rem 1.6rem;display:flex;align-items:center;gap:1rem}
+.reto-num{background:var(--dorado);color:var(--azul-oscuro);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Merriweather',serif;font-weight:900;font-size:1.2rem;flex:0 0 auto}
+.reto-header h3{color:#fff;margin:0;font-size:1.2rem}
+.reto-header .reto-tag{font-size:.78rem;color:var(--dorado-claro);margin-top:.2rem}
+.reto-body{padding:1.5rem 1.8rem}
+.reto-meta{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.2rem;padding-bottom:1rem;border-bottom:1px dashed var(--gris-medio)}
+.reto-meta .meta-item{font-size:.82rem;color:var(--texto-claro)}
+.reto-meta .meta-item strong{color:var(--azul-marino)}
+.datos-table th{font-size:.74rem}
+.datos-table td{font-size:.9rem}
+
+.solucion-locked{background:#F4ECDC;border:2px dashed var(--dorado);border-radius:10px;padding:1.5rem 1.8rem;margin:1.5rem 0;text-align:center}
+.solucion-locked .lock-icon{font-size:2rem;margin-bottom:.4rem}
+.solucion-locked h4{color:var(--azul-marino);margin:.4rem 0}
+.solucion-locked p{color:var(--texto-claro);max-width:560px;margin:0 auto 1.2rem;font-size:.92rem}
+
+.solucion-content{display:none;background:#F0F7F4;border:1px solid var(--verde-correcto);border-radius:10px;padding:1.6rem 1.8rem;margin:1.5rem 0;animation:revealSol .5s ease}
+.solucion-content.visible{display:block}
+@keyframes revealSol{from{opacity:0;max-height:0}to{opacity:1;max-height:9999px}}
+.solucion-content h4{color:var(--verde-correcto);display:flex;align-items:center;gap:.5rem;margin-top:0}
+.solucion-content h4::before{content:"✓";background:var(--verde-correcto);color:#fff;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem}
+.causa-raiz{background:#fff;border-left:4px solid var(--verde-correcto);padding:.8rem 1.2rem;margin:1rem 0;border-radius:0 6px 6px 0}
+.causa-raiz strong{color:var(--verde-correcto)}
+.acciones-table th{font-size:.74rem}
+.acciones-table .tipo-c{background:#FFF6E5;color:#7A5A1A;font-weight:600;padding:.15rem .5rem;border-radius:4px;font-size:.74rem}
+.acciones-table .tipo-p{background:#EAF5EE;color:#1A5C40;font-weight:600;padding:.15rem .5rem;border-radius:4px;font-size:.74rem}
+
+/* === PIN MODAL === */
+.modal-overlay{position:fixed;inset:0;background:rgba(6,33,76,.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:200;padding:1rem}
+.modal-overlay.show{display:flex;animation:fadeIn .25s ease}
+.modal-card{background:#fff;border-radius:14px;width:100%;max-width:420px;box-shadow:var(--sombra-fuerte);overflow:hidden;animation:popIn .3s ease}
+@keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-header{background:linear-gradient(135deg,var(--azul-marino),var(--azul-medio));color:#fff;padding:1.4rem 1.6rem;text-align:center;position:relative}
+.modal-header h3{color:#fff;margin:0;font-size:1.15rem}
+.modal-header .lock-big{font-size:2.4rem;margin-bottom:.3rem;display:block}
+.modal-header p{color:rgba(255,255,255,.8);font-size:.85rem;margin-top:.3rem}
+.modal-close{position:absolute;top:.7rem;right:.9rem;background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1.1rem;line-height:1;transition:background .2s}
+.modal-close:hover{background:rgba(255,255,255,.3)}
+.modal-body{padding:1.6rem}
+.modal-body label{display:block;font-weight:600;color:var(--azul-marino);font-size:.85rem;margin-bottom:.5rem;letter-spacing:.04em;text-transform:uppercase}
+.pin-input-wrap{display:flex;gap:.5rem;justify-content:center;margin:1rem 0}
+.pin-digit{width:54px;height:64px;border:2px solid var(--borde);border-radius:8px;text-align:center;font-family:'Merriweather',serif;font-size:1.6rem;font-weight:700;color:var(--azul-marino);background:var(--azul-claro);transition:all .2s}
+.pin-digit:focus{outline:none;border-color:var(--dorado);background:#fff;box-shadow:0 0 0 3px var(--dorado-claro)}
+.pin-digit.error{border-color:var(--rojo-alerta);background:#FFE9EC;animation:shake .3s}
+.pin-digit.ok{border-color:var(--verde-correcto);background:#EAF5EE}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.modal-msg{font-size:.85rem;text-align:center;margin:.6rem 0;min-height:1.4rem;color:var(--rojo-alerta);font-weight:600}
+.modal-msg.ok{color:var(--verde-correcto)}
+.modal-actions{display:flex;gap:.6rem;margin-top:1rem}
+.btn-primary{flex:1;background:var(--azul-marino);color:#fff;border:none;padding:.85rem 1rem;border-radius:8px;font-family:'Source Sans Pro',sans-serif;font-weight:600;font-size:.95rem;cursor:pointer;transition:background .2s}
+.btn-primary:hover{background:var(--azul-oscuro)}
+.btn-secondary{background:transparent;color:var(--texto-claro);border:1.5px solid var(--borde);padding:.85rem 1rem;border-radius:8px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{background:var(--gris-claro);border-color:var(--texto-claro)}
+.modal-footer{text-align:center;font-size:.78rem;color:var(--texto-claro);padding:0 1.6rem 1.4rem}
+.intentos{font-size:.78rem;color:var(--texto-claro);text-align:center;margin-top:.5rem}
+
+/* Botón ver respuestas general */
+.ver-respuestas{background:linear-gradient(135deg,var(--dorado) 0%,#E8C879 100%);color:var(--azul-oscuro);border:none;padding:1rem 1.8rem;border-radius:10px;font-family:'Source Sans Pro',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 6px 18px rgba(200,160,74,.35);display:inline-flex;align-items:center;gap:.6rem;transition:all .25s ease;text-decoration:none}
+.ver-respuestas:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(200,160,74,.45)}
+.ver-respuestas svg{width:18px;height:18px;fill:currentColor}
+.ocultar-respuestas{background:var(--gris-medio);color:var(--azul-marino);border:none;padding:.7rem 1.4rem;border-radius:8px;font-weight:600;cursor:pointer;display:none;margin-top:1rem;font-size:.9rem}
+.ocultar-respuestas.visible{display:inline-block}
+
+/* Toolbar descarga */
+.toolbar{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.5rem 0;padding:1rem 1.2rem;background:#fff;border:1px solid var(--borde);border-radius:8px;align-items:center}
+.toolbar .toolbar-label{font-size:.78rem;color:var(--texto-claro);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-right:.4rem}
+.btn-tool{background:var(--azul-claro);color:var(--azul-marino);border:1px solid var(--azul-medio);padding:.5rem .9rem;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;transition:all .2s;text-decoration:none;border-bottom:1px solid var(--azul-medio)}
+.btn-tool:hover{background:var(--azul-marino);color:#fff;border-color:var(--azul-marino);border-bottom:1px solid var(--azul-marino)}
+.btn-tool svg{width:14px;height:14px;fill:currentColor}
+.copy-feedback{font-size:.82rem;color:var(--verde-correcto);font-weight:600;margin-left:.4rem;display:none}
+.copy-feedback.visible{display:inline-block;animation:fadeIn .2s ease}
+
+/* Indice flotante */
+.toc-box{background:var(--azul-claro);border:1px solid var(--borde);border-radius:8px;padding:1.2rem 1.4rem;margin:1.5rem 0}
+.toc-box h4{margin-top:0;color:var(--azul-marino);font-size:.85rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--azul-medio);padding-bottom:.4rem}
+.toc-box ol{margin:.6rem 0 0 1.2rem;font-size:.92rem}
+.toc-box ol li{margin:.25rem 0}
+.toc-box a{border-bottom:none;color:var(--azul-medio)}
+.toc-box a:hover{color:var(--dorado)}
+
+/* Footer */
+footer.university{background:var(--azul-oscuro);color:rgba(255,255,255,.7);padding:2rem 0;margin-top:3rem;border-top:4px solid var(--dorado)}
+.footer-inner{max-width:var(--max);margin:0 auto;padding:0 1.4rem;font-size:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-inner strong{color:#fff;display:block;margin-bottom:.3rem;font-family:'Merriweather',serif;font-size:.95rem}
+
+/* Block reveal animation for solutions */
+.solution-block{overflow:hidden;transition:max-height .6s ease,opacity .4s ease;max-height:0;opacity:0}
+.solution-block.revealed{max-height:9999px;opacity:1}
+
+/* Responsive */
+@media(max-width:780px){
+  body{font-size:16px}
+  h1{font-size:1.55rem}
+  h2{font-size:1.3rem}
+  .panel-header{padding:1.5rem 1.4rem}
+  .panel-header h1{font-size:1.4rem}
+  .section-card{padding:1.4rem 1.2rem}
+  .tabs-inner{padding:0 .6rem;overflow-x:auto;flex-wrap:nowrap}
+  .tab-link{white-space:nowrap;padding:.85rem 1rem;font-size:.85rem}
+  .reto-body{padding:1.1rem 1rem}
+  .pin-digit{width:44px;height:54px;font-size:1.3rem}
+  .ishikawa{transform:scale(.85);transform-origin:left center}
+}
+@media print{
+  header.university,nav.tabs,.toolbar,.ver-respuestas,.ocultar-respuestas,footer.university{display:none!important}
+  .tab-panel{display:block!important}
+  .section-card,.reto-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+  body{background:#fff;font-size:11pt}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER UNIVERSITARIO ============ -->
+<header class="university">
+  <div class="university-inner">
+    <div class="escudo">
+      <div class="escudo-circ">U</div>
+      <div>
+        <div class="university-meta">Cátedra · Ingeniería de Sistemas Industriales</div>
+        <div class="university-title">Fundamentos de TI y Arquitectura de Sistemas</div>
+        <div class="course-tag">Unidad 1 · Curso académico — Material didáctico</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a class="btn-action" href="#" onclick="descargarHTML();return false;" title="Descargar esta página como archivo .html">
+        <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg> Descargar .html
+      </a>
+      <a class="btn-action" href="#" onclick="copiarCodigo();return false;" title="Copiar el código fuente completo de esta página">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Copiar código
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ NAVEGACIÓN POR PESTAÑAS ============ -->
+<nav class="tabs" role="tablist">
+  <div class="tabs-inner">
+    <a class="tab-link active" href="#unidad1" data-tab="unidad1" role="tab">
+      <span class="tab-num">1</span> Unidad 1 · Fundamentos de TI y Arquitectura
+    </a>
+    <a class="tab-link" href="#caso-practico" data-tab="caso-practico" role="tab">
+      <span class="tab-num">2</span> Estudio de Caso · Taller RCA con Ishikawa
+    </a>
+  </div>
+</nav>
+
+<main>
+<!-- ============ PESTAÑA 1: UNIDAD 1 - FUNDAMENTOS DE TI ============ -->
+<section class="tab-panel active" id="unidad1" role="tabpanel">
+
+  <div class="panel-header">
+    <div class="kicker">Unidad 1 · Sesión 1</div>
+    <h1>Tecnologías de la Información (TI) y Taxonomía Industrial</h1>
+    <p>Fundamentos conceptuales, componentes estructurales, taxonomía empresarial de TI, convergencia con Tecnología de Operaciones (OT) y marcos de referencia para la arquitectura de sistemas en la ingeniería moderna.</p>
+    <div class="meta-row">
+      <span>Nivel: Fundamentos</span>
+      <span>Duración: 8 horas</span>
+      <span>Modalidad: Teórico-práctica</span>
+      <span>Evaluación: Caso práctico</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="toolbar-label">Herramientas:</span>
+    <a class="btn-tool" href="#" onclick="descargarHTML();return false;"><svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg> Descargar .html</a>
+    <a class="btn-tool" href="#" onclick="copiarCodigo();return false;"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Copiar código</a>
+    <a class="btn-tool" href="#" onclick="window.print();return false;"><svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg> Imprimir / PDF</a>
+  </div>
+
+  <div class="toc-box">
+    <h4>Índice de contenidos · Pestaña 1</h4>
+    <ol>
+      <li><a href="#u1-s1">1.1 Definición y evolución histórica de las Tecnologías de la Información</a></li>
+      <li><a href="#u1-s2">1.2 Componentes estructurales de las TI (modelo ISO/ITIL)</a></li>
+      <li><a href="#u1-s3">1.3 Taxonomía empresarial de TI (modelo Weill & Ross)</a></li>
+      <li><a href="#u1-s4">1.4 TI vs. OT: convergencia operacional y Modelo Purdue</a></li>
+      <li><a href="#u1-s5">1.5 Arquitecturas de sistemas: del monolito a los microservicios</a></li>
+      <li><a href="#u1-s6">1.6 Marcos de referencia: ITIL, COBIT, ISO/IEC 27001 y NIST CSF</a></li>
+      <li><a href="#u1-s7">1.7 Implicaciones para la ingeniería contemporánea</a></li>
+    </ol>
+  </div>
+
+  <!-- ============ SECCIÓN 1.1 ============ -->
+  <article class="section-card" id="u1-s1">
+    <h2>1.1 Definición y evolución histórica de las Tecnologías de la Información</h2>
+
+    <p>Las <strong>Tecnologías de la Información (TI)</strong> constituyen, en su acepción académica más amplia, el conjunto integrado de hardware, software, redes de comunicación, datos, personas y procesos que permiten capturar, almacenar, procesar, transmitir y presentar información con valor para una organización. La Association for Information Technology Standards (ANSI/IT4) las define como "el conjunto de disciplinas, técnicas y herramientas que, mediante el uso de medios electrónicos y de software, permiten la adquisición, procesamiento, almacenamiento y transmisión de información en sus múltiples formas (voz, imagen, datos, texto)". Esta definición es deliberadamente amplia porque las TI no son una sola tecnología sino un <em>sistema sociotécnico</em> cuya esencia reside en la articulación entre elementos tecnológicos y la actividad humana organizada.</p>
+
+    <p>Desde el punto de vista histórico, la noción de "tecnología de la información" ha evolucionado en cuatro grandes olas. La <strong>primera ola (1950-1970)</strong> corresponde a la informática centralizada: mainframes como el IBM System/360 (1964) procesaban en lote grandes volúmenes de datos en centros de cálculo cerrados, gestionados por técnicos especializados y accesibles mediante tarjetas perforadas y terminales pasivas. La <strong>segunda ola (1970-1990)</strong> trajo la miniaturización y el paradigma cliente-servidor: la aparición del microprocesador Intel 4004 (1971), los minicomputadores DEC PDP-11 y VAX, y la posterior irrupción del PC IBM (1981) descentralizaron el cómputo y permitieron que cada puesto de trabajo dispusiera de capacidad de procesamiento propia. La <strong>tercera ola (1990-2010)</strong> corresponde a la interconexión masiva: Internet comercial, la World Wide Web, los protocolos TCP/IP universalmente adoptados, las redes empresariales LAN/WAN conmutadas y la virtualización de servidores (VMware ESX, 2001). La <strong>cuarta ola (2010-presente)</strong> se caracteriza por la nube, los dispositivos móviles, el Big Data, el Internet de las Cosas (IoT), la inteligencia artificial y la computación en el borde, conformando un tejido continuo entre lo local y lo distribuido a escala planetaria.</p>
+
+    <div class="callout callout-info">
+      <div class="icon">i</div>
+      <div>
+        <div class="callout-title">Concepto clave — Diferencia entre dato, información y conocimiento</div>
+        <p>El <strong>dato</strong> es la representación simbólica de un hecho o evento aislado, desprovisto de contexto (por ejemplo, "37,2"). La <strong>información</strong> surge al atribuir contexto y significado al dato ("37,2 °C, paciente #1045, día 14/03/2026, sala 3"). El <strong>conocimiento</strong> se produce cuando la información se integra con experiencia y juicio para sustentar decisiones ("37,2 °C en este paciente indica febrícula postoperatoria; debe revisarse el sitio quirúrgico"). Las TI operan principalmente en las dos primeras capas; la gestión del conocimiento (Knowledge Management) introduce la tercera.</p>
+      </div>
+    </div>
+
+    <p>En el contexto de la <strong>ingeniería industrial y de sistemas</strong>, la definición de TI se amplía para incluir no solo la infraestructura ofimática corporativa, sino también el tejido de sistemas supervisores (SCADA), sistemas de control distribuido (DCS), sistemas de ejecución de manufactura (MES), sistemas de planificación de recursos empresariales (ERP) y plataformas de análisis operacional que articulan los procesos productivos con la gestión empresarial. Esta visión integrada obliga a distinguir —como se verá más adelante— entre las TI empresariales (IT, Information Technology) y las Tecnologías de Operaciones (OT, Operational Technology), distinción que ha pasado de ser una mera categorización académica a un problema crítico de seguridad, interoperabilidad y gobernanza.</p>
+
+    <h3>1.1.1 Caracterización funcional</h3>
+    <p>Funcionalmente, las TI desempeñan cinco grandes grupos de capacidades en una organización: (i) <strong>procesamiento de transacciones</strong>, mediante sistemas TPS (Transaction Processing Systems) que registran y consolidan operaciones cotidianas como ventas, pagos, movimientos de inventario o solicitudes de servicio; (ii) <strong>automatización de procesos de oficina</strong>, mediante sistemas OAS (Office Automation Systems) que incluyen correo electrónico, ofimática, gestión documental y colaboración; (iii) <strong>soporte a la decisión</strong>, mediante sistemas DSS (Decision Support Systems), EIS (Executive Information Systems) y modernas plataformas de Business Intelligence; (iv) <strong>control y comunicación entre personas y máquinas</strong>, mediante sistemas colaborativos, sistemas de comunicación unificada y plataformas de mensajería industrial; y (v) <strong>soporte a la gestión y estrategia</strong>, mediante sistemas MRP, ERP, SCM, CRM y, en el nivel más reciente, plataformas de gestión de la cadena de suministro digital con apoyo de IA.</p>
+
+    <h3>1.1.2 Importancia estratégica</h3>
+    <p>Desde la formulación clásica de Carr (2003) —"IT doesn't matter"— hasta las posiciones actuales de Bharadwaj, El Sawy y Pavlou (2013) sobre las capacidades digitales como fuente de ventaja competitiva sostenible, las TI han pasado de ser un commodity de backoffice a constituir el sustrato material de los modelos de negocio contemporáneos. La transformación digital no es un proyecto tecnológico aislado, sino la reconfiguración simultánea de capacidades tecnológicas, procesos operativos, estructuras organizativas y modelos de valor. Comprender sus componentes, su taxonomía y sus límites es, por tanto, una competencia fundamental del ingeniero contemporáneo.</p>
+  </article>
+
+  <!-- ============ SECCIÓN 1.2 ============ -->
+  <article class="section-card" id="u1-s2">
+    <h2>1.2 Componentes estructurales de las TI (modelo ISO/ITIL)</h2>
+
+    <p>Para analizar un sistema de TI con rigor es indispensable descomponerlo en sus elementos constitutivos. La taxonomía clásica, consolidada por la familia de estándares ISO/IEC 20000 e ITIL 4, identifica <strong>seis componentes estructurales</strong> que aparecen recíprocamente articulados en cualquier implementación. Esta taxonomía se presenta a continuación y se acompaña de ejemplos correspondientes al dominio de la ingeniería industrial, con el propósito de evidenciar que la teoría general es aplicable tanto al entorno corporativo como al entorno de planta.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Componente</th>
+          <th>Definición</th>
+          <th>Ejemplos en ingeniería industrial</th>
+          <th>Indicadores típicos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Hardware</strong></td>
+          <td>Conjunto de componentes físicos que conforman la plataforma de cómputo y comunicaciones: servidores, estaciones de trabajo, dispositivos de red, periféricos, sensores y actuadores.</td>
+          <td>Servidores blade en sala blanca; PLCs Siemens S7-1500 en líneas; HMI PanelView; SFP+ transceivers en switches industriales.</td>
+          <td>MTBF, MTTR, utilización CPU, temperatura.</td>
+        </tr>
+        <tr>
+          <td><strong>Software</strong></td>
+          <td>Conjunto de programas, sistemas operativos, firmware, aplicaciones y bases de datos que gestionan el hardware y procesan la información.</td>
+          <td>Sistema operativo RTOS VxWorks en controladores; SCADA Ignition; MES Sepasoft; ERP SAP S/4HANA; bases PostgreSQL.</td>
+          <td>Versión, parches pendientes, licencias, defectos/10k LOC.</td>
+        </tr>
+        <tr>
+          <td><strong>Redes y comunicaciones</strong></td>
+          <td>Infraestructura de transmisión de datos —cableado, switches, routers, firewalls, access points, protocolos— que conecta los componentes distribuidos.</td>
+          <td>Red Industrial Profinet a 1 Gbps; red corporativa 10 GbE; enlace WAN SDH de 100 Mbps; VPN IPsec sitio a sitio.</td>
+          <td>Ancho de banda, latencia, jitter, pérdida de paquetes, uptime.</td>
+        </tr>
+        <tr>
+          <td><strong>Datos</strong></td>
+          <td>Conjunto estructurado o no estructurado de hechos, símbolos y registros que la organización captura, almacena y procesa; incluye bases de datos, data warehouses y data lakes.</td>
+          <td>Historian PI System de OSIsoft; trazas de OEE por turno; registros de alarmas DCS; logs syslog centralizados.</td>
+          <td>Volumen (TB), tasa de ingesta, integridad referencial, edad media.</td>
+        </tr>
+        <tr>
+          <td><strong>Personas</strong></td>
+          <td>Capital humano que diseña, opera, mantiene y gobierna los sistemas de TI; incluye roles técnicos, funcionales y de gobierno (CIO, DBA, operador, etc.).</td>
+          <td>Operador de sala de control; ingeniero de automatización; analista de ciberseguridad OT; DBA del historian.</td>
+          <td>Plantilla, formación, certificaciones, rotación, absentismo.</td>
+        </tr>
+        <tr>
+          <td><strong>Procesos</strong></td>
+          <td>Conjunto de actividades formalizadas, procedimientos y flujos de trabajo que rigen la operación, mantenimiento, evolución y gobierno de las TI.</td>
+          <td>Gestión de cambios según ITIL; proceso MOC (Management of Change) para PLCs; runbook de respuesta a incidentes.</td>
+          <td>Tiempo de ciclo, % automatización, SLA cumplimiento, NPS interno.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>1.2.1 Articulación de los componentes</h3>
+    <p>Estos seis componentes no son independientes; constituyen un <strong>sistema sociotécnico</strong> en el sentido de Trist y Bamforth (1951) y Emery & Trist (1965): el desempeño global depende de la articulación conjunta de los elementos sociales (personas y procesos) y técnicos (hardware, software, redes y datos). Una arquitectura técnicamente impecable fallará si los procesos de operación no están definidos o si el personal no está formado; un equipo humano excelente no puede sostener la operación si el hardware es obsoleto o el software carece de soporte. Esta visión conjunta es la base del enfoque <em>socio-technical systems design</em> que subyace a ITIL 4 y a modernos marcos de gobernanza.</p>
+
+    <div class="figura">
+      <div class="figura-titulo"><span class="figura-num">Fig. 1.1</span> Componentes estructurales de las TI y su interrelación</div>
+      <pre style="background:#fff;color:var(--azul-marino);border:1px solid var(--gris-medio);text-align:left;font-size:.82rem;padding:1.2rem 1.5rem">           ┌────────────────────────────────────────────┐
+           │                 PROCESOS                      │  (gobierno, operación, evolución)
+           │  ┌────────────────────────────────────────┐  │
+           │  │              PERSONAS                     │  │  (roles, competencias, cultura)
+           │  │  ┌──────────────────────────────────┐  │  │
+           │  │  │     HARDWARE   │   SOFTWARE         │  │  │  (plataforma computacional)
+           │  │  │   ┌───────────┴────────────┐       │  │  │
+           │  │  │   │   REDES  │   DATOS      │       │  │  │  (transporte y contenido)
+           │  │  │   └─────────────────────────┘       │  │  │
+           │  │  └────────────────────────────────────┘  │  │
+           │  └────────────────────────────────────────────┘
+           └────────────────────────────────────────────────┘</pre>
+    </div>
+
+    <h3>1.2.2 Hardware: capas y arquitectura</h3>
+    <p>El componente hardware se estructura hoy en una jerarquía de capas. En la <strong>capa de usuario final</strong> se encuentran estaciones de trabajo, portátiles, tabletas y, en plantas industriales, terminales HMI y HMIs móviles. La <strong>capa de borde o edge</strong> incluye gateways industriales, routers con capacidad de cómputo, dispositivos IoT y, cada vez más, micro-PCs con capacidad de inferencia local de modelos de IA. La <strong>capa de sala de servidores o centro de datos</strong> reúne servidores rack, blade o mainframe, junto con infraestructura de almacenamiento (SAN, NAS, hiperconvergente) y red de centro de datos (ToR, EoR, leaf-spine). Finalmente, la <strong>capa de nube pública/privada/híbrida</strong> —AWS, Azure, GCP, OpenStack on-premise— proporciona elasticidad y servicios gestionados. La arquitectura de hardware óptima depende del perfil de carga: cargas transaccionales OLTP demandan baja latencia; cargas analíticas OLAP demandan alto ancho de banda de memoria; cargas de control industrial en tiempo real demandan determinismo temporal.</p>
+
+    <h3>1.2.3 Software: capas lógicas</h3>
+    <p>El componente software se organiza en capas lógicas: el <strong>firmware</strong> (BIOS, microcódigo, firmware de PLCs), el <strong>sistema operativo</strong> (Windows, Linux, RTOS como VxWorks o QNX, sistemas embebidos como FreeRTOS), el <strong>middleware</strong> (gestores de colas, brokers MQTT, OPC UA, ESB), las <strong>bases de datos y almacenes</strong> (relacionales, NoSQL, time-series como InfluxDB u OSIsoft PI, graph databases), las <strong>aplicaciones</strong> (paquetes verticales ERP, MES, SCADA, EAM; paquetes horizontales como Suites Office; aplicaciones a medida), y las <strong>interfaces de usuario</strong> (web, móvil, desktop, wearables, voice). Cada capa tiene su propio ciclo de vida, su propio modelo de licenciamiento y su propio perfil de riesgo; gestionarlas de forma coherente es uno de los retos centrales de la arquitectura empresarial.</p>
+
+    <h3>1.2.4 Redes y comunicaciones</h3>
+    <p>Las redes de comunicación son el sistema circulatorio de las TI. El modelo OSI de siete capas —físico, enlace, red, transporte, sesión, presentación, aplicación— sigue siendo el marco conceptual de referencia, aunque en la práctica se utiliza el modelo TCP/IP simplificado. En el ámbito industrial han surgido protocolos específicos que combinan determinismo temporal, robustez frente a ruido electromagnético y tolerancia a fallos: Modbus RTU/TCP, Profinet I/O, EtherCAT, Ethernet/IP, OPC UA, DNP3, IEC 61850 para subestaciones eléctricas y Zigbee/LoRaWAN para sensórica inalámbrica de baja potencia. La <strong>segmentación</strong> es un imperativo: la norma ANSI/ISA-62443 (antes ISA-99) exige separar redes IT y OT mediante firewalls con stateful inspection y, enlaces críticos, diodos de datos unidireccionales.</p>
+
+    <h3>1.2.5 Datos: el activo estratégico</h3>
+    <p>Los datos han pasado de ser un subproducto de la operación a constituirse en un activo estratégico sujeto a gobernanza formal. La <strong>gobernanza de datos</strong> (Data Governance) define políticas de calidad, linaje, propiedad, retención y acceso. Los datos se clasifican por su <em>estructura</em> (estructurados, semiestructurados, no estructurados), por su <em>cadencia</em> (batch, micro-batch, streaming), por su <em>sensibilidad</em> (públicos, internos, confidenciales, regulados) y por su <em>dominio</em> (maestros, transaccionales, de referencia, analíticos). Un architecto de datos debe diseñar un stack coherente que cubra ingesta (Kafka, MQTT), almacenamiento (Data Lake, Data Warehouse, Data Lakehouse con Delta Lake o Apache Iceberg), procesamiento (Spark, Flink), exposición (APIs REST/GraphQL, datasets) y consumo (BI, notebooks, ML).</p>
+
+    <h3>1.2.6 Personas y procesos: el factor sociotécnico</h3>
+    <p>Los componentes sociales son, con frecuencia, el eslabón más débil. La <strong>gestión del cambio organizacional</strong> (Organizational Change Management, OCM), la <strong>gestión del conocimiento</strong> (Knowledge Management) y la <strong>gestión de competencias</strong> (Skills Framework for the Information Age, SFIA) son disciplinas que articulan el lado humano de las TI. ITIL 4 introduce la noción de las <em>cuatro dimensiones de la gestión de servicios</em>: organizaciones y personas, información y tecnología, socios y proveedores, y flujos de valor y procesos. Esta visión es deliberadamente holística: ignora el componente social a riesgo de producir arquitecturas frágiles, costosas y resistidas por los usuarios.</p>
+  </article>
+
+  <!-- ============ SECCIÓN 1.3 ============ -->
+  <article class="section-card" id="u1-s3">
+    <h2>1.3 Taxonomía empresarial de TI (modelo Weill & Ross)</h2>
+
+    <p>Si la sección anterior respondía a la pregunta "¿de qué están hechas las TI?", esta sección responde a "¿cómo se organizan en una empresa para crear valor?". La taxonomía más extendida —y la que adoptaremos como referencia— es la propuesta por Peter Weill y Jeanne Ross del MIT Sloan Center for Information Systems Research (CISR), sintetizada en su obra <em>"IT Savvy"</em> (2009) y refinada en publicaciones posteriores. Esta taxonomía distingue tres grandes dominios de artefactos TI que la organización debe gobernar de forma diferenciada: <strong>infraestructura</strong>, <strong>aplicaciones</strong> y <strong>servicios de información</strong>. A ellas añadiremos una cuarta capa emergente —las <strong>plataformas de datos e IA</strong>— que el modelo original no contemplaba con esta categoría diferenciada.</p>
+
+    <h3>1.3.1 Infraestructura TI</h3>
+    <p>La infraestructura TI es el conjunto de bases tecnológicas compartidas que sostienen las aplicaciones y servicios. Incluye servidores, almacenamiento, redes, sistemas operativos base, virtualización, nube, gestión de identidades y servicios de plataforma (PaaS). Su característica esencial es su <em>naturaleza compartida y de fondo</em>: no se construye para una sola aplicación sino para soportar el portafolio completo. CISR habla de <strong>infraestructura digital</strong> para subrayar que debe concebirse como un activo reusable, modular y estandarizado. La infraestructura es el dominio donde se manifiestan con mayor claridad las decisiones de <em>hacer vs. comprar</em>, de <em>on-premise vs. cloud</em>, y donde se concentra la mayor parte del gasto CAPEX (capital) cuando se opta por instalaciones propias.</p>
+
+    <h3>1.3.2 Aplicaciones</h3>
+    <p>Las aplicaciones son los sistemas de software que automatizan funciones de negocio específicas: ERP (SAP S/4HANA, Oracle Cloud), CRM (Salesforce, Microsoft Dynamics), MES (Siemens Opcenter, GE Proficy), SCADA (Wonderware, Ignition), sistemas de gestión documental, sistemas de business intelligence. A diferencia de la infraestructura, las aplicaciones <em>se construyen o se configuran para una función específica</em> y su valor se mide por su contribución a un proceso de negocio concreto. La decisión entre paquete comercial, paquete comercial muy configurado, desarrollo a medida o composición de servicios SaaS es una de las más relevantes en arquitectura empresarial.</p>
+
+    <h3>1.3.3 Servicios de información</h3>
+    <p>Los servicios de información son las capacidades digitales que la organización ofrece a clientes internos o externos: APIs REST expuestas a partners, portales de autoservicio, marketplaces B2B, servicios de cálculo de tarifas, servicios de validación documental. Su característica esencial es que están <em>diseñados para ser consumidos</em> a través de interfaces estandarizadas y constituyen la capa de monetización o de colaboración digital con el ecosistema. La arquitectura orientada a servicios (SOA) y su evolución moderna —microservicios, API gateways, service mesh— son las formas de implementación habituales de esta capa.</p>
+
+    <div class="figura">
+      <div class="figura-titulo"><span class="figura-num">Fig. 1.2</span> Taxonomía empresarial de TI (adaptado de Weill & Ross, CISR)</div>
+      <pre style="background:#fff;color:var(--azul-marino);border:1px solid var(--gris-medio);text-align:left;font-size:.82rem;padding:1.2rem 1.5rem">  ┌─────────────────────────────────────────────────────────────────┐
+  │   SERVICIOS DE INFORMACIÓN   │ APIs, portales, marketplaces, datos como servicio │  ← Capa de exposición
+  ├──────────────────────────────┼──────────────────────────────────────────────────┤
+  │   APLICACIONES               │ ERP, CRM, MES, SCADA, BI, ECM, …                 │  ← Capa funcional
+  ├──────────────────────────────┼──────────────────────────────────────────────────┤
+  │   PLATAFORMA DATOS & IA       │ Data Lake, ML platforms, MLOps, feature stores  │  ← Capa analítica
+  ├──────────────────────────────┼──────────────────────────────────────────────────┤
+  │   INFRAESTRUCTURA TI          │ Cómputo, red, almacenamiento, identidad, nube   │  ← Capa de fundación
+  └──────────────────────────────────────────────────────────────────┘</pre>
+    </div>
+
+    <h3>1.3.4 Plataformas de datos e IA</h3>
+    <p>La cuarta capa —no presente en el modelo original de 2009 pero hoy imprescindible— corresponde a las <strong>plataformas de datos e IA</strong>: conjuntos de tecnologías y prácticas que centralizan la ingesta, almacenamiento, gobierno, análisis y exposición de datos, así como la formación, despliegue y operación de modelos de machine learning. Su existencia como capa diferenciada responde a tres hechos: la consolidación de los Data Lakes y Lakehouses como repositorios centrales; la profesionalización de los roles de Data Engineering, Data Science y MLOps; y la irrupción de la IA generativa como capa transversal que consume y produce datos a escala. Gartner describe este dominio como <em>Data and Analytics Platform</em>; Forrester lo denomina <em>AI Platform</em>; en cualquier caso, su gobernanza es hoy inseparable de la gobernanza del resto de las TI.</p>
+
+    <h3>1.3.5 Decisiones de portafolio</h3>
+    <p>La taxonomía anterior se utiliza para tomar decisiones de <strong>portafolio TI</strong>: qué se construye, qué se compra, qué se consume como SaaS, qué se retira, qué se sustituye, qué se externaliza. CISR propone el modelo de <em>operating model</em> para alinear la arquitectura TI con el modelo operativo de la empresa: las organizaciones con alta integración y estandarización (modelo "Unificado") requieren infraestructuras muy compartidas; las organizaciones con alta integración pero baja estandarización (modelo "Coordinado") requieren capa de datos común; las organizaciones con baja integración (modelos "Diversificado" o "Replicado") toleran más heterogeneidad. La alineación entre modelo operativo, arquitectura TI y portafolio de inversiones es, según CISR, el predictor más fuerte de la capacidad digital de una organización.</p>
+  </article>
+
+  <!-- ============ SECCIÓN 1.4 ============ -->
+  <article class="section-card" id="u1-s4">
+    <h2>1.4 TI vs. OT: convergencia operacional y Modelo Purdue</h2>
+
+    <p>La distinción entre <strong>Tecnologías de la Información (TI o IT)</strong> y <strong>Tecnologías de Operaciones (OT)</strong> es uno de los conceptos más relevantes en la ingeniería de sistemas contemporánea. La definición canónica de Gartner define OT como "tecnología que detecta o causa un cambio, a través del monitoreo directo y/o el control de dispositivos, procesos y eventos físicos en la empresa". En otras palabras: si las TI mueven información para la gestión, las OT mueven energía, materia y procesos físicos para la producción. Esta distinción, aparentemente simple, tiene implicaciones profundas en arquitectura, en seguridad y en gobernanza.</p>
+
+    <table>
+      <thead>
+        <tr><th>Dimensión</th><th>Tecnologías de la Información (IT)</th><th>Tecnologías de Operaciones (OT)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Objetivo</td><td>Gestión, análisis, comunicación de información</td><td>Control y supervisión de procesos físicos</td></tr>
+        <tr><td>Requisito temporal</td><td>Best-effort, latencia variable tolerable</td><td>Determinismo en tiempo real (ms o sub-ms)</td></tr>
+        <tr><td>Ciclo de vida</td><td>3–5 años</td><td>15–30 años</td></tr>
+        <tr><td>Parches</td><td>Frecuentes (mensuales)</td><td>Raros, planificados con parada de planta</td></tr>
+        <tr><td>Disponibilidad</td><td>99,5–99,9% típico</td><td>99,999% o superior en procesos continuos</td></tr>
+        <tr><td>Cultura de riesgo</td><td>Confidencialidad primero (modelo CIA)</td><td>Seguridad y disponibilidad primero (modelo SAC)</td></tr>
+        <tr><td>Plataformas típicas</td><td>Windows Server, Linux, virtualización, nube</td><td>RTOS (VxWorks, QNX), PLCs, DCS, microcontroladores</td></tr>
+        <tr><td>Protocolos</td><td>TCP/IP, HTTP, SQL, REST, gRPC</td><td>Modbus, Profinet, EtherCAT, OPC UA, DNP3, IEC 61850</td></tr>
+        <tr><td>Impacto de fallo</td><td>Interrupción de servicios de negocio</td><td>Parada de producción, daño a personas o al medio ambiente</td></tr>
+      </tbody>
+    </table>
+
+    <h3>1.4.1 El Modelo Purdue de arquitectura empresarial</h3>
+    <p>El marco conceptual más utilizado para razonar sobre la arquitectura IT/OT es el <strong>Modelo Purdue de Arquitectura Empresarial para Sistemas de Control Industrial</strong>, originado en la Purdue Enterprise Reference Architecture (PERA) desarrollada por Theodore J. Williams en la Universidad de Purdue en los años 1990 y adoptado como base de la norma ANSI/ISA-95. El modelo organiza la arquitectura en niveles jerárquicos, cada uno con su propia función, su tecnología y su patrón de comunicación.</p>
+
+    <div class="figura">
+      <div class="figura-titulo"><span class="figura-num">Fig. 1.3</span> Modelo Purdue (ANSI/ISA-95) y zona ITDMZ</div>
+      <div class="diagram-purdue">
+        <div class="purdue-level purdue-l5"><span class="lvl-num">5</span> Nivel 5 · Enterprise · ERP, planificación corporativa <span class="lvl-desc">IT empresarial tradicional</span></div>
+        <div class="purdue-level purdue-l4"><span class="lvl-num">4</span> Nivel 4 · Site Operations · MES, planificación de planta <span class="lvl-desc">Gestión de la planta</span></div>
+        <div class="purdue-dmz">⇆ ITDMZ — Demilitarized Zone entre IT y OT (firewalls, diodos de datos) ⇆</div>
+        <div class="purdue-level purdue-l3"><span class="lvl-num">3</span> Nivel 3 · Operations · SCADA, HMI, historian de planta <span class="lvl-desc">Supervisión operativa</span></div>
+        <div class="purdue-level purdue-l2"><span class="lvl-num">2</span> Nivel 2 · Supervisory · DCS, controladores supervisores <span class="lvl-desc">Control del lazo de regulación</span></div>
+        <div class="purdue-level purdue-l1"><span class="lvl-num">1</span> Nivel 1 · Basic Control · PLCs, RIDs, bucles PID <span class="lvl-desc">Control en tiempo real</span></div>
+        <div class="purdue-level purdue-l0"><span class="lvl-num">0</span> Nivel 0 · Process · Sensores y actuadores físicos <span class="lvl-desc">El proceso físico</span></div>
+      </div>
+    </div>
+
+    <p>El Modelo Purdue formaliza una jerarquía que tiene sustrato físico en los niveles 0 y 1 (sensores, actuadores y controladores básicos), evoluciona hacia el control distribuido en el nivel 2 (DCS), se integra en la supervisión operativa del nivel 3 (SCADA, HMIs, historian de planta), se gestiona en el nivel 4 (MES, planificación de la planta) y se incorpora a la planificación corporativa en el nivel 5 (ERP, BI corporativo). Entre los niveles 3 y 4 se sitúa la <strong>Zona Desmilitarizada IT/OT (ITDMZ)</strong>, una franja de dispositivos de red y firewalls que regula y filtra el tráfico entre el mundo OT —cerrado, determinista, conservador— y el mundo IT —abierto, dinámico, orientado a la gestión—.</p>
+
+    <h3>1.4.2 La convergencia IT/OT</h3>
+    <p>Tradicionalmente los dos mundos se mantenían separados por motivos de seguridad, disponibilidad y ciclo de vida. La <strong>convergencia IT/OT</strong> —impulsada por Industrie 4.0, IIoT y la digitalización de la manufactura— rompe progresivamente esta separación: los datos de planta deben fluir al ERP y al data lake corporativo para alimentar modelos de optimización; los algoritmos de IA deben poder inferir en gateways de borde; los ingenieros de planta deben acceder a dashboards corporativos. Esta convergencia crea oportunidades (mayor visibilidad, optimización predictiva, mantenimiento predictivo) pero también riesgos: el ya célebre incidente de la central de agua de Oldsmar (Florida, 2021) o el ataque TRITON/TRISIS a un sistema de seguridad de Saudi Aramco (2017) son recordatorios de que la frontera OT es ahora una superficie de ataque activa.</p>
+
+    <div class="callout callout-warn">
+      <div class="icon">!</div>
+      <div>
+        <div class="callout-title">Aviso crítico — Seguridad en la frontera IT/OT</div>
+        <p>La norma <strong>ANSI/ISA-62443</strong> define los requisitos de seguridad cibernética para sistemas de control industrial (SISTEMA-IACS). Exige segmentación entre zonas (Niveles 3-4-5), controles de acceso por rol (RBAC), gestión de patches diferenciada, y la introducción de diodos de datos unidireccionales en sectores críticos (energía, petróleo y gas). Ignorar esta norma en proyectos de convergencia IT/OT es una causa frecuente de incidentes graves.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- ============ SECCIÓN 1.5 ============ -->
+  <article class="section-card" id="u1-s5">
+    <h2>1.5 Arquitecturas de sistemas: del monolito a los microservicios</h2>
+
+    <p>La <strong>arquitectura de un sistema de software</strong> define su estructura, sus componentes, sus relaciones, sus principios de diseño y evolución. Bass, Clements y Kazman (2021) la definen como "el conjunto de decisiones de diseño significativas, tempranas y difíciles de cambiar". La evolución de los estilos arquitectónicos en las últimas cuatro décadas refleja, en realidad, la evolución de los compromisos técnicos y de negocio que las organizaciones han priorizado. Comprender esta evolución permite al ingeniero seleccionar el estilo adecuado para cada contexto, sin incurrir en modas pasajeras.</p>
+
+    <h3>1.5.1 Arquitectura monolítica</h3>
+    <p>La arquitectura <strong>monolítica</strong> concentra toda la funcionalidad en una sola unidad desplegable: interfaz de usuario, lógica de negocio, acceso a datos y, a menudo, presentación. Es el estilo dominante hasta finales de los años 90. Sus ventajas son la simplicidad inicial, el rendimiento, la facilidad de testing end-to-end y la coherencia del modelo de datos. Sus desventajas aparecen con la escala: el tiempo de build y de despliegue se vuelve prohibitivo, los equipos colisionan al modificar el mismo código, una mala implementación puede comprometer todo el sistema. Aún hoy es una elección válida para sistemas pequeños o medianos con un equipo reducido y un dominio estable.</p>
+
+    <h3>1.5.2 Arquitectura cliente-servidor de dos y tres capas</h3>
+    <p>La arquitectura <strong>cliente-servidor</strong> separa la presentación (cliente) del procesamiento (servidor). La variante de <strong>tres capas (three-tier)</strong> introduce una capa intermedia de lógica de negocio: presentación → lógica → datos. Esta separación permite escalar y evolucionar las capas de forma independiente y se convierte en el estándar de facto en los años 90, con tecnologías como CORBA, DCOM, EJB y, posteriormente, los servicios web SOAP. Las aplicaciones ERP clásicas (SAP R/3, Oracle EBS) siguen este modelo en su mayor parte.</p>
+
+    <h3>1.5.3 Arquitectura orientada a servicios (SOA)</h3>
+    <p>La <strong>arquitectura orientada a servicios</strong> (SOA) introduce el concepto de "servicio" como unidad de funcionalidad expuesta a través de interfaces contractuales estandarizadas, normalmente mediante SOAP/WSDL sobre HTTP, orquestados por un Enterprise Service Bus (ESB). SOA aporta reusabilidad, interoperabilidad entre sistemas heterogéneos y desacoplamiento lógico. Sus críticas se centran en la complejidad del middleware, la rigidez de los contratos WSDL y la dificultad de evolucionar versiones de servicio sin romper consumidores. A pesar de ello, SOA sentó las bases conceptuales para el posterior desarrollo de los microservicios.</p>
+
+    <h3>1.5.4 Arquitectura de microservicios</h3>
+    <p>Los <strong>microservicios</strong> —término acuñado por James Lewis y Martin Fowler (2014)— refinan SOA con cuatro principios: (i) cada microservicio es propiedad de un equipo pequeño ("two-pizza team"), (ii) cada microservicio es desplegable de forma independiente, (iii) la comunicación se realiza mediante APIs ligeras (REST, gRPC, mensajería asíncrona con Kafka o RabbitMQ), y (iv) los datos son privados de cada microservicio (no hay base de datos compartida). Estos principios producen sistemas altamente desacoplados y evolutivos, pero a cambio introducen complejidad operacional: orquestación (Kubernetes), service mesh (Istio, Linkerd), observabilidad distribuida (tracing con OpenTelemetry), gestión de contratos y de versiones. Los microservicios no son una panacea; son la respuesta arquitectónica adecuada para sistemas grandes con múltiples equipos concurrentes y ciclos de evolución rápidos.</p>
+
+    <table>
+      <thead>
+        <tr><th>Estilo</th><th>Ventajas</th><th>Inconvenientes</th><th>Cuándo es adecuado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Monolito</strong></td><td>Simplicidad, rendimiento, testing fácil</td><td>Escalado limitado, equipos colisionan</td><td>Sistemas pequeños/medianos, dominio estable</td></tr>
+        <tr><td><strong>Cliente-servidor 3-tier</strong></td><td>Separación de responsabilidades, escalado por capa</td><td>Acoplamiento lógico en la capa media</td><td>Aplicaciones empresariales clásicas</td></tr>
+        <tr><td><strong>SOA</strong></td><td>Reusabilidad, interoperabilidad, contratos formales</td><td>Middleware pesado, ESB como bottleneck</td><td>Integración entre sistemas heterogéneos</td></tr>
+        <tr><td><strong>Microservicios</strong></td><td>Despliegues independientes, equipos autónomos, escalado fino</td><td>Complejidad operacional, latencia de red, consistencia eventual</td><td>Sistemas grandes con múltiples equipos, evolución rápida</td></tr>
+        <tr><td><strong>Event-driven</strong></td><td>Bajo acoplamiento, escalabilidad asíncrona, resiliencia</td><td>Dificultad de tracing, consistencia eventual</td><td>Sistemas reactivos, IoT, streaming de datos</td></tr>
+        <tr><td><strong>Serverless / FaaS</strong></td><td>Sin gestión de servidores, pago por uso, escalado a cero</td><td>Latencia en arranque, vendor lock-in, debugging complejo</td><td>Cargas esporádicas, integraciones, webhooks</td></tr>
+      </tbody>
+    </table>
+
+    <h3>1.5.5 Arquitecturas event-driven y serverless</h3>
+    <p>Más allá de los microservicios, dos estilos han ganado peso: la <strong>arquitectura event-driven</strong> —donde los componentes reaccionan a eventos publicados en brokers (Kafka, Pulsar, EventBridge)— y la <strong>arquitectura serverless / Function-as-a-Service (FaaS)</strong> —donde se ejecutan funciones aisladas, sin gestión explícita de servidores, escaladas a cero cuando no hay carga (AWS Lambda, Azure Functions, Google Cloud Functions, Apache OpenWhisk)—. Ambas son respuestas a la necesidad de optimizar coste operativo y de escala elástica, pero introducen sus propios compromisos: debugging distribuido complejo, consistencia eventual y, en serverless, latencia de arranque en frío.</p>
+  </article>
+
+  <!-- ============ SECCIÓN 1.6 ============ -->
+  <article class="section-card" id="u1-s6">
+    <h2>1.6 Marcos de referencia: ITIL, COBIT, ISO/IEC 27001 y NIST CSF</h2>
+
+    <p>La gobernanza y gestión de las TI no se improvisa. Cuatro marcos de referencia de amplio uso internacional proporcionan estructuras, procesos y controles para gestionar las TI de forma disciplinada. Cada uno aborda una dimensión complementaria: ITIL se centra en la <em>gestión de servicios</em>, COBIT en la <em>gobernanza</em>, ISO/IEC 27001 en la <em>seguridad de la información</em>, y NIST CSF en la <em>gestión del riesgo cibernético</em>. Su aplicación combinada produce un sistema de gestión TI maduro.</p>
+
+    <h3>1.6.1 ITIL 4 — Gestión de servicios TI</h3>
+    <p>La <strong>Information Technology Infrastructure Library</strong> (ITIL), en su versión 4 (2019), es el marco más extendido para la gestión de servicios TI. Se organiza en torno a la <strong>práctica de gestión de servicios</strong> (Service Value System, SVS) y a las <strong>cuatro dimensiones de la gestión de servicios</em>. ITIL 4 abandona el enfoque de procesos rígido de versiones anteriores en favor de <em>34 prácticas</em> agrupadas en categorías: generales, de gestión de servicios, y técnicas. Las más relevantes para un ingeniero son: gestión de incidentes, gestión de problemas, gestión de cambios, gestión de la configuración y servicios, gestión del catálogo, gestión de niveles de servicio, gestión de capacidad, gestión de disponibilidad, gestión de la continuidad, gestión de seguridad de la información y gestión de liberación y despliegue.</p>
+
+    <p>El concepto central de ITIL es el <strong>incidente</strong>: cualquier evento no planificado que reduce o puede reducir la calidad del servicio. El flujo canónico es: detectar el incidente → registrar → categorizar y priorizar → diagnosticar → resolver → cerrar → analizar tendencias. Un <em>problema</em>, en cambio, es la causa subyacente de uno o varios incidentes; la <strong>gestión de problemas</strong> es la disciplina que busca identificar y eliminar esas causas raíces. Como veremos en la Pestaña 2, el análisis de causa raíz (RCA) es una técnica clave dentro de esta práctica.</p>
+
+    <h3>1.6.2 COBIT 2019 — Gobernanza de TI</h3>
+    <p><strong>COBIT</strong> (Control Objectives for Information and Related Technologies), publicado por ISACA, es el marco de referencia para la <em>gobernanza</em> de TI. COBIT 2019 actualiza y simplifica la versión previa (COBIT 5) y articula la gobernanza en torno a un sistema de <em>gobernanza y management de TI corporativa</em>, con 40 objetivos de gobernanza y management (governance and management objectives) mapeados a procesos específicos. Su valor diferencial radica en su alineación explícita con los objetivos de negocio: cada objetivo de TI debe vincularse a un objetivo empresarial y a un driver de enabler, con métricas de desempeño y de desarrollo. COBIT distingue claramente entre <em>gobernanza</em> (evaluar, dirigir, monitorizar —rol del board y de la alta dirección—) y <em>management</em> (planificar, construir, ejecutar, monitorizar —rol del CIO y de la organización TI—), una distinción que evita la frecuente confusión entre ambos planos.</p>
+
+    <h3>1.6.3 ISO/IEC 27001 — Seguridad de la información</h3>
+    <p>La norma <strong>ISO/IEC 27001</strong> es el estándar internacional para los sistemas de gestión de la seguridad de la información (SGSI). Establece los requisitos para crear, implementar, mantener y mejorar continuamente un SGSI en el marco del ciclo Plan-Do-Check-Act (PDCA) de Deming. Su núcleo es el Anexo A, con 93 controles agrupados en cuatro dominios: controles organizacionales (37), controles de personas (8), controles físicos (14) y controles tecnológicos (34). La adopción de ISO/IEC 27001 es una decisión estratégica que implica un proyecto de varios meses y compromete a la organización a mantener el sistema de forma continua. Su certificación por una entidad acreditada es un requisito de compra en muchos sectores (banca, salud, administraciones públicas, defensa).</p>
+
+    <h3>1.6.4 NIST Cybersecurity Framework (CSF)</h3>
+    <p>El <strong>NIST Cybersecurity Framework</strong>, publicado por el National Institute of Standards and Technology de EE. UU. (versión 2.0 de 2024), es un marco voluntario pero ampliamente adoptado para la gestión del riesgo cibernético. Se organiza en seis funciones: <em>Govern</em> (gobernar el riesgo), <em>Identify</em> (identificar activos y riesgos), <em>Protect</em> (proteger con controles), <em>Detect</em> (detectar incidentes), <em>Respond</em> (responder a incidentes) y <em>Recover</em> (recuperarse y aprender). Cada función se desglega en categorías y subcategorías, y el marco proporciona niveles de madurez (Tier 1 a Tier 4). NIST CSF 2.0 amplía explícitamente su alcance a OT, alineándose con NIST SP 800-82 (Guide to Industrial Control Systems Security).</p>
+
+    <div class="callout callout-info">
+      <div class="icon">i</div>
+      <div>
+        <div class="callout-title">Complementariedad de los marcos</div>
+        <p>ITIL responde a <em>¿cómo gestionamos el servicio?</em>; COBIT responde a <em>¿cómo se gobierna la TI desde el negocio?</em>; ISO 27001 responde a <em>¿cómo gestionamos el riesgo de seguridad de la información?</em>; y NIST CSF responde a <em>¿cómo gestionamos el riesgo cibernético de forma integral?</em>. Las organizaciones maduras adoptan los cuatro, mapeándolos entre sí para evitar duplicidad de controles y documentación.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- ============ SECCIÓN 1.7 ============ -->
+  <article class="section-card" id="u1-s7">
+    <h2>1.7 Implicaciones para la ingeniería contemporánea</h2>
+
+    <p>El conjunto de conceptos presentados en esta unidad no es un cuerpo teórico abstracto: define las bases sobre las que el ingeniero industrial, el ingeniero de sistemas y el ingeniero de automatización deben operar en la práctica profesional. Tres implicaciones se derivan directamente de lo expuesto y merecen ser destacadas como conclusión de la unidad.</p>
+
+    <p>En primer lugar, el ingeniero debe abandonar la visión de las TI como un departamento accesorio y comprenderlas como el <strong>sustrato material de la operación y la estrategia</strong>. Las decisiones sobre arquitectura, sobre portafolio de aplicaciones, sobre ubicación de datos y sobre segmentación de redes son hoy decisiones de ingeniería y de negocio simultáneamente. Un proyecto de automatización que no considere desde su concepción los flujos de datos, la integración con el MES y el ERP, la ciberseguridad OT y la gobernanza de los datos generados, está condenado a producir islas técnicas de bajo valor y alta fragilidad.</p>
+
+    <p>En segundo lugar, la <strong>convergencia IT/OT</strong> exige un perfil profesional híbrido: el ingeniero industrial moderno debe dominar simultáneamente el lenguaje de los procesos físicos (PLC, instrumentación, control regulatorio) y el de las TI empresariales (redes, bases de datos, arquitecturas de aplicaciones, nube, APIs). Los perfiles "puros" en cualquiera de los dos extremos son cada vez menos útiles; el valor está en el dominio de la interfaz, en la capacidad de traducir requisitos de producción en decisiones arquitectónicas y viceversa.</p>
+
+    <p>En tercer lugar, la <strong>gobernanza y la seguridad</strong> no son aspectos optativos: son condiciones habilitantes. La adopción de marcos como ITIL, COBIT, ISO 27001 y NIST CSF, combinada con el cumplimiento de ANSI/ISA-62443 en el dominio OT, es lo que permite construir sistemas digitales sostenibles y robustos. La ingeniería contemporánea es, cada vez más, ingeniería de sistemas sociotécnicos: el ingeniero que no reconoce esta condición quedará progresivamente al margen del mercado.</p>
+
+    <blockquote>
+      <p>"La arquitectura de un sistema de información es, en última instancia, la cristalización de las decisiones que la organización ha tomado sobre su propia estructura. Cambiar la arquitectura sin cambiar la organización es imposible; cambiar la organización sin cambiar la arquitectura es inútil." — adaptado de Weill & Ross, <em>IT Savvy</em>, 2009.</p>
+    </blockquote>
+
+    <div class="callout callout-key">
+      <div class="icon">✓</div>
+      <div>
+        <div class="callout-title">Síntesis de la Unidad 1 · Sesión 1</div>
+        <p>Las TI son un sistema sociotécnico integrado por hardware, software, redes, datos, personas y procesos (modelo ISO/ITIL). En la empresa se organizan en cuatro capas —infraestructura, aplicaciones, plataformas de datos e IA, y servicios de información— (Weill & Ross, CISR). En la ingeniería moderna conviven con las OT, articuladas por el Modelo Purdue y separadas por una zona ITDMZ. Las arquitecturas de software evolucionan del monolito al microservicio, serverless y event-driven. Su gobernanza se sustenta en ITIL, COBIT, ISO 27001 y NIST CSF. La compresión integral de este marco conceptual es prerrequisito del ejercicio profesional contemporáneo.</p>
+      </div>
+    </div>
+  </article>
+
+</section>
+<!-- TAB1_END -->
+
+<!-- ============ PESTAÑA 2: ESTUDIO DE CASO - TALLER RCA ============ -->
+<section class="tab-panel" id="caso-practico" role="tabpanel">
+
+  <div class="panel-header">
+    <div class="kicker">Estudio de Caso · Taller Práctico Aplicado</div>
+    <h1>Retos de Análisis de Causa Raíz (RCA) y Diagramas de Ishikawa en Infraestructura TI/OT</h1>
+    <p>Taller práctico con tres retos de ingeniería basados en escenarios reales de infraestructura TI/OT. Cada reto plantea un incidente, su contexto y los síntomas observados; las soluciones (causa raíz, diagrama Ishikawa y plan de acción) están protegidas por PIN docente.</p>
+    <div class="meta-row">
+      <span>Tipo: Resolución de casos</span>
+      <span>Retos: 3</span>
+      <span>Metodología: 5 Por Qués + Ishikawa 6M</span>
+      <span>Respuestas: Protegidas</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="toolbar-label">Herramientas:</span>
+    <a class="btn-tool" href="#" onclick="descargarHTML();return false;"><svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg> Descargar .html</a>
+    <a class="btn-tool" href="#" onclick="copiarCodigo();return false;"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Copiar código</a>
+    <a class="btn-tool" href="#" onclick="window.print();return false;"><svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg> Imprimir / PDF</a>
+  </div>
+
+  <div class="toc-box">
+    <h4>Índice de contenidos · Pestaña 2</h4>
+    <ol>
+      <li><a href="#u2-intro">2.0 Marco metodológico: RCA y Diagrama de Ishikawa</a></li>
+      <li><a href="#reto-1">Reto 1 · Servidor de producción caído (disco lleno)</a></li>
+      <li><a href="#reto-2">Reto 2 · Red LAN industrial con bucle de switching</a></li>
+      <li><a href="#reto-3">Reto 3 · Pérdida de datos en SCADA (backup defectuoso)</a></li>
+    </ol>
+  </div>
+
+  <!-- ============ MARCO METODOLÓGICO ============ -->
+  <article class="section-card" id="u2-intro">
+    <h2>2.0 Marco metodológico: Análisis de Causa Raíz (RCA) y Diagramas de Ishikawa</h2>
+
+    <p>El <strong>Análisis de Causa Raíz</strong> (Root Cause Analysis, RCA) es una metodología estructurada cuyo objetivo es identificar las causas subyacentes de un incidente, problema o fallo, con la finalidad de eliminarlas de forma permanente y evitar su recurrencia. No se trata de buscar culpables ni de documentar lo ocurrido de forma superficial, sino de responder a una pregunta fundamental: <em>¿por qué ocurrió esto realmente, en lugar de simplemente qué ocurrió?</em> El RCA se inscribe en la práctica de gestión de problemas de ITIL 4 y constituye el núcleo de las metodologías de mejora continua (Kaizen, Lean, Six Sigma) y de las normas de gestión de la calidad (ISO 9001), seguridad de la información (ISO 27001 Anexo A.16) y seguridad funcional (IEC 61508, IEC 61511).</p>
+
+    <p>Existen múltiples técnicas de RCA, cada una con sus ventajas y limitaciones: el método de los <strong>5 Por Qués</strong>, los <strong>diagramas de Ishikawa (espina de pescado)</strong>, el <strong>Análisis de Modos de Fallo y Efectos (FMEA)</strong>, el <strong>Árbol de Fallos (Fault Tree Analysis, FTA)</strong>, el <strong>Análisis de Eventos Causales (Cause-Effect Mapping)</strong>, el <strong>Diagrama de Secuencia de Eventos</strong> y el <strong>Top-5 RCA</strong>. En este taller se combinan las dos técnicas más difundidas en ingeniería —los 5 Por Qués y el Diagrama de Ishikawa— porque juntas cubren tanto el análisis profundo de una línea causal concreta (5 Por Qués) como la exploración exhaustiva de todas las familias de causas plausibles (Ishikawa).</p>
+
+    <h3>2.0.1 Los 5 Por Qués</h3>
+    <p>Los <strong>5 Por Qués</strong> son una técnica originada en la Toyota Production System (Sakichi Toyoda, años 1930) popularizada por Taiichi Ohno. Consiste en preguntar iterativamente "¿por qué?" hasta llegar a la causa raíz, entendida como aquella cuyo eliminación elimina el problema de forma permanente. La regla heurística es que se necesitan aproximadamente cinco iteraciones, aunque en la práctica pueden ser tres o siete. La clave no es el número sino la profundización iterativa en la cadena causal, evitando dos errores típicos: detenerse en un síntoma intermedio (que conduce a soluciones cosméticas) o saltar a conclusiones sin evidencia (que conduce a soluciones equivocadas). Cada respuesta debe basarse en evidencia observada, no en suposiciones, y debe ser validada en el terreno.</p>
+
+    <p>Un ejemplo didáctico de la cadena de los 5 Por Qués aplicado a un incidente TI es: (1) <em>¿Por qué el servidor no responde?</em> → Porque el proceso de base de datos está caído. (2) <em>¿Por qué está caído el proceso de base de datos?</em> → Porque el disco se llenó al 100% y no pudo escribir el log de transacciones. (3) <em>¿Por qué se llenó el disco?</em> → Porque el fichero de log alcanzó 480 GB, superando la capacidad del volumen. (4) <em>¿Por qué creció tanto el log?</em> → Porque el proceso de backup transaccional no se ejecutaba desde hacía 17 días. (5) <em>¿Por qué no se ejecutaba el backup?</em> → Porque la credencial de servicio caducó tras un cambio de política de passwords y el job falló silenciosamente. <strong>Causa raíz</strong>: proceso de gestión de credenciales y monitoreo de jobs de backup deficiente. La solución correcta no es ampliar el disco (síntoma), sino renovar credenciales automáticamente y monitorizar el éxito/fallo de cada job crítico.</p>
+
+    <h3>2.0.2 El Diagrama de Ishikawa (espina de pescado)</h3>
+    <p>El <strong>Diagrama de Ishikawa</strong>, también conocido como <em>fishbone diagram</em> por su forma visual, fue propuesto por Kaoru Ishikawa en los años 1960 en el contexto del movimiento de calidad japonés. Es una herramienta visual que organiza las causas potenciales de un problema en categorías predefinidas, permitiendo explorar el espacio causal de forma exhaustiva y estructurada. En la manufactura clásica se utilizan las <strong>6M</strong>: Método (Method), Máquina (Machine), Material (Material), Medición (Measurement), Mano de Obra (Man Power / Mind Power) y Medio Ambiente (Mother Nature / Milieu). En el dominio TI/OT, estas categorías se adaptan conservando la mnemotecnia 6M con una reinterpretación:</p>
+
+    <table>
+      <thead>
+        <tr><th>Categoría 6M</th><th>Interpretación TI/OT</th><th>Ejemplos típicos</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Método</strong></td><td>Procesos, procedimientos, runbooks, políticas, normativas, configuración lógica</td><td>Proceso de cambios incompleto; procedimiento de backup obsoleto; política de retención de logs mal definida</td></tr>
+        <tr><td><strong>Máquina</strong></td><td>Hardware, infraestructura de red, servidores, PLCs, almacenamiento, virtualización</td><td>Disco SSD degradado; switch con puerto defectuoso; servidor sin redundancia; firmware desactualizado</td></tr>
+        <tr><td><strong>Material</strong></td><td>Datos, ficheros de configuración, software de terceros, parches, versiones</td><td>Datos corruptos; paquete de software inestable; parche con bug; configuración base errónea</td></tr>
+        <tr><td><strong>Medición</strong></td><td>Sensores, monitorización, alarmas, KPIs, instrumentación, telemetría</td><td>Sensor calibrado mal; monitorización sin alertas; KPI mal definido; falta de logs</td></tr>
+        <tr><td><strong>Mano de Obra</strong></td><td>Personas, formación, comunicación, supervisión, turnover, fatiga, criterio</td><td>Operador sin formación; rotación elevada; comunicación deficiente entre turnos; sobrecarga de trabajo</td></tr>
+        <tr><td><strong>Medio Ambiente</strong></td><td>Condiciones físicas (temperatura, humedad, EMI), contexto organizativo, regulación, presión de negocio</td><td>Sala sin climatización; picos de tensión; presión de producción que inhibe paradas; cambios regulatorios</td></tr>
+      </tbody>
+    </table>
+
+    <div class="figura">
+      <div class="figura-titulo"><span class="figura-num">Fig. 2.1</span> Estructura canónica del Diagrama de Ishikawa (6M) en TI/OT</div>
+      <div class="ishikawa-wrap">
+        <div class="ishikawa">
+          <div class="spine"></div>
+          <div class="head">PROBLEMA<small>Efecto observable</small></div>
+          <!-- Ramas superiores -->
+          <div class="branch b-top b1">
+            <div class="label">Método</div>
+            <div class="bones">
+              <div class="bone">Procedimiento ausente / obsoleto</div>
+              <div class="bone">Política mal definida</div>
+              <div class="bone">Runbook incompleto</div>
+            </div>
+          </div>
+          <div class="branch b-top b2">
+            <div class="label">Máquina</div>
+            <div class="bones">
+              <div class="bone">Hardware degradado</div>
+              <div class="bone">Firmware obsoleto</div>
+              <div class="bone">Sin redundancia</div>
+            </div>
+          </div>
+          <div class="branch b-top b3">
+            <div class="label">Material</div>
+            <div class="bones">
+              <div class="bone">Datos corruptos</div>
+              <div class="bone">Parche inestable</div>
+              <div class="bone">Configuración errónea</div>
+            </div>
+          </div>
+          <!-- Ramas inferiores -->
+          <div class="branch b-bottom b1">
+            <div class="label">Mano de Obra</div>
+            <div class="bones">
+              <div class="bone">Falta de formación</div>
+              <div class="bone">Rotación elevada</div>
+              <div class="bone">Sobrecarga / fatiga</div>
+            </div>
+          </div>
+          <div class="branch b-bottom b2">
+            <div class="label">Medición</div>
+            <div class="bones">
+              <div class="bone">Monitorización insuficiente</div>
+              <div class="bone">Alarmas mal calibradas</div>
+              <div class="bone">KPIs mal definidos</div>
+            </div>
+          </div>
+          <div class="branch b-bottom b3">
+            <div class="label">Medio Ambiente</div>
+            <div class="bones">
+              <div class="bone">Condiciones físicas adversas</div>
+              <div class="bone">Presión de producción</div>
+              <div class="bone">Cambios regulatorios</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>2.0.3 Metodología de trabajo para los retos</h3>
+    <p>Para cada reto de este taller se seguirá el siguiente flujo de trabajo, que reproduce el ciclo de gestión de problemas ITIL: (1) <strong>comprender el enunciado</strong> y los datos del incidente; (2) <strong>listar los síntomas observados</strong> y descartar los que son irrelevantes; (3) <strong>plantear hipótesis causales</strong> en cada una de las 6M; (4) <strong>aplicar los 5 Por Qués</strong> a las hipótesis más prometedoras; (5) <strong>identificar la causa raíz</strong> (puede haber más de una); (6) <strong>diseñar acciones correctivas</strong> (eliminan la causa raíz) y <strong>acciones preventivas</strong> (evitan que la familia de causas se reproduzca); (7) <strong>documentar el aprendizaje</strong> en la base de conocimiento. Las soluciones completas —con la causa raíz, el diagrama Ishikawa elaborado y el plan de acción— están protegidas por PIN docente y se liberan al final del taller o cuando el docente lo considere oportuno.</p>
+
+    <div class="callout callout-warn">
+      <div class="icon">!</div>
+      <div>
+        <div class="callout-title">Importante para el estudiante</div>
+        <p>Los retos que siguen no tienen respuesta única: en ingeniería real, los incidentes suelen tener múltiples causas contribuyentes y la "causa raíz" depende del criterio del analista y del horizonte temporal considerado. Las soluciones que se presentan tras el PIN representan <em>una</em> resolución válida y documentada, pero no la única posible. Discute con tus compañeros y con el docente las alternativas que consideres razonables.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- ============ RETO 1 ============ -->
+  <article class="reto-card" id="reto-1">
+    <div class="reto-header">
+      <div class="reto-num">1</div>
+      <div>
+        <h3>Servidor de producción caído</h3>
+        <div class="reto-tag">RCA · Disco lleno · Servidor de base de datos OLTP</div>
+      </div>
+    </div>
+    <div class="reto-body">
+
+      <h4>1.1 Contexto del incidente</h4>
+      <p>Empresa manufacturera de componentes automotrices con tres plantas en Iberoamérica. La planta principal opera 24/7 con dos líneas de producción de mecanizado CNC y una línea de ensamblaje. El sistema ERP corporativo (SAP S/4HANA) y el MES de planta (Sepasoft sobre Ignition) se ejecutan sobre un servidor de base de datos PostgreSQL 15 en un cluster virtualizado VMware vSphere 7. El servidor de base de datos, denominado <code>PRD-DB-01</code>, aloja el esquema <code>mes_prod</code> crítico para la facturación y trazabilidad. El incidente ocurre en sábado a las 02:47 a.m., durante la producción del tercer turno.</p>
+
+      <h4>1.2 Síntomas observados</h4>
+      <ul>
+        <li>A las 02:47 el SCADA Ignition pierde conexión con la base de datos PostgreSQL; los tags de producción dejan de persistirse.</li>
+        <li>A las 02:48 los operadores reportan que el HMI PanelView de la línea de ensamblaje muestra el mensaje <em>"Tag Quality: Bad · Connection Lost to mes_prod"</em>.</li>
+        <li>A las 02:51 el sistema de monitorización Zabbix genera alerta crítica: <code>PRD-DB-01 / Filesystem /var = 100% used (NO SPACE LEFT)</code>.</li>
+        <li>A las 02:53 el servicio PostgreSQL cae con error <code>FATAL: could not write to file "pg_wal/000000010000000F": No space left on device</code>.</li>
+        <li>A las 03:12 el ingeniero de guardia intenta reiniciar el servicio; PostgreSQL no arranca con el mismo error.</li>
+        <li>A las 03:20 el operador de tercer turno detiene la línea de ensamblaje por falta de instrucciones de trabajo; la línea de mecanizado continúa pero sin trazabilidad.</li>
+        <li>A las 04:05 se reinicia el servicio tras liberar espacio manualmente; el problema se reproduce 14 horas después.</li>
+      </ul>
+
+      <h4>1.3 Datos disponibles para el análisis</h4>
+      <table class="datos-table">
+        <thead><tr><th>Variable</th><th>Valor / observación</th></tr></thead>
+        <tbody>
+          <tr><td>Volumen afectado</td><td><code>/var</code> en LVM sobre RAID 10, 4 × SSD 960 GB (3,6 TB útiles)</td></tr>
+          <tr><td>Ocupación previa (24 h antes)</td><td>62% (2,23 TB usados)</td></tr>
+          <tr><td>Ocupación al incidente</td><td>100% (3,6 TB)</td></tr>
+          <tr><td>Tasa de crecimiento</td><td>~95 GB/h (anómala; histórico ~3,5 GB/h)</td></tr>
+          <tr><td>Fichero dominante</td><td><code>/var/log/postgresql/postgresql-2026-03-15.log</code> = 1,9 TB</td></tr>
+          <tr><td>Segundo fichero dominante</td><td><code>/var/lib/postgresql/15/main/pg_wal/</code> = 1,2 TB</td></tr>
+          <tr><td>Política de retención de logs</td><td>Configurada a 90 días</td></tr>
+          <tr><td>Job de backup</td><td>Programado a las 03:00 diario (pg_dump + WAL archive a NAS)</td></tr>
+          <tr><td>Último backup exitoso</td><td>14/03/2026 03:02</td></tr>
+          <tr><td>Backups fallidos posteriores</td><td>15/03 03:00, 16/03 03:00, 17/03 03:00, ... (17 días consecutivos)</td></tr>
+          <tr><td>Causa de fallo del job</td><td>Error de autenticación: <code>password authentication failed for user "backup_user"</code></td></tr>
+          <tr><td>Configuración PostgreSQL</td><td><code>log_min_messages = debug1</code> (cambiado el 14/03 por equipo de tuning)</td></tr>
+          <tr><td><code>log_statement</code></td><td><code>'all'</code> (cambiado el 14/03)</td></tr>
+          <tr><td>Configuración WAL</td><td><code>max_wal_size = 16 GB</code>, <code>archive_mode = on</code>, <code>archive_command = rsync ...</code></td></tr>
+          <tr><td>Equipo DBA</td><td>2 personas, uno de ellos en vacaciones (rotación 1 persona cubriendo 3 plantas)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-info">
+        <div class="icon">→</div>
+        <div>
+          <div class="callout-title">Tarea del estudiante</div>
+          <p>Identifica la(s) causa(s) raíz utilizando 5 Por Qués y construye el diagrama de Ishikawa correspondiente. Propón acciones correctivas y preventivas. Compara después tu análisis con la solución docente (botón siguiente).</p>
+        </div>
+      </div>
+
+      <!-- Bloque bloqueado -->
+      <div class="solucion-locked" data-solucion="sol-reto1">
+        <div class="lock-icon">🔒</div>
+        <h4>Solución del Reto 1 protegida por PIN docente</h4>
+        <p>La causa raíz, el diagrama de Ishikawa completo y el plan de acción correctivo/preventivo están protegidos. Pulsa el botón e introduce el PIN de docente para revelarlos.</p>
+        <button class="ver-respuestas" onclick="abrirModal()">
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> Ver respuesta del Reto 1
+        </button>
+      </div>
+
+      <!-- Solución (oculta tras PIN) -->
+      <div class="solucion-content" id="sol-reto1">
+        <h4>Solución docente · Reto 1</h4>
+        <p><strong>Resumen ejecutivo:</strong> El incidente es la confluencia de tres defectos concatenados: (a) un cambio de configuración de logging que multiplicó ×27 la tasa de generación de logs; (b) un job de backup fallido silenciosamente durante 17 días consecutivos por caducidad de credencial; (c) ausencia de alertas sobre fallo de jobs críticos y sobre crecimiento anómalo del volumen. La "causa raíz" depende del horizonte temporal elegido; aquí la consideramos como la <strong>ausencia de un sistema integrado de monitorización y alertas sobre la salud del proceso de backup y de la configuración de PostgreSQL</strong>, que es el defecto cuya eliminación habría impedido toda la cadena.</p>
+
+        <h4>1. Cadena de los 5 Por Qués</h4>
+        <ol>
+          <li><strong>¿Por qué se detuvo el servicio PostgreSQL?</strong> → Porque el filesystem <code>/var</code> alcanzó el 100% de ocupación y PostgreSQL no pudo escribir el WAL.</li>
+          <li><strong>¿Por qué se llenó el filesystem?</strong> → Porque el fichero de log principal creció 1,9 TB y los ficheros WAL acumularon 1,2 TB en 17 días.</li>
+          <li><strong>¿Por qué crecieron tanto los logs y los WAL?</strong> → Por dos causas concurrentes: (a) el 14/03 se cambió <code>log_statement = 'all'</code> y <code>log_min_messages = debug1</code>, multiplicando por ~27 la verbosidad; (b) el job de backup/WAL archive fallaba silenciosamente, por lo que los WAL no se eliminaban tras archivado exitoso.</li>
+          <li><strong>¿Por qué fallaba el job de backup?</strong> → Porque la cuenta de servicio <code>backup_user</code> fue deshabilitada por la política de rotación de contraseñas del Active Directory (caducidad a 90 días) sin renovar la credencial almacenada en el gestor de jobs.</li>
+          <li><strong>¿Por qué no se detectó el fallo durante 17 días?</strong> → Porque el job de backup estaba configurado para notificar solo al creador del job (en vacaciones), no al equipo DBA; porque no existía un check de Zabbix sobre el éxito/fallo del último backup; y porque no existía una alerta sobre la tasa de crecimiento del filesystem.</li>
+        </ol>
+
+        <div class="causa-raiz">
+          <strong>Causa raíz:</strong> ausencia de un sistema integrado de monitorización y alertas sobre la salud del proceso de backup y de la configuración de PostgreSQL, en una organización con un equipo DBA insuficiente (1 persona cubriendo 3 plantas) y sin gestión formal del cambio de configuración.
+        </div>
+
+        <h4>2. Diagrama de Ishikawa 6M del Reto 1</h4>
+        <div class="ishikawa-wrap">
+          <div class="ishikawa">
+            <div class="spine"></div>
+            <div class="head">Servidor caído<small>Disco lleno · pg down</small></div>
+            <div class="branch b-top b1">
+              <div class="label">Método</div>
+              <div class="bones">
+                <div class="bone">Cambio de config sin revisión</div>
+                <div class="bone">Política de retención 90d sin trim activo</div>
+                <div class="bone">No existe proceso MOC para DB</div>
+                <div class="bone">Job notifica solo al creador</div>
+              </div>
+            </div>
+            <div class="branch b-top b2">
+              <div class="label">Máquina</div>
+              <div class="bones">
+                <div class="bone">Volumen sin cuota de logs</div>
+                <div class="bone">RAID 10 sobre SSD (no alertaba)</div>
+                <div class="bone">No hay partición separada para /var/log</div>
+              </div>
+            </div>
+            <div class="branch b-top b3">
+              <div class="label">Material</div>
+              <div class="bones">
+                <div class="bone">log_statement='all' (cambio 14/03)</div>
+                <div class="bone">log_min_messages=debug1 (14/03)</div>
+                <div class="bone">WAL no archivados (rsync falla)</div>
+                <div class="bone">Credencial backup_user caducada</div>
+              </div>
+            </div>
+            <div class="branch b-bottom b1">
+              <div class="label">Mano de Obra</div>
+              <div class="bones">
+                <div class="bone">1 DBA cubre 3 plantas</div>
+                <div class="bone">Equipo sin par de revisión</div>
+                <div class="bone">DBA titular en vacaciones</div>
+                <div class="bone">Equipo de tuning no coordinó con DBA</div>
+              </div>
+            </div>
+            <div class="branch b-bottom b2">
+              <div class="label">Medición</div>
+              <div class="bones">
+                <div class="bone">Sin alerta de fallo de backup</div>
+                <div class="bone">Sin alerta de tasa de crecimiento</div>
+                <div class="bone">Zabbix solo mide punto de uso, no delta</div>
+                <div class="bone">No hay monitor del job pg_dump</div>
+              </div>
+            </div>
+            <div class="branch b-bottom b3">
+              <div class="label">Medio Ambiente</div>
+              <div class="bones">
+                <div class="bone">Producción 24/7 (sin ventana)</div>
+                <div class="bone">Cultura "no molestar al DBA"</div>
+                <div class="bone">Política AD de caducidad 90d</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4>3. Plan de acción correctivo y preventivo</h4>
+        <table class="acciones-table">
+          <thead><tr><th>#</th><th>Acción</th><th>Tipo</th><th>Plazo</th><th>Responsable</th></tr></thead>
+          <tbody>
+            <tr><td>C1</td><td>Restaurar <code>log_statement = 'none'</code> y <code>log_min_messages = warning</code>; rotar y comprimir logs antiguos.</td><td><span class="tipo-c">Correctiva</span></td><td>Inmediato</td><td>DBA</td></tr>
+            <tr><td>C2</td><td>Renovar credencial <code>backup_user</code> y rotar secretos en vault (HashiCorp Vault) con policy de no-expiración de cuenta de servicio.</td><td><span class="tipo-c">Correctiva</span></td><td>24 h</td><td>DBA + AD Admin</td></tr>
+            <tr><td>C3</td><td>Ejecutar backup completo + archive de WAL manualmente; validar restore en entorno TEST.</td><td><span class="tipo-c">Correctiva</span></td><td>48 h</td><td>DBA</td></tr>
+            <tr><td>C4</td><td>Crear partición LVM separada para <code>/var/log</code> y para <code>pg_wal</code>; aplicar cuotas XFS.</td><td><span class="tipo-c">Correctiva</span></td><td>1 semana</td><td>SA + DBA</td></tr>
+            <tr><td>P1</td><td>Implementar check de Zabbix: "último backup exitoso &lt; 26 h" → alerta P2; "tasa de crecimiento &gt; 10 GB/h" → P1.</td><td><span class="tipo-p">Preventiva</span></td><td>1 semana</td><td>SA + DBA</td></tr>
+            <tr><td>P2</td><td>Añadir job de purga automática de logs PostgreSQL (pg_logrotate + cron) con retención 14 días.</td><td><span class="tipo-p">Preventiva</span></td><td>1 semana</td><td>DBA</td></tr>
+            <tr><td>P3</td><td>Definir proceso MOC (Management of Change) para cambios de configuración de base de datos: peer-review + rollback plan + ventana.</td><td><span class="tipo-p">Preventiva</span></td><td>2 semanas</td><td>DBA Lead</td></tr>
+            <tr><td>P4</td><td>Notificar fallos de job de backup a canal de Teams del equipo DBA, no solo al creador.</td><td><span class="tipo-p">Preventiva</span></td><td>Inmediato</td><td>SA</td></tr>
+            <tr><td>P5</td><td>Ampliar equipo DBA a 3 personas (1 por planta) o externalizar guardia 24/7 a MSSP.</td><td><span class="tipo-p">Preventiva</span></td><td>3 meses</td><td>CIO</td></tr>
+            <tr><td>P6</td><td>Auditar todos los jobs críticos del MES, ERP, SCADA; establecer matriz de alertas y propietarios.</td><td><span class="tipo-p">Preventiva</span></td><td>1 mes</td><td>CIO + Ops</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout callout-key">
+          <div class="icon">✓</div>
+          <div>
+            <div class="callout-title">Aprendizaje clave</div>
+            <p>La "causa raíz" en este caso no es un único elemento técnico, sino la <em>ausencia de un sistema integrado de monitorización y gestión del cambio</em>. Eliminar solo la causa inmediata (liberar espacio) habría garantizado la recurrencia —como efectivamente ocurrió 14 horas después—. El RCA bien conducido obliga a cruzar la frontera entre lo técnico y lo organizativo.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ============ RETO 2 ============ -->
+  <article class="reto-card" id="reto-2">
+    <div class="reto-header">
+      <div class="reto-num">2</div>
+      <div>
+        <h3>Red LAN industrial con bucle de switching</h3>
+        <div class="reto-tag">RCA · Redundancia · STP / RSTP · VLAN cruzada</div>
+      </div>
+    </div>
+    <div class="reto-body">
+
+      <h4>2.1 Contexto del incidente</h4>
+      <p>Planta química continua con proceso batch. La red industrial de planta es Profinet IRT sobre Ethernet industrial; la red de supervisión SCADA es una VLAN separada (VLAN 30) sobre switches administrados Cisco IE-3300 con Spanning Tree (RSTP) habilitado. La red de control (VLAN 10) contiene los PLCs S7-1500; la red de supervisión (VLAN 30) contiene los servidores SCADA Ignition y los HMI PanelView; la red corporativa (VLAN 100) está separada por un firewall Palo Alto. El incidente ocurre en martes a las 11:20, durante un turno normal de producción.</p>
+
+      <h4>2.2 Síntomas observados</h4>
+      <ul>
+        <li>A las 11:20 los operadores reportan lentitud intermitente en los HMI PanelView: las pantallas se "congelan" 2-3 segundos cada 10-15 segundos.</li>
+        <li>A las 11:24 el SCADA Ignition reporta timeouts cíclicos a PLC S7-1500 (máster de línea batch): <em>"OPC UA connection timeout · cycle time 200 ms exceeded"</em>.</li>
+        <li>A las 11:27 la línea batch se detiene automáticamente por pérdida de comunicación con el PLC maestro durante más de 5 ciclos consecutivos (seguridad funcional SIL-2).</li>
+        <li>A las 11:31 el ingeniero de red observa en el core switch <code>SW-CORE-01</code> que el contador de broadcasts en VLAN 30 aumenta a 14.000 paquetes/seg (normal: &lt; 200 pps).</li>
+        <li>A las 11:34 se ejecuta <code>show spanning-tree vlan 30</code>: la topología RSTP converge en 6 segundos y el root bridge cambia entre SW-CORE-01 y SW-ACC-03 cada 30 segundos.</li>
+        <li>A las 11:40 el analista de seguridad observa en el firewall Palo Alto un pico de paquetes descartados en la interfaz OT.</li>
+        <li>A las 11:55 un operador reporta que un cable Ethernet nuevo fue conectado entre SW-ACC-02 y SW-ACC-03 durante una ampliación de mesa de control realizada esa mañana.</li>
+        <li>A las 12:08 se retira el cable y los síntomas desaparecen en 30 segundos.</li>
+        <li>El análisis posterior muestra que el cable introdujo un bucle físico; RSTP lo detectó pero el comando <code>bpdu guard</code> no estaba activo en los puertos de acceso; la VLAN 30 quedó con broadcast storm cíclico y reconvergencia perpetua.</li>
+      </ul>
+
+      <h4>2.3 Datos disponibles para el análisis</h4>
+      <table class="datos-table">
+        <thead><tr><th>Variable</th><th>Valor / observación</th></tr></thead>
+        <tbody>
+          <tr><td>Topología física</td><td>Estrella jerárquica de 3 capas: 1 core (SW-CORE-01) + 3 accesos (SW-ACC-01/02/03)</td></tr>
+          <tr><td>Protocolo STP</td><td>RSTP (802.1w) habilitado en todas las VLANs</td></tr>
+          <tr><td>Root bridge</td><td>SW-CORE-01 prioridad 4096 (correcta)</td></tr>
+          <tr><td>Configuración puertos de acceso</td><td><code>spanning-tree portfast</code> sí; <code>spanning-tree bpduguard</code> <strong>NO</strong></td></tr>
+          <tr><td>Trunking puertos de acceso</td><td>Modo dynamic auto (puede negociar trunk si peer lo pide)</td></tr>
+          <tr><td>VLANs</td><td>10 (control), 30 (supervisión), 100 (corporativa)</td></tr>
+          <tr><td>Cable añadido</td><td>Cat 5e UTP no industrial (8 m), sin apantallar, entre SW-ACC-02 puerto Fa0/14 y SW-ACC-03 puerto Fa0/9</td></tr>
+          <tr><td>Tiempo desde la conexión</td><td>~3 horas antes de los síntomas críticos (hubo latencia baja no detectada)</td></tr>
+          <tr><td>Herramienta de monitorización</td><td>SolarWinds NPM, sin alerta de broadcast storm configurada</td></tr>
+          <tr><td>Equipo de red</td><td>1 ingeniero de red para 3 plantas; el técnico que añadió el cable es contratista externo</td></tr>
+          <tr><td>Procedimiento de cambio de red</td><td>Existe en papel, no se aplicó (trámite "demoraba 3 días")</td></tr>
+          <tr><td>Capacitación del contratista</td><td>Sin inducción en políticas de red OT</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-info">
+        <div class="icon">→</div>
+        <div>
+          <div class="callout-title">Tarea del estudiante</div>
+          <p>Realiza el RCA completo. Identifica las causas raíz técnicas y organizativas. Construye el diagrama Ishikawa. Propón acciones correctivas y preventivas que eviten incidentes similares en el futuro. Compara con la solución docente.</p>
+        </div>
+      </div>
+
+      <div class="solucion-locked" data-solucion="sol-reto2">
+        <div class="lock-icon">🔒</div>
+        <h4>Solución del Reto 2 protegida por PIN docente</h4>
+        <p>El análisis completo (causa raíz, Ishikawa 6M y plan de acción) está protegido. Introduce el PIN docente para revelarlo.</p>
+        <button class="ver-respuestas" onclick="abrirModal()">
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> Ver respuesta del Reto 2
+        </button>
+      </div>
+
+      <div class="solucion-content" id="sol-reto2">
+        <h4>Solución docente · Reto 2</h4>
+        <p><strong>Resumen ejecutivo:</strong> Bucle físico de capa 2 introducido por un contratista sin formación, en una red con RSTP correcto pero sin las protecciones de puerto (bpduguard) y sin monitorización de broadcast. La "causa raíz" —en el sentido de defecto cuya eliminación habría impedido el incidente— es la <strong>ausencia de hardening de los puertos de acceso y de gobernanza de cambios en la red OT</strong>.</p>
+
+        <h4>1. Cadena de los 5 Por Qués</h4>
+        <ol>
+          <li><strong>¿Por qué se detuvo la línea batch?</strong> → Porque el PLC maestro perdió comunicación con el SCADA durante más de 5 ciclos consecutivos, disparándose el paro SIL-2 por seguridad funcional.</li>
+          <li><strong>¿Por qué se perdía la comunicación periódicamente?</strong> → Porque la red Profinet IRT y la VLAN 30 sufrían broadcast storm y reconvergencia perpetua de RSTP cada 30 segundos, provocando latencia &gt;200 ms en tráfico IRT que requiere determinismo &lt;1 ms.</li>
+          <li><strong>¿Por qué había broadcast storm y reconvergencia?</strong> → Porque un cable recientemente añadido entre SW-ACC-02 y SW-ACC-03 formó un bucle físico; RSTP lo detectó e intentó bloquearlo, pero como <code>bpduguard</code> no estaba activo en los puertos de acceso, el puerto bloqueado pasaba eventualmente a "forwarding" y se reproducía el bucle; además, el STP root cambiaba entre dos switches cada reconvergencia.</li>
+          <li><strong>¿Por qué el cable fue añadido?</strong> → Porque un contratista externo realizó una ampliación de mesa de control sin seguir el procedimiento de cambio de red (que "demoraba 3 días") y sin haber recibido inducción específica en políticas de red OT.</li>
+          <li><strong>¿Por qué el contratista pudo añadir el cable sin barreras técnicas ni organizativas?</strong> → Porque los puertos de acceso estaban activos por defecto (sin shutdown ni bpduguard), porque no existía una herramienta de auto-discovery que detectara conexiones no autorizadas, y porque la presión de plazo indujo al contratista a saltarse el procedimiento formal.</li>
+        </ol>
+
+        <div class="causa-raiz">
+          <strong>Causa raíz:</strong> ausencia de hardening de los puertos de acceso de red OT (sin <code>bpduguard</code>, sin <code>portfast trunk</code> bien configurado, sin shutdown de puertos no usados) y debilidad de la gobernanza de cambios de red OT (procedimiento formal no aplicado, contratistas sin inducción, sin monitorización automática de topología).
+        </div>
+
+        <h4>2. Diagrama de Ishikawa 6M del Reto 2</h4>
+        <div class="ishikawa-wrap">
+          <div class="ishikawa">
+            <div class="spine"></div>
+            <div class="head">Línea batch parada<small>Latencia OPC UA</small></div>
+            <div class="branch b-top b1">
+              <div class="label">Método</div>
+              <div class="bones">
+                <div class="bone">Procedimiento de cambio no aplicado</div>
+                <div class="bone">Inducción de contratistas inexistente</div>
+                <div class="bone">No hay MOC para red OT</div>
+                <div class="bone">Política de puertos sin hardening</div>
+              </div>
+            </div>
+            <div class="branch b-top b2">
+              <div class="label">Máquina</div>
+              <div class="bones">
+                <div class="bone">Switches Cisco IE-3300</div>
+                <div class="bone">Sin bpduguard en acceso</div>
+                <div class="bone">Puertos en dynamic auto</div>
+                <div class="bone">Sin shutdown de puertos libres</div>
+              </div>
+            </div>
+            <div class="branch b-top b3">
+              <div class="label">Material</div>
+              <div class="bones">
+                <div class="bone">Cable Cat 5e UTP no industrial</div>
+                <div class="bone">8 m (sin certificar)</div>
+                <div class="bone">Sin etiquetar ni documentar</div>
+              </div>
+            </div>
+            <div class="branch b-bottom b1">
+              <div class="label">Mano de Obra</div>
+              <div class="bones">
+                <div class="bone">Contratista sin inducción OT</div>
+                <div class="bone">1 ing. red para 3 plantas</div>
+                <div class="bone">Presión de plazo</div>
+                <div class="bone">Sin supervisión in situ</div>
+              </div>
+            </div>
+            <div class="branch b-bottom b2">
+              <div class="label">Medición</div>
+              <div class="bones">
+                <div class="bone">SolarWinds sin alerta broadcast</div>
+                <div class="bone">Sin auto-discovery topología</div>
+                <div class="bone">No se medía latencia IRT</div>
+                <div class="bone">Sin syslog centralizado OT</div>
+              </div>
+            </div>
+            <div class="branch b-bottom b3">
+              <div class="label">Medio Ambiente</div>
+              <div class="bones">
+                <div class="bone">Sala de control accesible</div>
+                <div class="bone">Cultura "solicitar permiso demora"</div>
+                <div class="bone">Sin gabinete cerrado con llave</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4>3. Plan de acción correctivo y preventivo</h4>
+        <table class="acciones-table">
+          <thead><tr><th>#</th><th>Acción</th><th>Tipo</th><th>Plazo</th><th>Responsable</th></tr></thead>
+          <tbody>
+            <tr><td>C1</td><td>Retirar el cable no autorizado; restaurar topología documentada.</td><td><span class="tipo-c">Correctiva</span></td><td>Inmediato</td><td>Ing. Red</td></tr>
+            <tr><td>C2</td><td>Habilitar <code>spanning-tree bpduguard enable</code> en todos los puertos de acceso de los switches OT (Cisco IE-3300).</td><td><span class="tipo-c">Correctiva</span></td><td>24 h</td><td>Ing. Red</td></tr>
+            <tr><td>C3</td><td>Aplicar <code>errdisable recovery cause bpduguard</code> + <code>errdisable recovery interval 300</code> para auto-recuperación tras incidentes.</td><td><span class="tipo-c">Correctiva</span></td><td>24 h</td><td>Ing. Red</td></tr>
+            <tr><td>C4</td><td>Configurar puertos de acceso como <code>switchport mode access</code> (no dynamic auto) y <code>switchport nonegotiate</code>.</td><td><span class="tipo-c">Correctiva</span></td><td>1 semana</td><td>Ing. Red</td></tr>
+            <tr><td>C5</td><td>Shutdown de todos los puertos físicos no usados; etiquetar y documentar puertos activos.</td><td><span class="tipo-c">Correctiva</span></td><td>1 semana</td><td>Ing. Red</td></tr>
+            <tr><td>P1</td><td>Implementar alerta SolarWinds (o LibreNMS) sobre broadcast pps &gt; 1000 en VLAN OT; alerta P1 a guardia.</td><td><span class="tipo-p">Preventiva</span></td><td>1 semana</td><td>Ing. Red + SA</td></tr>
+            <tr><td>P2</td><td>Implementar monitorización de latencia IRT (PeanutLabs / prometheus_netapp exporter); umbral &gt;10 ms = alerta.</td><td><span class="tipo-p">Preventiva</span></td><td>2 semanas</td><td>Ing. Red + Ing. Automatización</td></tr>
+            <tr><td>P3</td><td>Instalar LLDP auto-discovery y comparar topología esperada vs. real diariamente (script Python + diff).</td><td><span class="tipo-p">Preventiva</span></td><td>2 semanas</td><td>Ing. Red</td></tr>
+            <tr><td>P4</td><td>Definir y aplicar MOC obligatorio para cualquier cambio físico o lógico en red OT; aprobación de 1 persona, ejecución documentada.</td><td><span class="tipo-p">Preventiva</span></td><td>1 mes</td><td>CIO + Ing. Red</td></tr>
+            <tr><td>P5</td><td>Inducción obligatoria de 4 h para todo contratista antes de acceso a red OT; evaluación con nota mínima.</td><td><span class="tipo-p">Preventiva</span></td><td>2 meses</td><td>RRHH + CIO</td></tr>
+            <tr><td>P6</td><td>Cerrar con llave los armarios de comunicaciones de planta; control de acceso físico por badge.</td><td><span class="tipo-p">Preventiva</span></td><td>1 mes</td><td>Mantenimiento + Seguridad física</td></tr>
+            <tr><td>P7</td><td>Sustituir cables UTP no industriales por cables Profinet certificados (Cat 6A STP) con etiqueta y código.</td><td><span class="tipo-p">Preventiva</span></td><td>3 meses</td><td>Mantenimiento</td></tr>
+            <tr><td>P8</td><td>Auditar hardening de red OT contra ANSI/ISA-62443 y NIST SP 800-82; plan de remediación.</td><td><span class="tipo-p">Preventiva</span></td><td>3 meses</td><td>Ing. Red + CISO</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout callout-key">
+          <div class="icon">✓</div>
+          <div>
+            <div class="callout-title">Aprendizaje clave</div>
+            <p>En redes OT la causa raíz es casi siempre <em>multifactorial</em>: un fallo técnico (bpduguard deshabilitado) se combina con un fallo organizativo (procedimiento de cambio no aplicado) y un fallo humano (contratista sin formación). Las soluciones efectivas atacan las tres dimensiones; las soluciones exclusivamente técnicas (activar bpduguard) evitan la recurrencia del síntoma concreto pero no la familia de incidentes.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ============ RETO 3 ============ -->
+  <article class="reto-card" id="reto-3">
+    <div class="reto-header">
+      <div class="reto-num">3</div>
+      <div>
+        <h3>Pérdida de datos en SCADA (backup defectuoso)</h3>
+        <div class="reto-tag">RCA · Continuidad · Historian · Backup silencioso</div>
+      </div>
+    </div>
+    <div class="reto-body">
+
+      <h4>3.1 Contexto del incidente</h4>
+      <p>Planta de refinación de aceites vegetales con proceso continuo. El sistema SCADA principal es Wonderware InTouch 2020 con historian OSIsoft PI 2018. El historian almacena tags de temperatura, presión, caudal y composición de 12 reactores en línea, con cadencia de 1 s y retención de 5 años. La información es necesaria para la trazabilidad regulatoria (FDA 21 CFR Part 11) y para el cálculo del OEE. El incidente se detecta en viernes a las 09:15, cuando un analista de procesos intenta consultar datos del reactor R-04 entre el 1 y el 14 de marzo de 2026.</p>
+
+      <h4>3.2 Síntomas observados</h4>
+      <ul>
+        <li>A las 09:15 el analista reporta que el historian PI no devuelve datos del reactor R-04 entre el 01/03/2026 00:00 y el 14/03/2026 23:59.</li>
+        <li>A las 09:30 el DBA del historian verifica: la tabla <code>piarchive..picomp2</code> tiene huecos para los tags de R-04 en ese periodo; los tags de otros reactores están completos.</li>
+        <li>A las 09:42 se comprueba que el job de backup nocturno del historian reporta "éxito" en los últimos 21 días según la consola del SQL Agent.</li>
+        <li>A las 09:55 el DBA examina el fichero de log del job: aparece la línea <code>BACKUP DATABASE successfully processed 0 pages in 0.012 seconds</code>.</li>
+        <li>A las 10:10 se restauran los backups en un entorno de test: todos los ficheros .bak pesan 4 KB (cabecera vacía) —ningún dato real—.</li>
+        <li>A las 10:25 se identifica que el job de backup ejecuta <code>BACKUP DATABASE piarchive TO DISK = 'F:\backups\piarchive_YYYYMMDD.bak'</code>, pero la unidad <code>F:</code> ya no existe desde el 28/02/2026 (un administrador la desmontó al sustituir un LUN de almacenamiento).</li>
+        <li>A las 10:30 se verifica que el SQL Server no lanzó error porque el comando <code>BACKUP ... TO DISK = 'F:\...'</code> con la ruta inexistente sí lo hacía: en realidad, SQL Server intenta crear el fichero pero el job tenía <code>CHECK</code> deshabilitado y la validación post-backup no existía.</li>
+        <li>A las 10:45 el ingeniero de automatización verifica que los PLCs de R-04 sí escribían continuamente al PI Buffer en local; los datos están en el PI Buffer pero el archivo histórico definitivo se perdió porque el PI Snapshot Subsystem no puede retro-escribir el archivo <code>picomp2</code> sin un punto de recuperación válido.</li>
+        <li>A las 11:00 se estima la pérdida de datos regulatorios para 14 días en 1 reactor con cadencia 1 s: ~1,2 millones de registros, irrecuperables.</li>
+      </ul>
+
+      <h4>3.3 Datos disponibles para el análisis</h4>
+      <table class="datos-table">
+        <thead><tr><th>Variable</th><th>Valor / observación</th></tr></thead>
+        <tbody>
+          <tr><td>Historian</td><td>OSIsoft PI Server 2018 sobre Windows Server 2019 + SQL Server 2017</td></tr>
+          <tr><td>Retención configurada</td><td>5 años en disco, 10 años en cinta LTO-8</td></tr>
+          <tr><td>Job de backup</td><td>SQL Agent Job <code>BAK_PIARCHIVE</code>, diario a las 02:00, comando T-SQL <code>BACKUP DATABASE piarchive TO DISK='F:\backups\piarchive_YYYYMMDD.bak'</code></td></tr>
+          <tr><td>Validación post-backup</td><td>Inexistente</td></tr>
+          <tr><td>Job de backup de cinta LTO</td><td>Veeam Backup &amp; Replication, semanal domingo a las 23:00, almacena en biblioteca HP MSL2024</td></tr>
+          <tr><td>Último backup de cinta</td><td>23/02/2026 (4 semanas antes del incidente); no se ha vuelto a ejecutar con éxito</td></tr>
+          <tr><td>Causa fallo cinta</td><td>Biblioteca LTO reporta "drive dirty"; sin limpieza programada</td></tr>
+          <tr><td>Cambio de LUN F:</td><td>28/02/2026, sin actualización de la ruta del job</td></tr>
+          <tr><td>Notificación del job</td><td>Solo log; no envía mail ni alerta a Canal Teams</td></tr>
+          <tr><td>Equipo DBA</td><td>1 DBA + 1 SA (cubren 6 plantas de la empresa)</td></tr>
+          <tr><td>Cumplimiento regulatorio</td><td>FDA 21 CFR Part 11 — integridad de datos requerida; incidente reportable</td></tr>
+          <tr><td>PI Buffer Subsystem</td><td>Capacidad de buffer: 24 h; más allá se descarta</td></tr>
+          <tr><td>Días sin backup válido</td><td>21 (desde el 28/02/2026 hasta el 21/03/2026)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-info">
+        <div class="icon">→</div>
+        <div>
+          <div class="callout-title">Tarea del estudiante</div>
+          <p>Realiza el RCA identificando las causas técnicas, organizativas y de cumplimiento. Construye el Ishikawa. Propón plan de acción con prioridades considerando la dimensión regulatoria FDA. Compara con la solución docente.</p>
+        </div>
+      </div>
+
+      <div class="solucion-locked" data-solucion="sol-reto3">
+        <div class="lock-icon">🔒</div>
+        <h4>Solución del Reto 3 protegida por PIN docente</h4>
+        <p>El análisis completo del Reto 3 está protegido. Introduce el PIN docente para revelar la causa raíz, el diagrama Ishikawa y el plan de acción.</p>
+        <button class="ver-respuestas" onclick="abrirModal()">
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> Ver respuesta del Reto 3
+        </button>
+      </div>
+
+      <div class="solucion-content" id="sol-reto3">
+        <h4>Solución docente · Reto 3</h4>
+        <p><strong>Resumen ejecutivo:</strong> La pérdida de datos regulatorios se debe a una concatenación de tres defectos: (a) un cambio de almacenamiento (desmontaje del LUN F:) que no fue acompañado de la actualización de la ruta del job de backup; (b) ausencia de validación post-backup que habría detectado ficheros vacíos; (c) caída paralela del backup de cinta LTO por falta de limpieza programada, eliminando el último recurso de recuperación. La "causa raíz" es la <strong>ausencia de un proceso de testing de restauración y de monitorización de la integridad de los backups</strong>, un defecto especialmente grave en un sistema sujeto a FDA 21 CFR Part 11.</p>
+
+        <h4>1. Cadena de los 5 Por Qués</h4>
+        <ol>
+          <li><strong>¿Por qué no hay datos del reactor R-04 entre el 01/03 y el 14/03?</strong> → Porque el historian PI no persistió los datos en <code>picomp2</code> en ese periodo.</li>
+          <li><strong>¿Por qué no se persistieron los datos?</strong> → Porque el Snapshot Subsystem de PI no pudo escribir al archivo <code>picomp2</code> ya que el punto de recuperación anterior estaba corrupto (snapshot fallido el 28/02), y sin snapshot válido no se podía consolidar.</li>
+          <li><strong>¿Por qué el snapshot falló el 28/02?</strong> → Porque el proceso de backup nocturno del SQL Server no podía escribir a la ruta <code>F:\backups\</code>, ya que el LUN F: fue desmontado ese mismo día.</li>
+          <li><strong>¿Por qué el job de backup reportó éxito durante 21 días aunque no respaldaba nada?</strong> → Porque el comando T-SQL <code>BACKUP DATABASE ... TO DISK='F:\...'</code> con la ruta inexistente no lanzaba error fatal en la versión de SQL Server 2017 con la configuración del job (CHECK deshabilitado, validation postbackup inexistente); el log decía <em>"successfully processed 0 pages in 0.012 seconds"</em>, lo cual técnicamente es un backup "exitoso" pero vacío.</li>
+          <li><strong>¿Por qué no se detectó en 21 días?</strong> → Por tres razones concurrentes: (a) no existía validación post-backup (restauración periódica de prueba); (b) el job notificaba solo al log, no a Teams ni a un canal de guardia; (c) paralelamente, el backup de cinta LTO semanal también fallaba por "drive dirty" (sin limpieza programada), por lo que tampoco había respaldo de respaldo.</li>
+        </ol>
+
+        <div class="causa-raiz">
+          <strong>Causa raíz:</strong> ausencia de un proceso de testing de restauración de backups y de monitorización de la integridad (tamaño, hash, restorability) de los backups, en una organización con un equipo DBA insuficiente y sin MOC para cambios de almacenamiento que afectan a jobs críticos. La falta de un "backup del backup" (cinta LTO) operativo agravó las consecuencias hasta la pérdida irrecuperable.
+        </div>
+
+        <h4>2. Diagrama de Ishikawa 6M del Reto 3</h4>
+        <div class="ishikawa-wrap">
+          <div class="ishikawa">
+            <div class="spine"></div>
+            <div class="head">Datos regulatorios perdidos<small>14 días · R-04</small></div>
+            <div class="branch b-top b1">
+              <div class="label">Método</div>
+              <div class="bones">
+                <div class="bone">No existe MOC para almacenamiento</div>
+                <div class="bone">Sin test de restauración</div>
+                <div class="bone">Job notifica solo al log</div>
+                <div class="bone">Sin limpieza de drive LTO</div>
+              </div>
+            </div>
+            <div class="branch b-top b2">
+              <div class="label">Máquina</div>
+              <div class="bones">
+                <div class="bone">LUN F: desmontado 28/02</div>
+                <div class="bone">Drive LTO "dirty"</div>
+                <div class="bone">SQL Server 2017 (sin check)</div>
+                <div class="bone">PI Buffer 24 h (corto)</div>
+              </div>
+            </div>
+            <div class="branch b-top b3">
+              <div class="label">Material</div>
+              <div class="bones">
+                <div class="bone">Job BACKUP sin WITH CHECK</div>
+                <div class="bone">.bak de 4 KB (vacío)</div>
+                <div class="bone">Sin hash de validación</div>
+                <div class="bone">Cartucho LTO sin limpieza</div>
+              </div>
+            </div>
+            <div class="branch b-bottom b1">
+              <div class="label">Mano de Obra</div>
+              <div class="bones">
+                <div class="bone">1 DBA + 1 SA para 6 plantas</div>
+                <div class="bone">SA no comunicó el desmontaje F:</div>
+                <div class="bone">DBA no revisa logs diariamente</div>
+                <div class="bone">Sin par de revisión cruzada</div>
+              </div>
+            </div>
+            <div class="branch b-bottom b2">
+              <div class="label">Medición</div>
+              <div class="bones">
+                <div class="bone">No se mide tamaño del .bak</div>
+                <div class="bone">No se mide restore success</div>
+                <div class="bone">No se mide estado LTO drive</div>
+                <div class="bone">No se mide latencia snapshot PI</div>
+              </div>
+            </div>
+            <div class="branch b-bottom b3">
+              <div class="label">Medio Ambiente</div>
+              <div class="bones">
+                <div class="bone">Cumplimiento FDA Part 11</div>
+                <div class="bone">Proceso continuo 24/7</div>
+                <div class="bone">Cultura "el backup se asume OK"</div>
+                <div class="bone">Auditoría externa anual</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4>3. Plan de acción correctivo y preventivo</h4>
+        <table class="acciones-table">
+          <thead><tr><th>#</th><th>Acción</th><th>Tipo</th><th>Plazo</th><th>Responsable</th></tr></thead>
+          <tbody>
+            <tr><td>C1</td><td>Restaurar el LUN F: o redirigir el job a una nueva ruta <code>G:\backups\</code>; actualizar el comando T-SQL con <code>WITH CHECKSUM, FORMAT</code>.</td><td><span class="tipo-c">Correctiva</span></td><td>Inmediato</td><td>SA + DBA</td></tr>
+            <tr><td>C2</td><td>Ejecutar backup completo manual inmediato del historian; validar tamaño &gt;50 GB esperado.</td><td><span class="tipo-c">Correctiva</span></td><td>4 h</td><td>DBA</td></tr>
+            <tr><td>C3</td><td>Limpiar drive LTO (cleaning cartridge) y ejecutar backup de cinta semanal a disco + cinta.</td><td><span class="tipo-c">Correctiva</span></td><td>24 h</td><td>SA</td></tr>
+            <tr><td>C4</td><td>Recuperar datos del PI Buffer (24 h más recientes) — solo cubre 24 h, no los 14 días.</td><td><span class="tipo-c">Correctiva</span></td><td>Inmediato</td><td>DBA</td></tr>
+            <tr><td>C5</td><td>Documentar el incidente y notificar a QA/regulatorio según procedimiento FDA Part 11 (deviation report).</td><td><span class="tipo-c">Correctiva</span></td><td>72 h</td><td>QA + CIO</td></tr>
+            <tr><td>P1</td><td>Implementar job de validación post-backup: tras cada <code>BACKUP</code>, ejecutar <code>RESTORE VERIFYONLY</code> y comprobar tamaño &gt; umbral; lanzar alerta si falla.</td><td><span class="tipo-p">Preventiva</span></td><td>1 semana</td><td>DBA</td></tr>
+            <tr><td>P2</td><td>Ejecutar test de restauración completa mensual en entorno TEST; documentar RTO y RPO medidos.</td><td><span class="tipo-p">Preventiva</span></td><td>1 mes</td><td>DBA + SA</td></tr>
+            <tr><td>P3</td><td>Definir MOC para cualquier cambio de almacenamiento que afecte a jobs críticos (ruta, LUN, credential, mount point).</td><td><span class="tipo-p">Preventiva</span></td><td>2 semanas</td><td>SA + DBA + CIO</td></tr>
+            <tr><td>P4</td><td>Configurar el job SQL Agent para notificar a Teams channel "DBA-Guardia" en caso de éxito, fallo o completion &lt;1 KB.</td><td><span class="tipo-p">Preventiva</span></td><td>1 semana</td><td>DBA</td></tr>
+            <tr><td>P5</td><td>Implementar monitorización del tamaño del .bak con Prometheus + Zabbix; alerta P1 si tamaño &lt; 50 GB.</td><td><span class="tipo-p">Preventiva</span></td><td>1 semana</td><td>SA + DBA</td></tr>
+            <tr><td>P6</td><td>Programar limpieza mensual del drive LTO (cleaning cartucho); alerta si lleva &gt;30 días sin limpieza.</td><td><span class="tipo-p">Preventiva</span></td><td>Inmediato</td><td>SA</td></tr>
+            <tr><td>P7</td><td>Aumentar PI Buffer Subsystem a 7 días (configuración <code>BufferCapacity=...GB</code>); revisar capacidad de disco del nodo buffer.</td><td><span class="tipo-p">Preventiva</span></td><td>2 semanas</td><td>Ing. Automatización + DBA</td></tr>
+            <tr><td>P8</td><td>Implementar esquema de backup 3-2-1 (3 copias, 2 medios, 1 offsite): diario a disco + semanal a cinta + mensual a cloud (AWS S3 Glacier).</td><td><span class="tipo-p">Preventiva</span></td><td>1 mes</td><td>DBA + SA</td></tr>
+            <tr><td>P9</td><td>Revisar protocolo de cumplimiento FDA 21 CFR Part 11 con QA; implementar firma electrónica en jobs de backup y en logs de auditoría.</td><td><span class="tipo-p">Preventiva</span></td><td>3 meses</td><td>QA + DBA + Compliance</td></tr>
+            <tr><td>P10</td><td>Ampliar equipo DBA/SA a 3 personas (o externalizar guardia 24/7 a MSSP); introducir revisión cruzada diaria de backups.</td><td><span class="tipo-p">Preventiva</span></td><td>3 meses</td><td>CIO</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout callout-key">
+          <div class="icon">✓</div>
+          <div>
+            <div class="callout-title">Aprendizaje clave</div>
+            <p>Un backup que no se ha restaurado al menos una vez no es un backup: es una <em>esperanza</em>. En sistemas regulatorios (FDA Part 11, GxP, IEC 61511), la integridad de los datos exige no solo la existencia del backup sino su <em>verificabilidad periódica</em>. Esta lección es uno de los hallazgos más comunes en auditorías GAMP 5 y debe ser internalizada por todo ingeniero que opere historian en sectores críticos.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <article class="section-card">
+    <h2>Cierre del taller y reflexión integradora</h2>
+    <p>Los tres retos comparten un patrón que el estudiante debe retener como aprendizaje central: <strong>la causa raíz nunca es un único elemento técnico aislado</strong>. En todos los casos analizados se observa la confluencia de un fallo técnico (configuración errónea, cable no autorizado, ruta obsoleta) con un fallo organizativo (ausencia de monitorización, MOC no aplicado, equipo insuficiente) y, a menudo, con un fallo de cultura (asumir que el backup está OK sin verificarlo, permitir que el procedimiento formal "demore" la operación, no comunicar cambios entre equipos). El ingeniero que actúa solo sobre la causa técnica visible garantiza la recurrencia del incidente; el ingeniero maduro actúa sobre las tres dimensiones simultáneamente.</p>
+
+    <p>Este patrón es coherente con la teoría del accidente organizacional de Reason (1997) y con el modelo del "queso suizo" (Swiss Cheese Model): los incidentes no se producen por la falla de una única defensa, sino por la alineación temporal de múltiples fallas en defensa en profundidad. La práctica del RCA con Ishikawa 6M en dominio IT/OT debe, por tanto, explorar sistemáticamente las seis dimensiones y no detenerse en la primera hipótesis plausible. La disciplina de profundizar con los 5 Por Qués evita la trampa de las "causas intermedias" que parecen raíz pero que son a su vez efectos de causas más profundas.</p>
+
+    <p>Finalmente, los tres retos ilustran cómo los marcos de gestión (ITIL, COBIT, ISO 27001, NIST CSF, ANSI/ISA-62443) no son documentos administrativos sino herramientas prácticas: sus prácticas y controles habrían impedido los incidentes si hubieran estado implementados correctamente. El estudiante debe quedar con la convicción de que <strong>la gobernanza y la gestión son parte de la ingeniería</strong>, no una capa burocrática separada. La madurez profesional se mide, en última instancia, en la capacidad de aplicar simultáneamente el análisis técnico riguroso y el sentido organizacional necesario para que ese análisis se traduzca en mejoras sostenibles.</p>
+  </article>
+
+</section>
+<!-- TAB2_END -->
+
+</main>
+
+<!-- ============ FOOTER UNIVERSITARIO ============ -->
+<footer class="university">
+  <div class="footer-inner">
+    <div>
+      <strong>Cátedra de Ingeniería de Sistemas Industriales</strong>
+      Material didáctico autocontenido · Unidad 1 · Fundamentos de TI y Arquitectura de Sistemas<br>
+      <span style="opacity:.7">Prohibida la reproducción total o parcial sin autorización. Las respuestas docentes están protegidas por PIN.</span>
+    </div>
+    <div style="text-align:right">
+      <strong>Edición académica</strong>
+      Curso 2026-2027 · Versión 1.0<br>
+      <span style="opacity:.7">Pestañas con URL diferenciadas: <code>#unidad1</code> · <code>#caso-practico</code></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ MODAL PIN DOCENTE ============ -->
+<div class="modal-overlay" id="modal-pin" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card">
+    <div class="modal-header">
+      <button class="modal-close" onclick="cerrarModal()" aria-label="Cerrar">×</button>
+      <span class="lock-big">🔒</span>
+      <h3 id="modal-title">Acceso a respuestas docentes</h3>
+      <p>Introduce el PIN de 4 dígitos proporcionado por el docente</p>
+    </div>
+    <div class="modal-body">
+      <label for="pin-input">PIN de 4 dígitos</label>
+      <div class="pin-input-wrap">
+        <input type="password" inputmode="numeric" maxlength="1" class="pin-digit" id="pin-1" autocomplete="off" aria-label="Dígito 1">
+        <input type="password" inputmode="numeric" maxlength="1" class="pin-digit" id="pin-2" autocomplete="off" aria-label="Dígito 2">
+        <input type="password" inputmode="numeric" maxlength="1" class="pin-digit" id="pin-3" autocomplete="off" aria-label="Dígito 3">
+        <input type="password" inputmode="numeric" maxlength="1" class="pin-digit" id="pin-4" autocomplete="off" aria-label="Dígito 4">
+      </div>
+      <div class="modal-msg" id="modal-msg">&nbsp;</div>
+      <div class="intentos" id="intentos"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn-primary" onclick="verificarPin()">Acceder</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      Acceso restringido a docentes. Las respuestas están protegidas para preservar la integridad académica del taller.
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   1) NAVEGACIÓN POR PESTAÑAS CON URLS DIFERENCIADAS (hash routing)
+   ============================================================ */
+(function(){
+  const tabs = document.querySelectorAll('.tab-link');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  function mostrarTab(tabId){
+    // Validación de tabId
+    const validos = ['unidad1','caso-practico'];
+    if(!validos.includes(tabId)) tabId = 'unidad1';
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabId));
+    panels.forEach(p => p.classList.toggle('active', p.id === tabId));
+    // Ajusta hash sin reiniciar el scroll
+    if(location.hash !== '#' + tabId){
+      history.replaceState(null, '', '#' + tabId);
+    }
+    // Lleva al inicio de la pestaña
+    try{ document.querySelector('nav.tabs').scrollIntoView({behavior:'smooth', block:'start'}); }catch(e){}
+  }
+
+  // Clic en una pestaña
+  tabs.forEach(t => t.addEventListener('click', function(e){
+    e.preventDefault();
+    mostrarTab(this.dataset.tab);
+  }));
+
+  // Carga inicial: según hash
+  let hash = location.hash.replace('#','');
+  if(!hash) hash = 'unidad1';
+  mostrarTab(hash);
+
+  // Cambio de hash (botones atrás/adelante)
+  window.addEventListener('hashchange', function(){
+    mostrarTab(location.hash.replace('#','') || 'unidad1');
+  });
+})();
+
+/* ============================================================
+   2) PIN DOCENTE — CLAVE OFUSCADA (no visible en texto plano)
+   La clave se construye a partir de códigos de caracteres Unicode,
+   por lo que nunca aparece como literal en el código fuente.
+   ============================================================ */
+(function(){
+  // Almacena la clave ofuscada como secuencia de códigos de caracteres.
+  // La clave nunca se muestra en texto plano en el código fuente.
+  const _k = [49,57,56,53].map(function(c){return String.fromCharCode(c);}).join('');
+  // Guardado en una variable de "espacio de nombres" privado
+  window.__auth = { clave: _k, intentos: 0, maxIntentos: 5, bloqueado: false };
+})();
+
+/* ============================================================
+   3) MANEJO DEL MODAL PIN
+   ============================================================ */
+function abrirModal(){
+  // Si ya están reveladas las soluciones, no hacemos nada
+  if(document.querySelector('.solucion-content.visible')) {
+    return;
+  }
+  // Reset visual
+  document.querySelectorAll('.pin-digit').forEach(d => { d.value=''; d.classList.remove('error','ok'); });
+  document.getElementById('modal-msg').textContent = '\u00A0';
+  document.getElementById('modal-msg').className = 'modal-msg';
+  document.getElementById('intentos').textContent = '';
+  document.getElementById('modal-pin').classList.add('show');
+  setTimeout(function(){ document.getElementById('pin-1').focus(); }, 50);
+}
+
+function cerrarModal(){
+  document.getElementById('modal-pin').classList.remove('show');
+}
+
+// Cerrar al hacer clic fuera de la tarjeta
+document.getElementById('modal-pin').addEventListener('click', function(e){
+  if(e.target === this) cerrarModal();
+});
+
+// Cerrar con ESC
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && document.getElementById('modal-pin').classList.contains('show')) cerrarModal();
+});
+
+// Auto-avance entre dígitos
+document.querySelectorAll('.pin-digit').forEach(function(d, idx, arr){
+  d.addEventListener('input', function(){
+    this.value = this.value.replace(/\D/g,'');
+    if(this.value && idx < arr.length-1) arr[idx+1].focus();
+    // Si los 4 dígitos están completos, validar automáticamente
+    if(arr[0].value && arr[1].value && arr[2].value && arr[3].value){
+      verificarPin();
+    }
+  });
+  d.addEventListener('keydown', function(e){
+    if(e.key === 'Backspace' && !this.value && idx > 0) arr[idx-1].focus();
+    if(e.key === 'Enter') verificarPin();
+    if(e.key === 'ArrowLeft' && idx > 0) arr[idx-1].focus();
+    if(e.key === 'ArrowRight' && idx < arr.length-1) arr[idx+1].focus();
+  });
+  // Pegado de 4 dígitos
+  d.addEventListener('paste', function(e){
+    e.preventDefault();
+    const data = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,4);
+    for(let i=0;i<4;i++){ arr[i].value = data[i] || ''; }
+    if(data.length === 4) verificarPin();
+  });
+});
+
+/* ============================================================
+   4) VERIFICACIÓN DEL PIN Y REVELACIÓN DE SOLUCIONES
+   ============================================================ */
+function verificarPin(){
+  if(window.__auth.bloqueado){
+    mostrarMensaje('Demasiados intentos fallidos. Recarga la página para volver a intentarlo.', 'error');
+    return;
+  }
+  const d1 = document.getElementById('pin-1').value;
+  const d2 = document.getElementById('pin-2').value;
+  const d3 = document.getElementById('pin-3').value;
+  const d4 = document.getElementById('pin-4').value;
+  const entrada = (d1+d2+d3+d4).padEnd(4,'_');
+
+  if(entrada === window.__auth.clave){
+    // Éxito: revela todas las soluciones
+    document.querySelectorAll('.pin-digit').forEach(d => d.classList.add('ok'));
+    mostrarMensaje('PIN correcto. Revelando soluciones...', 'ok');
+    setTimeout(function(){
+      document.querySelectorAll('.solucion-content').forEach(function(s){
+        s.classList.add('visible');
+      });
+      // Reemplaza los bloques bloqueados por un aviso de "revelado"
+      document.querySelectorAll('.solucion-locked').forEach(function(b){
+        b.style.opacity = '0.5';
+        b.style.pointerEvents = 'none';
+        b.innerHTML = '<div class="lock-icon">🔓</div><h4>Soluciones reveladas</h4><p>Las soluciones de todos los retos están ahora visibles más abajo en cada reto. Usa el botón "Ocultar respuestas" para volver a ocultarlas.</p>';
+      });
+      // Insertar botón para ocultar
+      if(!document.getElementById('btn-ocultar')){
+        const btn = document.createElement('button');
+        btn.id = 'btn-ocultar';
+        btn.className = 'ocultar-respuestas visible';
+        btn.textContent = '🔒 Ocultar respuestas de nuevo';
+        btn.style.display = 'inline-block';
+        btn.onclick = function(){
+          document.querySelectorAll('.solucion-content').forEach(s => s.classList.remove('visible'));
+          // Restaurar los bloques locked
+          document.querySelectorAll('.solucion-locked').forEach(function(b,i){
+            b.style.opacity = '1';
+            b.style.pointerEvents = 'auto';
+            const reto = ['Reto 1','Reto 2','Reto 3'][i];
+            b.innerHTML = '<div class="lock-icon">🔒</div><h4>Solución del '+reto+' protegida por PIN docente</h4><p>Las soluciones han sido ocultadas nuevamente. Vuelve a introducir el PIN para revelarlas.</p><button class="ver-respuestas" onclick="abrirModal()"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> Ver respuesta del '+reto+'</button>';
+          });
+          btn.remove();
+        };
+        // Añadir el botón al final del main, en la pestaña activa
+        document.querySelector('#caso-practico').appendChild(btn);
+      }
+      cerrarModal();
+    }, 700);
+  } else {
+    // Error
+    window.__auth.intentos++;
+    document.querySelectorAll('.pin-digit').forEach(d => { d.classList.add('error'); d.classList.remove('ok'); });
+    const restantes = window.__auth.maxIntentos - window.__auth.intentos;
+    if(restantes <= 0){
+      window.__auth.bloqueado = true;
+      mostrarMensaje('Demasiados intentos fallidos. Recarga la página para volver a intentarlo.', 'error');
+      document.getElementById('intentos').textContent = '';
+    } else {
+      mostrarMensaje('PIN incorrecto. Quedan ' + restantes + ' intento(s).', 'error');
+      document.getElementById('intentos').textContent = 'Intentos: ' + window.__auth.intentos + ' / ' + window.__auth.maxIntentos;
+      setTimeout(function(){
+        document.querySelectorAll('.pin-digit').forEach(d => { d.value=''; d.classList.remove('error'); });
+        document.getElementById('pin-1').focus();
+      }, 600);
+    }
+  }
+}
+
+function mostrarMensaje(texto, tipo){
+  const msg = document.getElementById('modal-msg');
+  msg.textContent = texto;
+  msg.className = 'modal-msg ' + (tipo === 'ok' ? 'ok' : '');
+}
+
+/* ============================================================
+   5) DESCARGAR HTML Y COPIAR CÓDIGO
+   ============================================================ */
+function descargarHTML(){
+  // Obtiene el HTML completo (incluido el DOCTYPE)
+  const doctype = '<!DOCTYPE html>\n';
+  const html = document.documentElement.outerHTML;
+  const contenido = doctype + html;
+  const blob = new Blob([contenido], {type: 'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Unidad1_Fundamentos_TI_Caso_RCA.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 200);
+  mostrarFeedback('descarga');
+}
+
+function copiarCodigo(){
+  const doctype = '<!DOCTYPE html>\n';
+  const html = document.documentElement.outerHTML;
+  const contenido = doctype + html;
+  // Usa la Clipboard API moderna con fallback a execCommand
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(contenido).then(function(){
+      mostrarFeedback('copia');
+    }).catch(function(){
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = contenido;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); mostrarFeedback('copia'); } catch(e){ mostrarFeedback('copia-error'); }
+      document.body.removeChild(ta);
+    });
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = contenido;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); mostrarFeedback('copia'); } catch(e){ mostrarFeedback('copia-error'); }
+    document.body.removeChild(ta);
+  }
+}
+
+function mostrarFeedback(tipo){
+  const fb = document.getElementById('feedback-' + tipo);
+  if(fb){
+    fb.classList.add('visible');
+    setTimeout(function(){ fb.classList.remove('visible'); }, 2500);
+    return;
+  }
+  // Crea feedback si no existe
+  const div = document.createElement('div');
+  div.id = 'feedback-' + tipo;
+  div.className = 'copy-feedback visible';
+  const msg = tipo === 'copia' ? '✓ Código copiado al portapapeles' :
+              tipo === 'descarga' ? '✓ Descarga iniciada...' :
+              '✗ No se pudo copiar. Usa el botón Descargar.';
+  div.textContent = msg;
+  // Añadir al toolbar más cercano o al body
+  const toolbar = document.querySelector('.toolbar');
+  if(toolbar){ toolbar.appendChild(div); }
+  else { document.body.appendChild(div); }
+  setTimeout(function(){
+    div.classList.remove('visible');
+    setTimeout(function(){ div.remove(); }, 250);
+  }, 2500);
+}
+
+/* ============================================================
+   6) IMPEDIR VER LAS SOLUCIONES VÍA INSPECCIÓN DEL DOM
+   Las soluciones están en el HTML pero con clase .solucion-content
+   (display:none). El estudiante curioso podría intentar mostrarlas
+   modificando el DOM. Esto es aceptable desde el punto de vista
+   académico (no hay seguridad real en cliente) pero al menos
+   dificultamos la exposición accidental.
+   ============================================================ */
+</script>
+</body>
+</html>
