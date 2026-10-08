@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TICs en la Ingeniería Industrial | Guía Académica</title>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2b6cb0;
+            --accent-color: #c53030;
+            --bg-color: #f7fafc;
+            --surface-color: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #4a5568;
+            --border-color: #e2e8f0;
+            --highlight-bg: #edf2f7;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .academic-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        header.academic-header {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 32px 40px;
+            border-bottom: 4px solid var(--secondary-color);
+        }
+
+        .header-meta {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #cbd5e0;
+            margin-bottom: 6px;
+        }
+
+        .academic-header h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .academic-header p {
+            font-size: 1rem;
+            color: #e2e8f0;
+        }
+
+        /* Pestañas de Navegación */
+        .tabs-nav {
+            display: flex;
+            background: #edf2f7;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 16px 24px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+            background-color: #e2e8f0;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            background-color: var(--surface-color);
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        /* Contenedores de Sección */
+        .tab-content {
+            display: none;
+            padding: 36px 40px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        h2.section-title {
+            font-size: 1.45rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h3.subsection-title {
+            font-size: 1.15rem;
+            color: var(--secondary-color);
+            margin: 24px 0 12px 0;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--text-main);
+            text-align: justify;
+        }
+
+        /* Callout Académico */
+        .academic-callout {
+            background-color: #ebf8ff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .academic-callout p {
+            margin: 0;
+            color: #2c5282;
+            font-size: 0.95rem;
+        }
+
+        /* Tablas Técnicas */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table.academic-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            text-align: left;
+        }
+
+        table.academic-table th, table.academic-table td {
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        table.academic-table th {
+            background-color: #edf2f7;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        table.academic-table tr:nth-child(even) {
+            background-color: #f7fafc;
+        }
+
+        /* Diagrama de Flujo Visual */
+        .diagram-container {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 24px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid #4a5568;
+        }
+
+        /* Tarjetas de Casos y Actividades */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .activity-card {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .activity-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+
+        .badge-act {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .solution-box {
+            background-color: #f0fff4;
+            border-left: 3px solid #38a169;
+            padding: 12px 16px;
+            margin-top: 12px;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.9rem;
+            color: #22543d;
+        }
+
+        footer.academic-footer {
+            background-color: #edf2f7;
+            padding: 20px 40px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .tab-content { padding: 24px 20px; }
+            header.academic-header { padding: 24px 20px; }
+            .academic-header h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="academic-container">
+    <!-- Encabezado Institucional -->
+    <header class="academic-header">
+        <div class="header-meta">Facultad de Ingeniería • Fundamentos de Sistemas de Información</div>
+        <h1>Tecnologías de la Información en la Ingeniería Industrial</h1>
+        <p>Módulo de Medios Técnicos, Administración de Sistemas y Aplicación de Gestión (Caso de Estudio Zara)</p>
+    </header>
+
+    <!-- Barra de Pestañas -->
+    <nav class="tabs-nav" role="tablist">
+        <button class="tab-btn active" onclick="switchTab(event, 'tab-medios')">1. Medios Técnicos</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-admin')">2. Administración de Sistemas</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-erp-mes')">3. Sistemas ERP vs. MES</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-ciclo')">4. Ciclo de Datos</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-taller')">5. Taller de Análisis</button>
+    </nav>
+
+    <!-- Pestaña 1: Medios Técnicos -->
+    <section id="tab-medios" class="tab-content active">
+        <h2 class="section-title">1. Medios Técnicos para Implementar la Tecnología de la Información</h2>
+        <p>En el marco de la Ingeniería Industrial, los <strong>medios técnicos</strong> comprenden el conjunto estructurado de dispositivos físicos (hardware), canales de transmisión (redes) y plataformas lógicas (software) destinados a digitalizar y agilizar el flujo de materiales e información en la cadena de valor.</p>
+        
+        <div class="academic-callout">
+            <p><strong>Principio de Ingeniería:</strong> El propósito de los medios técnicos no es la programación en sí misma, sino la eliminación sistemática de los tiempos muertos informacionales, garantizando que una decisión productiva se tome en tiempo real.</p>
+        </div>
+
+        <h3 class="subsection-title">Matriz de Componentes Técnicos (Aplicación Caso Zara)</h3>
+        <div class="table-responsive">
+            <table class="academic-table">
+                <thead>
+                    <tr>
+                        <th>Medio Técnico</th>
+                        <th>Definición Operativa</th>
+                        <th>Función Específica en el Proceso</th>
+                        <th>Impacto en la Eficiencia Industrial</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>RFID (Radio-Frequency Identification)</strong></td>
+                        <td>Microchip con antena de radiofrecuencia incorporado en la alarma de seguridad de cada prenda.</td>
+                        <td>Lectura masiva y remota en arcos automáticos sin necesidad de contacto visual ni apertura de bultos.</td>
+                        <td>Capacidad de procesar hasta 1.000 prendas por minuto. Eliminación de cuellos de botella en despacho.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Terminales POS (Punto de Venta)</strong></td>
+                        <td>Hardware transaccional computarizado localizado en tiendas físicas a nivel mundial.</td>
+                        <td>Captura la baja del producto en el instante en que el consumidor realiza el pago en caja.</td>
+                        <td>Conversión inmediata de la demanda comercial en un dato de reposición para manufactura.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Máquinas de Corte CNC</strong></td>
+                        <td>Equipamiento industrial guiado por control numérico por computadora.</td>
+                        <td>Corte automatizado de telas mediante coordenadas programadas enviadas directamente desde planta.</td>
+                        <td>Aprovechamiento óptimo de tela (reducción de mermas) y uniformidad milimétrica en lotes.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Redes y Autopistas de Datos</strong></td>
+                        <td>Infraestructura de comunicación global segura (enlaces industriales de alta velocidad).</td>
+                        <td>Interconexión síncrona entre terminales POS de tiendas globales, almacenes y servidores centrales.</td>
+                        <td>Sustitución de reportes manuales o correos por transmisión de datos sin latencia.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Pestaña 2: Administración de Sistemas -->
+    <section id="tab-admin" class="tab-content">
+        <h2 class="section-title">2. Administración de Sistemas: Conceptos, Características y Estructuras</h2>
+        <p>La <strong>Administración de Sistemas</strong> es la función operativa y directiva encargada de garantizar la disponibilidad, integridad, seguridad y rendimiento continuo de los entornos de hardware y software corporativos.</p>
+        
+        <div class="academic-callout">
+            <p><strong>Analogía de Planta:</strong> Para un ingeniero industrial, la administración de sistemas equivale al plan de mantenimiento preventivo y confiabilidad de maquinaria: si un servidor se detiene, la línea productiva queda a ciegas.</p>
+        </div>
+
+        <h3 class="subsection-title">Pilares Característicos del Sistema</h3>
+        <div class="table-responsive">
+            <table class="academic-table">
+                <thead>
+                    <tr>
+                        <th>Característica</th>
+                        <th>Concepto Teórico</th>
+                        <th>Manifestación en la Cadena de Zara</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Alta Disponibilidad (24/7)</strong></td>
+                        <td>Capacidad de la infraestructura para mantenerse operativa sin caídas imprevistas.</td>
+                        <td>Las tiendas operan en distintos husos horarios; la recepción de datos de venta no puede detenerse.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Integridad de Datos</strong></td>
+                        <td>Consistencia, exactitud y validez de la información registrada en el sistema.</td>
+                        <td>Garantía de que 1.000 prendas leídas en un túnel RFID equivalgan exactamente a 1.000 unidades en el inventario contable.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Escalabilidad</strong></td>
+                        <td>Habilidad de la arquitectura para soportar incrementos masivos de carga operativa.</td>
+                        <td>Capacidad de absorber picos masivos de transacciones durante promociones y campañas de temporada.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Seguridad y Control de Roles</strong></td>
+                        <td>Asignación estricta de privilegios de acceso a la base de datos según el puesto de trabajo.</td>
+                        <td>El personal de mostrador no puede modificar parámetros de corte, y el operador CNC no altera balances contables.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Pestaña 3: ERP vs MES -->
+    <section id="tab-erp-mes" class="tab-content">
+        <h2 class="section-title">3. Sistemas de Gestión Empresarial: ERP frente a MES</h2>
+        <p>En las organizaciones industriales de manufactura avanzada, la información no se procesa en una única plataforma genérica, sino que se distribuye según el nivel de decisión jerárquica y el horizonte temporal.</p>
+
+        <h3 class="subsection-title">Estructura Jerárquica de Control</h3>
+        <div class="diagram-container">
+┌────────────────────────────────────────────────────────────────────────┐
+│                   NIVEL 4: SISTEMA ERP (Nivel Corporativo)             │
+│                      "El Cerebro Estratégico Global"                   │
+│   • Ubicación: Oficinas centrales y dirección.                         │
+│   • Función: Finanzas, compras globales, cálculo de reabastecimiento.  │
+│   • Pregunta clave: ¿Qué debemos fabricar, en qué volumen y costo?     │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │  ▲
+       Envía Órdenes de Producción  │  │  Reporta Despacho y Stock Real
+                                    ▼  │
+┌────────────────────────────────────────────────────────────────────────┐
+│                   NIVEL 3: SISTEMA MES (Nivel de Planta)               │
+│                      "El Sistema Nervioso de la Fábrica"               │
+│   • Ubicación: Taller de confección, mesas CNC y planchado.            │
+│   • Función: Monitoreo minuto a minuto, asignación de turnos.          │
+│   • Pregunta clave: ¿Cómo se ejecuta el corte y qué máquina falló?     │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │  ▲
+              Comandos de Operación │  │  Señales de Avance y Paradas
+                                    ▼  │
+┌────────────────────────────────────────────────────────────────────────┐
+│                   NIVELES 1 Y 2: PLANTA FÍSICA Y CAPTURA               │
+│   • Máquinas de Corte CNC | Arcos de Lectura RFID | Terminales POS     │
+└────────────────────────────────────────────────────────────────────────┘
+        </div>
+
+        <h3 class="subsection-title">Matriz Comparativa de Ingeniería</h3>
+        <div class="table-responsive">
+            <table class="academic-table">
+                <thead>
+                    <tr>
+                        <th>Criterio</th>
+                        <th>Sistema ERP (Nivel 4)</th>
+                        <th>Sistema MES (Nivel 3)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Área de Acción</strong></td>
+                        <td>Sede administrativa, finanzas, abastecimiento global.</td>
+                        <td>Suelo de fábrica, mesas de corte, líneas de ensamblaje.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Horizonte Temporal</strong></td>
+                        <td>Mediano y largo plazo (semanas, meses, ejercicios fiscales).</td>
+                        <td>Tiempo real y corto plazo (minutos, horas, turnos).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Objetivo Central</strong></td>
+                        <td>Determinar requerimientos de producción y presupuestos.</td>
+                        <td>Controlar la ejecución física de las órdenes y uso de máquinas.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Variables Clave</strong></td>
+                        <td>Inventario general valorizado, costos globales de tela.</td>
+                        <td>Tiempos muertos de máquina, mermas de corte, defectos por lote.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Pestaña 4: Ciclo de Datos -->
+    <section id="tab-ciclo" class="tab-content">
+        <h2 class="section-title">4. El Ciclo de Datos Integrado: Del Mostrador a la Fábrica</h2>
+        <p>El modelo industrial de Zara permite comprimir el ciclo de diseño y entrega de 9 meses a 2 o 3 semanas. Este flujo sincronizado de datos opera en cuatro etapas secuenciales:</p>
+
+        <div class="card-grid">
+            <div class="activity-card">
+                <span class="badge-act">Etapa 1</span>
+                <h4>Captura Automática en Tienda (Terminal POS & RFID)</h4>
+                <p>En el momento en que un cliente adquiere un artículo en cualquier tienda física del mundo, el chip RFID es leído en la caja registradora, descontando de forma inmediata la existencia en el stock local.</p>
+            </div>
+
+            <div class="activity-card">
+                <span class="badge-act">Etapa 2</span>
+                <h4>Consolidación y Planificación Centralizada (Sistema ERP)</h4>
+                <p>El sistema ERP consolida a nivel mundial las ventas, identifica patrones de demanda semanal y emite automáticamente las órdenes macro de reabastecimiento para los modelos de alta rotación.</p>
+            </div>
+
+            <div class="activity-card">
+                <span class="badge-act">Etapa 3</span>
+                <h4>Secuenciación y Ejecución Operativa (Sistema MES)</h4>
+                <p>El sistema MES descompone la orden corporativa en planes de corte diarios, valida el stock de rollos de tela y coordina las mesas automáticas CNC asignando cargas de trabajo según el turno.</p>
+            </div>
+
+            <div class="activity-card">
+                <span class="badge-act">Etapa 4</span>
+                <h4>Trazabilidad y Despacho Automatizado (Arcos RFID)</h4>
+                <p>Una vez confeccionadas, las prendas ingresan en cajas que atraviesan túneles con arcos lectores RFID. Se verifica el contenido sin abrir los paquetes y se valida la salida en el ERP para transporte.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pestaña 5: Taller de Análisis -->
+    <section id="tab-taller" class="tab-content">
+        <h2 class="section-title">5. Taller de Aplicación y Discusión en Clase</h2>
+        <p>Casos prácticos orientados a desarrollar el criterio técnico del estudiante de primer semestre sin requerir conocimientos de programación:</p>
+
+        <div class="card-grid">
+            <div class="activity-card">
+                <span class="badge-act">Actividad 1</span>
+                <h4>Falla de Integración: ERP sin Sistema MES</h4>
+                <p><strong>Escenario:</strong> Una firma textil invierte en un ERP de última generación para finanzas, pero carece de un sistema MES en los talleres de confección. ¿Qué problemas de comunicación y control surgen?</p>
+                <div class="solution-box">
+                    <strong>Criterio de Resolución:</strong> Se genera una ruptura informativa: la orden del ERP debe imprimirse en papel. La gerencia ignora en qué estado se encuentra el corte, si hay cuellos de botella o cuánto tejido se desperdició, provocando desfases en las entregas.
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <span class="badge-act">Actividad 2</span>
+                <h4>Estudio de Tiempos y Métodos: Código de Barras vs. RFID</h4>
+                <p><strong>Escenario:</strong> Compare la recepción de 10.000 prendas mediante escaneo manual unitario frente al uso de túneles automáticos RFID (1.000 prendas/minuto).</p>
+                <div class="solution-box">
+                    <strong>Criterio de Resolución:</strong> El escaneo unitario consume múltiples horas-hombre y es susceptible a errores de conteo manual. El arco RFID procesa el cargamento completo en minutos y con las cajas selladas, maximizando la rotación del centro de distribución.
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <span class="badge-act">Actividad 3</span>
+                <h4>Contingencia Operativa: Parada de Máquina CNC</h4>
+                <p><strong>Escenario:</strong> Una mesa de corte CNC se detiene 40 minutos en el turno matutino debido a una falla mecánica. ¿Qué sistema debe registrar el evento y qué acción toma el ingeniero?</p>
+                <div class="solution-box">
+                    <strong>Criterio de Resolución:</strong> El incidente debe ser registrado en tiempo real por el <strong>MES</strong>. Con este indicador de parada, el ingeniero industrial puede redirigir las órdenes de corte a otra máquina libre para salvaguardar la fecha de despacho comprometida.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pie de Página Institucional -->
+    <footer class="academic-footer">
+        <div>Introducción a las Tecnologías de la Información y Comunicación (TICs)</div>
+        <div>Carrera de Ingeniería Industrial • Material Académico Interactivo</div>
+    </footer>
+</div>
+
+<script>
+    function switchTab(event, tabId) {
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
