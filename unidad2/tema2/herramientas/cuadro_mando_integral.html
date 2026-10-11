@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Cuadro de Mando Integral — TICS Aplicada a la Ingeniería</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --primary: #1E3A8A;
+    --accent: #1E40AF;
+    --accent-light: #DBEAFE;
+    --border: #9CA3AF;
+    --text-primary: #1F2937;
+    --text-muted: #6B7280;
+    --bg: #FFFFFF;
+    --card-bg: #F9FAFB;
+
+    /* Perspective colors (matching reference image) */
+    --persp-financiera: #1E3A8A;       /* azul oscuro */
+    --persp-cliente: #166534;          /* verde oscuro */
+    --persp-procesos: #92400e;         /* marrón/ámbar oscuro */
+    --persp-aprendizaje: #991B1B;      /* rojo oscuro */
+
+    /* OEE circle colors */
+    --oee-circle-bg: #1F2937;
+    --oee-circle-label: #FFFFFF;
+    --oee-circle-value: #FBBF24;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Liberation Sans', 'Segoe UI', Tahoma, sans-serif;
+    background: #F3F4F6;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--primary);
+    color: white;
+    padding: 18px 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  header h1 { font-size: 22px; margin-bottom: 4px; }
+  header .subtitle { font-size: 13px; opacity: 0.85; }
+
+  /* ===== CONTROLS BAR ===== */
+  .controls-bar {
+    background: white;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .controls-bar .ctrl-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-right: 12px;
+    border-right: 1px solid var(--border);
+  }
+  .controls-bar .ctrl-group:last-child { border-right: none; }
+  .controls-bar label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .controls-bar input[type="text"], .controls-bar input[type="date"] {
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: white;
+  }
+  .controls-bar input[type="text"]:focus, .controls-bar input[type="date"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-light);
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-secondary { background: white; color: var(--primary); border: 1.5px solid var(--primary); }
+  .btn-secondary:hover { background: var(--accent-light); }
+  .btn-success { background: #166534; color: white; }
+  .btn-success:hover { opacity: 0.9; }
+  .btn-danger { background: #991B1B; color: white; }
+  .btn-danger:hover { opacity: 0.9; }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main-container {
+    padding: 16px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ===== STUDENT BADGE ===== */
+  .student-badge {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 6px;
+  }
+  .student-badge .field-display {
+    display: flex;
+    flex-direction: column;
+  }
+  .student-badge .field-label {
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+  .student-badge .field-value {
+    font-size: 12px;
+    color: var(--text-primary);
+  }
+
+  /* ===== BOARD TITLE ===== */
+  .board-title {
+    text-align: center;
+    padding: 6px 0 14px 0;
+  }
+  .board-title h2 {
+    font-size: 20px;
+    color: var(--text-primary);
+    font-weight: 700;
+    margin: 0;
+  }
+  .board-title .subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  /* ===== SCORECARD (2x2 GRID) ===== */
+  .scorecard-wrapper {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 18px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 580px;
+  }
+
+  .perspective {
+    background: white;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .perspective.financiera { border-color: var(--persp-financiera); }
+  .perspective.cliente { border-color: var(--persp-cliente); }
+  .perspective.procesos { border-color: var(--persp-procesos); }
+  .perspective.aprendizaje { border-color: var(--persp-aprendizaje); }
+
+  .persp-header {
+    color: white;
+    padding: 10px 14px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .perspective.financiera .persp-header { background: var(--persp-financiera); }
+  .perspective.cliente .persp-header { background: var(--persp-cliente); }
+  .perspective.procesos .persp-header { background: var(--persp-procesos); }
+  .perspective.aprendizaje .persp-header { background: var(--persp-aprendizaje); }
+
+  .persp-body {
+    padding: 10px 14px 14px 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .kpi-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: center;
+    padding: 6px 8px;
+    background: var(--card-bg);
+    border-radius: 4px;
+    border-left: 3px solid var(--border);
+    font-size: 12px;
+    transition: background 0.15s;
+  }
+  .kpi-row:hover { background: var(--accent-light); }
+  .perspective.financiera .kpi-row { border-left-color: var(--persp-financiera); }
+  .perspective.cliente .kpi-row { border-left-color: var(--persp-cliente); }
+  .perspective.procesos .kpi-row { border-left-color: var(--persp-procesos); }
+  .perspective.aprendizaje .kpi-row { border-left-color: var(--persp-aprendizaje); }
+
+  .kpi-name {
+    color: var(--text-primary);
+    font-weight: 600;
+    cursor: text;
+    padding: 2px 4px;
+    border-radius: 3px;
+    outline: none;
+  }
+  .kpi-name:focus, .kpi-name[contenteditable="true"]:focus {
+    background: white;
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .kpi-value {
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    text-align: right;
+    min-width: 80px;
+    cursor: text;
+    outline: none;
+  }
+  .kpi-value:focus, .kpi-value[contenteditable="true"]:focus {
+    background: white;
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .perspective.financiera .kpi-value { color: var(--persp-financiera); }
+  .perspective.cliente .kpi-value { color: var(--persp-cliente); }
+  .perspective.procesos .kpi-value { color: var(--persp-procesos); }
+  .perspective.aprendizaje .kpi-value { color: var(--persp-aprendizaje); }
+
+  .kpi-actions {
+    display: none;
+    gap: 3px;
+    margin-left: 4px;
+  }
+  .kpi-row:hover .kpi-actions { display: flex; }
+  .kpi-actions button {
+    background: transparent;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 11px;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    line-height: 1;
+    padding: 0;
+  }
+  .kpi-actions button:hover { background: #E5E7EB; color: var(--text-primary); }
+  .kpi-actions .btn-del:hover { background: #FEE2E2; color: var(--persp-aprendizaje); }
+
+  .add-kpi-btn {
+    display: block;
+    width: 100%;
+    padding: 5px;
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--text-muted);
+    font-size: 11px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 4px;
+    font-family: inherit;
+  }
+  .add-kpi-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+
+  /* ===== OEE CENTRAL CIRCLE ===== */
+  .oee-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 130px;
+    height: 130px;
+    background: var(--oee-circle-bg);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    border: 4px solid white;
+    cursor: pointer;
+  }
+  .oee-circle:hover { transform: translate(-50%, -50%) scale(1.05); }
+  .oee-circle .oee-label {
+    color: var(--oee-circle-label);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .oee-circle .oee-value {
+    color: var(--oee-circle-value);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .oee-target-label {
+    position: absolute;
+    top: calc(50% + 75px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 1.5px solid var(--text-primary);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-primary);
+    z-index: 11;
+    white-space: nowrap;
+  }
+
+  /* ===== MODAL FOR OEE ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  .modal h3 {
+    font-size: 15px;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+  .modal .field { margin-bottom: 10px; }
+  .modal label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .modal input[type="text"], .modal input[type="number"] {
+    width: 100%;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 14px;
+  }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--text-primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 9999;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.success { background: #166534; }
+  #toast.error { background: #991B1B; }
+  #toast.warning { background: #92400e; }
+
+  /* ===== FOOTER ===== */
+  .footer-note {
+    text-align: center;
+    padding: 14px 20px 24px 20px;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-style: italic;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: white; }
+    header, .controls-bar, .footer-note { display: none; }
+    .main-container { padding: 0; max-width: none; }
+    .kpi-actions, .add-kpi-btn { display: none !important; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 800px) {
+    .scorecard-wrapper { grid-template-columns: 1fr; min-height: auto; }
+    .oee-circle { position: relative; top: auto; left: auto; transform: none; margin: 0 auto; }
+    .oee-circle:hover { transform: scale(1.05); }
+    .oee-target-label { position: relative; top: auto; left: auto; transform: none; margin: 8px auto; display: inline-block; }
+    .controls-bar { padding: 10px; }
+    .controls-bar .ctrl-group { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Generador de Cuadro de Mando Integral</h1>
+  <div class="subtitle">Curso 2026-2 TICS APLICADA A LA INGENIERIA · PRESENCIAL 1/3 — ING-INDUSTRIAL</div>
+</header>
+
+<!-- ===== CONTROLS BAR ===== -->
+<div class="controls-bar">
+  <div class="ctrl-group">
+    <label>Título:</label>
+    <input type="text" id="scorecard-title-input" value="Cuadro de Mando Integral: Recuperación del OEE en piso de producción" style="width: 340px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Subtítulo:</label>
+    <input type="text" id="scorecard-subtitle-input" value="Indicadores MTBF y MTTR vinculados al desempeño operativo" style="width: 280px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Estudiante:</label>
+    <input type="text" id="student-name" placeholder="Nombre" style="width: 120px;">
+    <input type="text" id="student-code" placeholder="Código" style="width: 90px;">
+    <input type="text" id="student-group" placeholder="Grupo" style="width: 60px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Profesor:</label>
+    <input type="text" id="student-professor" placeholder="Profesor" style="width: 130px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Fecha:</label>
+    <input type="date" id="student-date">
+  </div>
+  <div class="ctrl-group" style="margin-left: auto;">
+    <button class="btn btn-primary" onclick="exportToPDF()">PDF</button>
+    <button class="btn btn-secondary" onclick="window.print()">Imprimir</button>
+    <button class="btn btn-success" onclick="saveToStorage()">Guardar</button>
+    <button class="btn btn-secondary" onclick="loadFromStorage()">Cargar</button>
+    <button class="btn btn-secondary" onclick="loadTemplate('parts')">Plantilla</button>
+    <button class="btn btn-secondary" onclick="loadTemplate('blank')">Limpiar</button>
+    <button class="btn btn-danger" onclick="resetAll()">Reiniciar</button>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main-container" id="main-container">
+
+  <!-- Student badge -->
+  <div class="student-badge" id="student-badge">
+    <div class="field-display">
+      <span class="field-label">Estudiante</span>
+      <span class="field-value" id="badge-name">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Código</span>
+      <span class="field-value" id="badge-code">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Grupo</span>
+      <span class="field-value" id="badge-group">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Profesor</span>
+      <span class="field-value" id="badge-professor">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Fecha</span>
+      <span class="field-value" id="badge-date">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Curso</span>
+      <span class="field-value">2026-2 TICS Ing. Industrial</span>
+    </div>
+  </div>
+
+  <!-- Board title -->
+  <div class="board-title">
+    <h2 id="display-title">Cuadro de Mando Integral: Recuperación del OEE en piso de producción</h2>
+    <div class="subtitle" id="display-subtitle">Indicadores MTBF y MTTR vinculados al desempeño operativo</div>
+  </div>
+
+  <!-- Scorecard 2x2 grid -->
+  <div class="scorecard-wrapper" id="scorecard-wrapper">
+
+    <!-- ===== PERSPECTIVA FINANCIERA (top-left) ===== -->
+    <div class="perspective financiera" data-persp="financiera">
+      <div class="persp-header">PERSPECTIVA FINANCIERA</div>
+      <div class="persp-body" id="body-financiera"></div>
+      <button class="add-kpi-btn" onclick="addKpi('financiera')">+ Agregar indicador</button>
+    </div>
+
+    <!-- ===== PERSPECTIVA DEL CLIENTE (top-right) ===== -->
+    <div class="perspective cliente" data-persp="cliente">
+      <div class="persp-header">PERSPECTIVA DEL CLIENTE</div>
+      <div class="persp-body" id="body-cliente"></div>
+      <button class="add-kpi-btn" onclick="addKpi('cliente')">+ Agregar indicador</button>
+    </div>
+
+    <!-- ===== PERSPECTIVA PROCESOS INTERNOS (bottom-left) ===== -->
+    <div class="perspective procesos" data-persp="procesos">
+      <div class="persp-header">PERSPECTIVA PROCESOS INTERNOS</div>
+      <div class="persp-body" id="body-procesos"></div>
+      <button class="add-kpi-btn" onclick="addKpi('procesos')">+ Agregar indicador</button>
+    </div>
+
+    <!-- ===== PERSPECTIVA APRENDIZAJE Y CRECIMIENTO (bottom-right) ===== -->
+    <div class="perspective aprendizaje" data-persp="aprendizaje">
+      <div class="persp-header">PERSPECTIVA APRENDIZAJE Y CRECIMIENTO</div>
+      <div class="persp-body" id="body-aprendizaje"></div>
+      <button class="add-kpi-btn" onclick="addKpi('aprendizaje')">+ Agregar indicador</button>
+    </div>
+
+    <!-- ===== OEE CENTRAL CIRCLE ===== -->
+    <div class="oee-circle" id="oee-circle" onclick="openOeeModal()" title="Clic para editar OEE">
+      <div class="oee-label" id="oee-label">OEE</div>
+      <div class="oee-value" id="oee-value">78%</div>
+    </div>
+    <div class="oee-target-label" id="oee-target-label">(Objetivo: 85%)</div>
+
+  </div>
+
+  <div class="footer-note" id="footer-note">
+    Las cuatro perspectivas (financiera, cliente, procesos internos, aprendizaje y crecimiento) convergen en el OEE, indicador rey de la gestión operacional industrial. Las métricas de TI (MTBF, MTTR, disponibilidad) se conectan con la rentabilidad del negocio a través del cuadro de mando integral.
+  </div>
+</div>
+
+<!-- ===== MODAL FOR OEE EDIT ===== -->
+<div class="modal-overlay" id="oee-modal">
+  <div class="modal">
+    <h3>Editar Indicador Central</h3>
+    <div class="field">
+      <label>Nombre del indicador (ej: OEE, ROI, EBITDA)</label>
+      <input type="text" id="edit-oee-label" value="OEE">
+    </div>
+    <div class="field">
+      <label>Valor actual</label>
+      <input type="text" id="edit-oee-value" value="78%" placeholder="Ej: 78%, 99.5%, +18%">
+    </div>
+    <div class="field">
+      <label>Objetivo (opcional)</label>
+      <input type="text" id="edit-oee-target" value="85%" placeholder="Ej: 85%, 99.9%, +25%">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeOeeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveOee()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL FOR ADD KPI ===== -->
+<div class="modal-overlay" id="kpi-modal">
+  <div class="modal">
+    <h3 id="kpi-modal-title">Agregar Indicador</h3>
+    <div class="field">
+      <label>Nombre del indicador</label>
+      <input type="text" id="new-kpi-name" placeholder="Ej: ROI del proyecto Phoenix">
+    </div>
+    <div class="field">
+      <label>Valor</label>
+      <input type="text" id="new-kpi-value" placeholder="Ej: +18% en 6 meses">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeKpiModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveNewKpi()">Agregar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const STATE = {
+  scorecard: { title: '', subtitle: '' },
+  student: { name: '', code: '', group: '', date: '', professor: '' },
+  oee: { label: 'OEE', value: '78%', target: '85%' },
+  perspectives: {
+    financiera:  { name: 'PERSPECTIVA FINANCIERA',              kpis: [] },
+    cliente:     { name: 'PERSPECTIVA DEL CLIENTE',              kpis: [] },
+    procesos:    { name: 'PERSPECTIVA PROCESOS INTERNOS',        kpis: [] },
+    aprendizaje: { name: 'PERSPECTIVA APRENDIZAJE Y CRECIMIENTO', kpis: [] },
+  }
+};
+
+let nextKpiId = 1;
+let modalContext = { persp: null };
+
+const TEMPLATES = {
+  parts: {
+    title: 'Cuadro de Mando Integral: Recuperación del OEE en piso de producción',
+    subtitle: 'Indicadores MTBF y MTTR vinculados al desempeño operativo',
+    oee: { label: 'OEE', value: '78%', target: '85%' },
+    perspectives: {
+      financiera: [
+        { name: 'ROI del proyecto Phoenix', value: '+18% en 6 meses' },
+        { name: 'Reducción de costos por outage', value: '-32% trimestral' },
+        { name: 'Recuperación de rentabilidad', value: 'De -8% a +5%' },
+        { name: 'Penalidades evitadas por SLA', value: '$2.3M USD/año' },
+      ],
+      cliente: [
+        { name: 'Disponibilidad de servicios TI', value: '99.5% (objetivo)' },
+        { name: 'Tiempo de respuesta a incidencias', value: '< 4 horas' },
+        { name: 'Satisfacción interna (NPS)', value: '+45 (de -12)' },
+        { name: 'Cumplimiento de SLA con negocio', value: '96% (de 71%)' },
+      ],
+      procesos: [
+        { name: 'MTBF — Tiempo entre fallas', value: '480 h (de 95 h)' },
+        { name: 'MTTR — Tiempo de reparación', value: '2.5 h (de 14 h)' },
+        { name: 'Cambios exitosos al primer intento', value: '94% (de 62%)' },
+        { name: 'WIP en control (Kanban ≤ límite)', value: '2 tareas/Brent' },
+      ],
+      aprendizaje: [
+        { name: 'Capacitación cruzada del equipo', value: '80% multirol' },
+        { name: 'Documentación de procesos (runbooks)', value: '100% servicios críticos' },
+        { name: 'Adopción de prácticas DevOps', value: 'Nivel 4 (de 1)' },
+        { name: 'Rotación de personal voluntaria', value: '< 8% (de 22%)' },
+      ],
+    }
+  },
+  blank: {
+    title: 'Cuadro de Mando Integral',
+    subtitle: '',
+    oee: { label: 'OEE', value: '—', target: '—' },
+    perspectives: { financiera: [], cliente: [], procesos: [], aprendizaje: [] }
+  }
+};
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('student-date').value = new Date().toISOString().split('T')[0];
+
+  document.getElementById('scorecard-title-input').addEventListener('input', e => {
+    STATE.scorecard.title = e.target.value;
+    document.getElementById('display-title').textContent = e.target.value;
+    autosave();
+  });
+  document.getElementById('scorecard-subtitle-input').addEventListener('input', e => {
+    STATE.scorecard.subtitle = e.target.value;
+    document.getElementById('display-subtitle').textContent = e.target.value;
+    autosave();
+  });
+  ['student-name','student-code','student-group','student-date','student-professor'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateStudentBadge);
+  });
+
+  // Set defaults
+  document.getElementById('scorecard-title-input').value = TEMPLATES.parts.title;
+  document.getElementById('scorecard-subtitle-input').value = TEMPLATES.parts.subtitle;
+  STATE.scorecard.title = TEMPLATES.parts.title;
+  STATE.scorecard.subtitle = TEMPLATES.parts.subtitle;
+  document.getElementById('display-title').textContent = TEMPLATES.parts.title;
+  document.getElementById('display-subtitle').textContent = TEMPLATES.parts.subtitle;
+
+  loadTemplate('parts', false);
+  updateStudentBadge();
+});
+
+// ============================================================
+// STUDENT BADGE
+// ============================================================
+function updateStudentBadge() {
+  STATE.student.name = document.getElementById('student-name').value;
+  STATE.student.code = document.getElementById('student-code').value;
+  STATE.student.group = document.getElementById('student-group').value;
+  STATE.student.date = document.getElementById('student-date').value;
+  STATE.student.professor = document.getElementById('student-professor').value;
+
+  document.getElementById('badge-name').textContent = STATE.student.name || '—';
+  document.getElementById('badge-code').textContent = STATE.student.code || '—';
+  document.getElementById('badge-group').textContent = STATE.student.group || '—';
+  document.getElementById('badge-professor').textContent = STATE.student.professor || '—';
+  document.getElementById('badge-date').textContent = STATE.student.date ? formatDate(STATE.student.date) : '—';
+
+  autosave();
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+// ============================================================
+// RENDER PERSPECTIVES
+// ============================================================
+function renderAll() {
+  ['financiera', 'cliente', 'procesos', 'aprendizaje'].forEach(p => {
+    renderPerspective(p);
+  });
+  renderOee();
+}
+
+function renderPerspective(persp) {
+  const body = document.getElementById(`body-${persp}`);
+  body.innerHTML = '';
+  STATE.perspectives[persp].kpis.forEach(kpi => {
+    body.appendChild(createKpiElement(kpi, persp));
+  });
+}
+
+function createKpiElement(kpi, persp) {
+  const row = document.createElement('div');
+  row.className = 'kpi-row';
+
+  const name = document.createElement('div');
+  name.className = 'kpi-name';
+  name.contentEditable = 'true';
+  name.textContent = kpi.name;
+  name.addEventListener('blur', () => {
+    kpi.name = name.textContent.trim() || 'Sin nombre';
+    name.textContent = kpi.name;
+    autosave();
+  });
+  name.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); name.blur(); }
+  });
+
+  const value = document.createElement('div');
+  value.className = 'kpi-value';
+  value.contentEditable = 'true';
+  value.textContent = kpi.value;
+  value.addEventListener('blur', () => {
+    kpi.value = value.textContent.trim() || '—';
+    value.textContent = kpi.value;
+    autosave();
+  });
+  value.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); value.blur(); }
+  });
+
+  const actions = document.createElement('div');
+  actions.className = 'kpi-actions';
+  const delBtn = document.createElement('button');
+  delBtn.className = 'btn-del';
+  delBtn.textContent = '×';
+  delBtn.title = 'Eliminar indicador';
+  delBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (confirm('¿Eliminar este indicador?')) {
+      STATE.perspectives[persp].kpis = STATE.perspectives[persp].kpis.filter(k => k.id !== kpi.id);
+      renderPerspective(persp);
+      autosave();
+      showToast('Indicador eliminado', 'success');
+    }
+  });
+  actions.appendChild(delBtn);
+
+  row.appendChild(name);
+  row.appendChild(value);
+  row.appendChild(actions);
+  return row;
+}
+
+function addKpi(persp) {
+  modalContext = { persp: persp };
+  document.getElementById('kpi-modal-title').textContent = `Agregar Indicador — ${STATE.perspectives[persp].name}`;
+  document.getElementById('new-kpi-name').value = '';
+  document.getElementById('new-kpi-value').value = '';
+  document.getElementById('kpi-modal').classList.add('show');
+  setTimeout(() => document.getElementById('new-kpi-name').focus(), 100);
+}
+
+function closeKpiModal() {
+  document.getElementById('kpi-modal').classList.remove('show');
+}
+
+function saveNewKpi() {
+  const name = document.getElementById('new-kpi-name').value.trim();
+  const value = document.getElementById('new-kpi-value').value.trim();
+  if (!name) {
+    showToast('El nombre del indicador es obligatorio', 'error');
+    return;
+  }
+  const newKpi = { id: nextKpiId++, name: name, value: value || '—' };
+  STATE.perspectives[modalContext.persp].kpis.push(newKpi);
+  renderPerspective(modalContext.persp);
+  autosave();
+  closeKpiModal();
+  showToast('Indicador agregado', 'success');
+}
+
+// ============================================================
+// OEE CIRCLE
+// ============================================================
+function renderOee() {
+  document.getElementById('oee-label').textContent = STATE.oee.label || 'OEE';
+  document.getElementById('oee-value').textContent = STATE.oee.value || '—';
+  const targetLabel = document.getElementById('oee-target-label');
+  if (STATE.oee.target && STATE.oee.target !== '—') {
+    targetLabel.textContent = `(Objetivo: ${STATE.oee.target})`;
+    targetLabel.style.display = 'block';
+  } else {
+    targetLabel.style.display = 'none';
+  }
+}
+
+function openOeeModal() {
+  document.getElementById('edit-oee-label').value = STATE.oee.label || 'OEE';
+  document.getElementById('edit-oee-value').value = STATE.oee.value || '';
+  document.getElementById('edit-oee-target').value = STATE.oee.target || '';
+  document.getElementById('oee-modal').classList.add('show');
+  setTimeout(() => document.getElementById('edit-oee-value').focus(), 100);
+}
+
+function closeOeeModal() {
+  document.getElementById('oee-modal').classList.remove('show');
+}
+
+function saveOee() {
+  STATE.oee.label = document.getElementById('edit-oee-label').value.trim() || 'OEE';
+  STATE.oee.value = document.getElementById('edit-oee-value').value.trim() || '—';
+  STATE.oee.target = document.getElementById('edit-oee-target').value.trim();
+  renderOee();
+  autosave();
+  closeOeeModal();
+  showToast('Indicador central actualizado', 'success');
+}
+
+// ============================================================
+// TEMPLATES
+// ============================================================
+function loadTemplate(name, showMsg = true) {
+  const tpl = TEMPLATES[name];
+  if (!tpl) return;
+  STATE.scorecard.title = tpl.title;
+  STATE.scorecard.subtitle = tpl.subtitle;
+  document.getElementById('scorecard-title-input').value = tpl.title;
+  document.getElementById('scorecard-subtitle-input').value = tpl.subtitle;
+  document.getElementById('display-title').textContent = tpl.title;
+  document.getElementById('display-subtitle').textContent = tpl.subtitle;
+
+  STATE.oee = { ...tpl.oee };
+  nextKpiId = 1;
+  ['financiera', 'cliente', 'procesos', 'aprendizaje'].forEach(p => {
+    STATE.perspectives[p].kpis = (tpl.perspectives[p] || []).map(k => ({
+      id: nextKpiId++,
+      name: k.name,
+      value: k.value
+    }));
+  });
+  renderAll();
+  autosave();
+  if (showMsg) showToast(`Plantilla cargada: ${tpl.title.substring(0, 40)}...`, 'success');
+}
+
+// ============================================================
+// SAVE / LOAD
+// ============================================================
+function autosave() {
+  try {
+    localStorage.setItem('scorecard_autosave', JSON.stringify({
+      scorecard: STATE.scorecard,
+      student: STATE.student,
+      oee: STATE.oee,
+      perspectives: STATE.perspectives,
+      nextKpiId: nextKpiId,
+      ts: Date.now()
+    }));
+  } catch(e) {}
+}
+
+function saveToStorage() {
+  autosave();
+  showToast('Cuadro de mando guardado en el navegador', 'success');
+}
+
+function loadFromStorage() {
+  const data = localStorage.getItem('scorecard_autosave');
+  if (!data) {
+    showToast('No hay cuadro de mando guardado', 'error');
+    return;
+  }
+  try {
+    const parsed = JSON.parse(data);
+    if (parsed.scorecard) {
+      STATE.scorecard = parsed.scorecard;
+      document.getElementById('scorecard-title-input').value = STATE.scorecard.title || '';
+      document.getElementById('scorecard-subtitle-input').value = STATE.scorecard.subtitle || '';
+      document.getElementById('display-title').textContent = STATE.scorecard.title || '';
+      document.getElementById('display-subtitle').textContent = STATE.scorecard.subtitle || '';
+    }
+    if (parsed.student) {
+      STATE.student = parsed.student;
+      document.getElementById('student-name').value = STATE.student.name || '';
+      document.getElementById('student-code').value = STATE.student.code || '';
+      document.getElementById('student-group').value = STATE.student.group || '';
+      document.getElementById('student-date').value = STATE.student.date || '';
+      document.getElementById('student-professor').value = STATE.student.professor || '';
+      updateStudentBadge();
+    }
+    if (parsed.oee) {
+      STATE.oee = parsed.oee;
+    }
+    if (parsed.perspectives) {
+      STATE.perspectives = parsed.perspectives;
+      nextKpiId = parsed.nextKpiId || 100;
+      renderAll();
+    }
+    showToast('Cuadro de mando cargado', 'success');
+  } catch(e) {
+    showToast('Error al cargar el cuadro de mando', 'error');
+  }
+}
+
+function resetAll() {
+  if (!confirm('¿Reiniciar el cuadro de mando? Se perderán los cambios no guardados.')) return;
+  document.getElementById('student-name').value = '';
+  document.getElementById('student-code').value = '';
+  document.getElementById('student-group').value = '';
+  document.getElementById('student-professor').value = '';
+  STATE.student = { name: '', code: '', group: '', date: '', professor: '' };
+  updateStudentBadge();
+  loadTemplate('parts');
+  showToast('Cuadro de mando reiniciado', 'success');
+}
+
+// ============================================================
+// EXPORT TO PDF
+// ============================================================
+function exportToPDF() {
+  showToast('Generando PDF...', 'info');
+
+  const target = document.getElementById('main-container');
+  // Hide edit-only elements for cleaner PDF
+  document.querySelectorAll('.kpi-actions').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.add-kpi-btn').forEach(el => el.style.display = 'none');
+  // Make contentEditable elements look non-editable
+  document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+    el.style.outline = 'none';
+  });
+
+  html2canvas(target, {
+    scale: 2,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    logging: false,
+    windowWidth: target.scrollWidth
+  }).then(canvas => {
+    // Restore
+    document.querySelectorAll('.kpi-actions').forEach(el => el.style.display = '');
+    document.querySelectorAll('.add-kpi-btn').forEach(el => el.style.display = '');
+    document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+      el.style.outline = '';
+    });
+
+    const { jsPDF } = window.jspdf;
+    const imgData = canvas.toDataURL('image/png');
+
+    // A4 landscape
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const pageW = 297;
+    const pageH = 210;
+    const margin = 8;
+    const usableW = pageW - 2*margin;
+    const usableH = pageH - 2*margin;
+
+    const imgRatio = canvas.height / canvas.width;
+    let imgW = usableW;
+    let imgH = imgW * imgRatio;
+    if (imgH > usableH) {
+      imgH = usableH;
+      imgW = imgH / imgRatio;
+    }
+    const offsetX = (pageW - imgW) / 2;
+    const offsetY = (pageH - imgH) / 2;
+
+    pdf.addImage(imgData, 'PNG', offsetX, offsetY, imgW, imgH);
+
+    pdf.set_title(STATE.scorecard.title || 'Cuadro de Mando Integral');
+    pdf.set_author(STATE.student.name || 'Estudiante');
+    pdf.set_subject('Cuadro de Mando Integral — Curso 2026-2 TICS Aplicada a la Ingeniería');
+    pdf.set_creator('Generador de Cuadro de Mando Integral');
+
+    const filename = `Cuadro_Mando_${(STATE.student.name || 'estudiante').replace(/\s+/g, '_')}.pdf`;
+    pdf.save(filename);
+    showToast('PDF generado: ' + filename, 'success');
+  }).catch(err => {
+    document.querySelectorAll('.kpi-actions').forEach(el => el.style.display = '');
+    document.querySelectorAll('.add-kpi-btn').forEach(el => el.style.display = '');
+    console.error(err);
+    showToast('Error al generar PDF', 'error');
+  });
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer = null;
+function showToast(msg, type = 'info') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'show ' + type;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.className = '';
+  }, 3000);
+}
+
+// Close modals on overlay click
+document.getElementById('oee-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'oee-modal') closeOeeModal();
+});
+document.getElementById('kpi-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'kpi-modal') closeKpiModal();
+});
+// Escape closes any modal
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeOeeModal();
+    closeKpiModal();
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    if (document.getElementById('oee-modal').classList.contains('show')) saveOee();
+    if (document.getElementById('kpi-modal').classList.contains('show')) saveNewKpi();
+  }
+});
+</script>
+
+</body>
+</html>
