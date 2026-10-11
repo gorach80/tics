@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Tablero Kanban — TICS Aplicada a la Ingeniería</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --primary: #1E3A8A;
+    --accent: #1E40AF;
+    --accent-light: #DBEAFE;
+    --border: #9CA3AF;
+    --text-primary: #1F2937;
+    --text-muted: #6B7280;
+    --bg: #FFFFFF;
+    --card-bg: #F9FAFB;
+
+    --col-backlog: #718096;
+    --col-todo: #2b6cb0;
+    --col-progress: #c53030;
+    --col-done: #276749;
+
+    --sev1: #c53030;
+    --sev2: #92400e;
+    --sev3: #6B7280;
+    --sev4: #9CA3AF;
+    --sev-done: #166534;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Liberation Sans', 'Segoe UI', Tahoma, sans-serif;
+    background: #F3F4F6;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--primary);
+    color: white;
+    padding: 18px 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  header h1 { font-size: 22px; margin-bottom: 4px; }
+  header .subtitle { font-size: 13px; opacity: 0.85; }
+
+  /* ===== CONTROLS BAR ===== */
+  .controls-bar {
+    background: white;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .controls-bar .ctrl-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-right: 12px;
+    border-right: 1px solid var(--border);
+  }
+  .controls-bar .ctrl-group:last-child { border-right: none; }
+  .controls-bar label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .controls-bar input[type="text"], .controls-bar input[type="date"] {
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: white;
+  }
+  .controls-bar input[type="text"]:focus, .controls-bar input[type="date"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-light);
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-secondary { background: white; color: var(--primary); border: 1.5px solid var(--primary); }
+  .btn-secondary:hover { background: var(--accent-light); }
+  .btn-success { background: #166534; color: white; }
+  .btn-success:hover { opacity: 0.9; }
+  .btn-danger { background: #991B1B; color: white; }
+  .btn-danger:hover { opacity: 0.9; }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main-container {
+    padding: 16px 20px;
+  }
+
+  /* ===== BOARD TITLE & SUBTITLE ===== */
+  .board-title {
+    text-align: center;
+    padding: 8px 0 4px 0;
+  }
+  .board-title h2 {
+    font-size: 20px;
+    color: var(--text-primary);
+    font-weight: 700;
+    margin: 0;
+  }
+  .board-title .subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  /* ===== STUDENT BADGE ===== */
+  .student-badge {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 12px auto;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 6px;
+    max-width: 1400px;
+  }
+  .student-badge .field-display {
+    display: flex;
+    flex-direction: column;
+  }
+  .student-badge .field-label {
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+  .student-badge .field-value {
+    font-size: 12px;
+    color: var(--text-primary);
+  }
+
+  /* ===== KANBAN BOARD ===== */
+  .kanban-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 16px auto;
+    max-width: 1400px;
+  }
+
+  .column {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .column.col-backlog { border: 1px solid var(--col-backlog); }
+  .column.col-todo { border: 1px solid var(--col-todo); }
+  .column.col-progress {
+    border: 2.5px dashed var(--col-progress);
+  }
+  .column.col-done { border: 1px solid var(--col-done); }
+
+  .column-header {
+    color: white;
+    padding: 8px 12px;
+    text-align: center;
+  }
+  .column-header .col-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .column-header .col-subtitle {
+    font-size: 10px;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+  .col-backlog .column-header { background: var(--col-backlog); }
+  .col-todo .column-header { background: var(--col-todo); }
+  .col-progress .column-header { background: var(--col-progress); }
+  .col-done .column-header { background: var(--col-done); }
+
+  .wip-label {
+    text-align: center;
+    padding: 4px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    background: white;
+    border-bottom: 1px solid var(--border);
+  }
+  .wip-label.over-limit { color: var(--col-progress); font-weight: 700; }
+  .col-backlog .wip-label { color: var(--col-backlog); }
+  .col-todo .wip-label { color: var(--col-todo); }
+  .col-progress .wip-label { color: var(--col-progress); }
+  .col-done .wip-label { color: var(--col-done); }
+
+  .cards-container {
+    padding: 8px;
+    flex: 1;
+    min-height: 250px;
+    background: #FAFBFC;
+  }
+  .col-progress .cards-container {
+    background: #FEF2F2;
+  }
+
+  .card {
+    background: white;
+    border-radius: 5px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    cursor: grab;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 12px;
+  }
+  .card:hover { box-shadow: 0 2px 4px rgba(0,0,0,0.1); transform: translateY(-1px); }
+  .card.dragging { opacity: 0.5; }
+  .col-backlog .card { border-color: var(--col-backlog); }
+  .col-todo .card { border-color: var(--col-todo); }
+  .col-progress .card { border-color: var(--col-progress); }
+  .col-done .card { border-color: var(--col-done); }
+
+  .card-title {
+    flex: 1;
+    color: var(--text-primary);
+    word-break: break-word;
+  }
+  .card-title[contenteditable="true"] {
+    outline: 1px dashed var(--accent);
+    background: var(--accent-light);
+    border-radius: 3px;
+    padding: 1px 4px;
+  }
+  .card-severity {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: #F3F4F6;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .sev-Sev-1 { color: var(--sev1); }
+  .sev-Sev-2 { color: var(--sev2); }
+  .sev-Sev-3 { color: var(--sev3); }
+  .sev-Sev-4 { color: var(--sev4); }
+  .sev-OK { color: var(--sev-done); }
+
+  .card-actions {
+    display: none;
+    gap: 3px;
+  }
+  .card:hover .card-actions { display: flex; }
+  .card-actions button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 14px;
+    width: 18px;
+    height: 18px;
+    line-height: 1;
+    padding: 0;
+    border-radius: 3px;
+  }
+  .card-actions button:hover { background: #E5E7EB; color: var(--text-primary); }
+  .card-actions .btn-del:hover { background: #FEE2E2; color: var(--col-progress); }
+
+  /* ===== SPECIAL ZONE LABEL ===== */
+  .zone-label {
+    text-align: center;
+    padding: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--col-progress);
+    background: #FEF2F2;
+    border-top: 1px dashed var(--col-progress);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== ADD CARD BUTTON ===== */
+  .add-card-btn {
+    display: block;
+    width: 100%;
+    padding: 6px;
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--text-muted);
+    font-size: 11px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 4px;
+    font-family: inherit;
+  }
+  .add-card-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+
+  /* ===== MODAL FOR NEW CARD ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 420px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  .modal h3 {
+    font-size: 15px;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+  .modal .field { margin-bottom: 10px; }
+  .modal label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .modal input[type="text"], .modal select {
+    width: 100%;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 14px;
+  }
+  .severity-chooser {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .severity-chooser button {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1.5px solid var(--border);
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .severity-chooser button.selected { background: var(--accent-light); border-color: var(--accent); }
+  .severity-chooser button.sev-Sev-1 { color: var(--sev1); border-color: var(--sev1); }
+  .severity-chooser button.sev-Sev-1.selected { background: #FEE2E2; }
+  .severity-chooser button.sev-Sev-2 { color: var(--sev2); border-color: var(--sev2); }
+  .severity-chooser button.sev-Sev-2.selected { background: #FEF3C7; }
+  .severity-chooser button.sev-Sev-3 { color: var(--sev3); border-color: var(--sev3); }
+  .severity-chooser button.sev-Sev-3.selected { background: #E5E7EB; }
+  .severity-chooser button.sev-Sev-4 { color: var(--sev4); border-color: var(--sev4); }
+  .severity-chooser button.sev-Sev-4.selected { background: #E5E7EB; }
+  .severity-chooser button.sev-OK { color: var(--sev-done); border-color: var(--sev-done); }
+  .severity-chooser button.sev-OK.selected { background: #D1FAE5; }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--text-primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 9999;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.success { background: #166534; }
+  #toast.error { background: #991B1B; }
+  #toast.warning { background: #92400e; }
+
+  /* ===== DROP ZONE HIGHLIGHT ===== */
+  .cards-container.drop-active {
+    background: var(--accent-light) !important;
+    outline: 2px dashed var(--accent);
+    outline-offset: -4px;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer-note {
+    text-align: center;
+    padding: 12px 20px;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .kanban-board { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .kanban-board { grid-template-columns: 1fr; }
+    .controls-bar { padding: 10px; }
+    .controls-bar .ctrl-group { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: white; }
+    header, .controls-bar, .footer-note { display: none; }
+    .main-container { padding: 0; }
+    .kanban-board { gap: 8px; }
+    .card:hover .card-actions { display: none; }
+    .card { cursor: default; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Generador de Tablero Kanban</h1>
+  <div class="subtitle">Curso 2026-2 TICS APLICADA A LA INGENIERIA · PRESENCIAL 1/3 — ING-INDUSTRIAL</div>
+</header>
+
+<!-- ===== CONTROLS BAR ===== -->
+<div class="controls-bar">
+  <div class="ctrl-group">
+    <label>Título:</label>
+    <input type="text" id="board-title-input" value="Tablero Kanban: Protección del Cuello de Botella (Brent = CCR)" style="width: 320px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Subtítulo:</label>
+    <input type="text" id="board-subtitle-input" value="Límite de WIP visible — Triage obligatorio antes de mover tarjetas" style="width: 280px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Estudiante:</label>
+    <input type="text" id="student-name" placeholder="Nombre" style="width: 120px;">
+    <input type="text" id="student-code" placeholder="Código" style="width: 90px;">
+    <input type="text" id="student-group" placeholder="Grupo" style="width: 60px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Profesor:</label>
+    <input type="text" id="student-professor" placeholder="Profesor" style="width: 130px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Fecha:</label>
+    <input type="date" id="student-date">
+  </div>
+  <div class="ctrl-group" style="margin-left: auto;">
+    <button class="btn btn-primary" onclick="exportToPDF()">PDF</button>
+    <button class="btn btn-secondary" onclick="window.print()">Imprimir</button>
+    <button class="btn btn-success" onclick="saveToStorage()">Guardar</button>
+    <button class="btn btn-secondary" onclick="loadFromStorage()">Cargar</button>
+    <button class="btn btn-secondary" onclick="loadTemplate('phoenix')">Plantilla</button>
+    <button class="btn btn-secondary" onclick="loadTemplate('blank')">Limpiar</button>
+    <button class="btn btn-danger" onclick="resetAll()">Reiniciar</button>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main-container">
+
+  <!-- Student badge (visible on board) -->
+  <div class="student-badge" id="student-badge">
+    <div class="field-display">
+      <span class="field-label">Estudiante</span>
+      <span class="field-value" id="badge-name">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Código</span>
+      <span class="field-value" id="badge-code">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Grupo</span>
+      <span class="field-value" id="badge-group">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Profesor</span>
+      <span class="field-value" id="badge-professor">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Fecha</span>
+      <span class="field-value" id="badge-date">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Curso</span>
+      <span class="field-value">2026-2 TICS Ing. Industrial</span>
+    </div>
+  </div>
+
+  <!-- Board title -->
+  <div class="board-title" id="board-title-display">
+    <h2 id="display-title">Tablero Kanban: Protección del Cuello de Botella (Brent = CCR)</h2>
+    <div class="subtitle" id="display-subtitle">Límite de WIP visible — Triage obligatorio antes de mover tarjetas</div>
+  </div>
+
+  <!-- Kanban board -->
+  <div class="kanban-board" id="kanban-board">
+
+    <!-- BACKLOG -->
+    <div class="column col-backlog" data-col="backlog">
+      <div class="column-header">
+        <div class="col-title">BACKLOG</div>
+        <div class="col-subtitle">(triaje pendiente)</div>
+      </div>
+      <div class="wip-label" id="wip-backlog">WIP: ∞</div>
+      <div class="cards-container" id="cards-backlog" data-col="backlog"></div>
+      <button class="add-card-btn" onclick="openAddCardModal('backlog')">+ Agregar tarjeta</button>
+    </div>
+
+    <!-- POR HACER -->
+    <div class="column col-todo" data-col="todo">
+      <div class="column-header">
+        <div class="col-title">POR HACER</div>
+        <div class="col-subtitle">(priorizado)</div>
+      </div>
+      <div class="wip-label" id="wip-todo">WIP: 5</div>
+      <div class="cards-container" id="cards-todo" data-col="todo"></div>
+      <button class="add-card-btn" onclick="openAddCardModal('todo')">+ Agregar tarjeta</button>
+    </div>
+
+    <!-- EN PROGRESO -->
+    <div class="column col-progress" data-col="progress">
+      <div class="column-header">
+        <div class="col-title">EN PROGRESO</div>
+        <div class="col-subtitle">(WIP ≤ 2)</div>
+      </div>
+      <div class="wip-label" id="wip-progress">WIP: 2</div>
+      <div class="cards-container" id="cards-progress" data-col="progress"></div>
+      <div class="zone-label">Zona Protegida — Solo trabajo priorizado</div>
+      <button class="add-card-btn" onclick="openAddCardModal('progress')">+ Agregar tarjeta</button>
+    </div>
+
+    <!-- HECHO -->
+    <div class="column col-done" data-col="done">
+      <div class="column-header">
+        <div class="col-title">HECHO</div>
+        <div class="col-subtitle">(validado)</div>
+      </div>
+      <div class="wip-label" id="wip-done">WIP: ∞</div>
+      <div class="cards-container" id="cards-done" data-col="done"></div>
+      <button class="add-card-btn" onclick="openAddCardModal('done')">+ Agregar tarjeta</button>
+    </div>
+
+  </div>
+
+  <div class="footer-note">
+    Generado con la herramienta de Tablero Kanban · Curso 2026-2 TICS Aplicada a la Ingeniería · PRESENCIAL 1/3 — ING-INDUSTRIAL
+  </div>
+</div>
+
+<!-- ===== MODAL FOR ADD/EDIT CARD ===== -->
+<div class="modal-overlay" id="card-modal">
+  <div class="modal">
+    <h3 id="modal-title">Nueva Tarjeta</h3>
+    <div class="field">
+      <label>Título de la tarea</label>
+      <input type="text" id="modal-card-title" placeholder="Ej: Hotfix POS facturación">
+    </div>
+    <div class="field">
+      <label>Severidad / Estado</label>
+      <div class="severity-chooser" id="severity-chooser">
+        <button data-sev="Sev-1" class="sev-Sev-1">Sev 1</button>
+        <button data-sev="Sev-2" class="sev-Sev-2">Sev 2</button>
+        <button data-sev="Sev-3" class="sev-Sev-3">Sev 3</button>
+        <button data-sev="Sev-4" class="sev-Sev-4">Sev 4</button>
+        <button data-sev="OK" class="sev-OK">OK</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveCard()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const STATE = {
+  board: { title: '', subtitle: '' },
+  student: { name: '', code: '', group: '', date: '', professor: '' },
+  columns: {
+    backlog:  { name: 'BACKLOG',     wipLimit: null, cards: [] },
+    todo:     { name: 'POR HACER',   wipLimit: 5,    cards: [] },
+    progress: { name: 'EN PROGRESO', wipLimit: 2,    cards: [] },
+    done:     { name: 'HECHO',       wipLimit: null, cards: [] },
+  }
+};
+
+const TEMPLATES = {
+  phoenix: {
+    title: 'Tablero Kanban: Protección del Cuello de Botella (Brent = CCR)',
+    subtitle: 'Límite de WIP visible — Triage obligatorio antes de mover tarjetas',
+    columns: {
+      backlog: [
+        { title: 'Cambiar cableado rack', sev: 'Sev-3' },
+        { title: 'Actualizar documentación', sev: 'Sev-4' },
+        { title: 'Reunión con proveedor', sev: 'Sev-4' },
+        { title: 'Migrar base datos legacy', sev: 'Sev-3' },
+      ],
+      todo: [
+        { title: 'Hotfix POS facturación', sev: 'Sev-1' },
+        { title: 'Patch seguridad crítico', sev: 'Sev-1' },
+        { title: 'Configurar monitoreo', sev: 'Sev-2' },
+        { title: 'Capacitación equipo', sev: 'Sev-3' },
+        { title: 'Revisión de cambios', sev: 'Sev-2' },
+      ],
+      progress: [
+        { title: 'Release Phoenix v1.2', sev: 'Sev-1' },
+        { title: 'Auditoría licencias', sev: 'Sev-2' },
+      ],
+      done: [
+        { title: 'Reset redundancia DB', sev: 'OK' },
+        { title: 'CAB semanal instalado', sev: 'OK' },
+        { title: 'Kanban tablero activo', sev: 'OK' },
+      ],
+    }
+  },
+  blank: {
+    title: 'Tablero Kanban',
+    subtitle: '',
+    columns: { backlog: [], todo: [], progress: [], done: [] }
+  }
+};
+
+let modalContext = { col: null, cardId: null, selectedSev: 'Sev-3' };
+let nextCardId = 1;
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('student-date').value = new Date().toISOString().split('T')[0];
+
+  // Listeners
+  document.getElementById('board-title-input').addEventListener('input', e => {
+    STATE.board.title = e.target.value;
+    document.getElementById('display-title').textContent = e.target.value;
+    autosave();
+  });
+  document.getElementById('board-subtitle-input').addEventListener('input', e => {
+    STATE.board.subtitle = e.target.value;
+    document.getElementById('display-subtitle').textContent = e.target.value;
+    autosave();
+  });
+  ['student-name','student-code','student-group','student-date','student-professor'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateStudentBadge);
+  });
+  document.querySelectorAll('#severity-chooser button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#severity-chooser button').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      modalContext.selectedSev = btn.dataset.sev;
+    });
+  });
+
+  // Set defaults
+  document.getElementById('board-title-input').value = TEMPLATES.phoenix.title;
+  document.getElementById('board-subtitle-input').value = TEMPLATES.phoenix.subtitle;
+  STATE.board.title = TEMPLATES.phoenix.title;
+  STATE.board.subtitle = TEMPLATES.phoenix.subtitle;
+  document.getElementById('display-title').textContent = TEMPLATES.phoenix.title;
+  document.getElementById('display-subtitle').textContent = TEMPLATES.phoenix.subtitle;
+
+  loadTemplate('phoenix', false);
+  updateStudentBadge();
+
+  // Setup drag & drop
+  setupDragDrop();
+});
+
+// ============================================================
+// STUDENT BADGE
+// ============================================================
+function updateStudentBadge() {
+  STATE.student.name = document.getElementById('student-name').value;
+  STATE.student.code = document.getElementById('student-code').value;
+  STATE.student.group = document.getElementById('student-group').value;
+  STATE.student.date = document.getElementById('student-date').value;
+  STATE.student.professor = document.getElementById('student-professor').value;
+
+  document.getElementById('badge-name').textContent = STATE.student.name || '—';
+  document.getElementById('badge-code').textContent = STATE.student.code || '—';
+  document.getElementById('badge-group').textContent = STATE.student.group || '—';
+  document.getElementById('badge-professor').textContent = STATE.student.professor || '—';
+  document.getElementById('badge-date').textContent = STATE.student.date ? formatDate(STATE.student.date) : '—';
+
+  autosave();
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+// ============================================================
+// RENDER CARDS
+// ============================================================
+function renderAll() {
+  ['backlog', 'todo', 'progress', 'done'].forEach(col => {
+    renderColumn(col);
+  });
+  updateWipLabels();
+}
+
+function renderColumn(col) {
+  const container = document.getElementById(`cards-${col}`);
+  container.innerHTML = '';
+  STATE.columns[col].cards.forEach(card => {
+    container.appendChild(createCardElement(card, col));
+  });
+}
+
+function createCardElement(card, col) {
+  const div = document.createElement('div');
+  div.className = `card sev-${card.sev}`;
+  div.draggable = true;
+  div.dataset.cardId = card.id;
+  div.dataset.col = col;
+
+  const title = document.createElement('div');
+  title.className = 'card-title';
+  title.textContent = card.title;
+  title.addEventListener('dblclick', () => editCardTitle(card.id, col, title));
+
+  const sev = document.createElement('div');
+  sev.className = `card-severity sev-${card.sev}`;
+  sev.textContent = card.sev.replace('-', ' ');
+  sev.title = 'Click para cambiar severidad';
+  sev.addEventListener('click', () => cycleSeverity(card.id, col));
+
+  const actions = document.createElement('div');
+  actions.className = 'card-actions';
+
+  const editBtn = document.createElement('button');
+  editBtn.textContent = '✎';
+  editBtn.title = 'Editar';
+  editBtn.className = 'btn-edit';
+  editBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openEditCardModal(card.id, col);
+  });
+
+  const delBtn = document.createElement('button');
+  delBtn.textContent = '×';
+  delBtn.title = 'Eliminar';
+  delBtn.className = 'btn-del';
+  delBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (confirm('¿Eliminar esta tarjeta?')) {
+      deleteCard(card.id, col);
+    }
+  });
+
+  actions.appendChild(editBtn);
+  actions.appendChild(delBtn);
+
+  div.appendChild(title);
+  div.appendChild(sev);
+  div.appendChild(actions);
+
+  // Drag events
+  div.addEventListener('dragstart', e => {
+    div.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', JSON.stringify({ cardId: card.id, fromCol: col }));
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  div.addEventListener('dragend', () => {
+    div.classList.remove('dragging');
+  });
+
+  return div;
+}
+
+function editCardTitle(cardId, col, titleEl) {
+  titleEl.contentEditable = 'true';
+  titleEl.focus();
+  // Select all text
+  const range = document.createRange();
+  range.selectNodeContents(titleEl);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+
+  const save = () => {
+    titleEl.contentEditable = 'false';
+    const card = STATE.columns[col].cards.find(c => c.id === cardId);
+    if (card) {
+      card.title = titleEl.textContent.trim() || 'Sin título';
+      titleEl.textContent = card.title;
+      autosave();
+    }
+    titleEl.removeEventListener('blur', save);
+    titleEl.removeEventListener('keydown', onKey);
+  };
+  const onKey = (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); titleEl.blur(); }
+    if (e.key === 'Escape') { e.preventDefault(); titleEl.textContent = STATE.columns[col].cards.find(c => c.id === cardId).title; titleEl.blur(); }
+  };
+  titleEl.addEventListener('blur', save);
+  titleEl.addEventListener('keydown', onKey);
+}
+
+function cycleSeverity(cardId, col) {
+  const card = STATE.columns[col].cards.find(c => c.id === cardId);
+  if (!card) return;
+  const sevs = col === 'done' ? ['OK'] : ['Sev-1', 'Sev-2', 'Sev-3', 'Sev-4'];
+  if (col === 'done') return; // Done always OK
+  const idx = sevs.indexOf(card.sev);
+  card.sev = sevs[(idx + 1) % sevs.length];
+  renderColumn(col);
+  updateWipLabels();
+  autosave();
+}
+
+function deleteCard(cardId, col) {
+  STATE.columns[col].cards = STATE.columns[col].cards.filter(c => c.id !== cardId);
+  renderColumn(col);
+  updateWipLabels();
+  autosave();
+}
+
+// ============================================================
+// WIP LABELS
+// ============================================================
+function updateWipLabels() {
+  ['backlog', 'todo', 'progress', 'done'].forEach(col => {
+    const count = STATE.columns[col].cards.length;
+    const limit = STATE.columns[col].wipLimit;
+    const label = document.getElementById(`wip-${col}`);
+    if (limit === null) {
+      label.textContent = `WIP: ${count} / ∞`;
+      label.classList.remove('over-limit');
+    } else {
+      label.textContent = `WIP: ${count} / ${limit}`;
+      if (count > limit) {
+        label.classList.add('over-limit');
+      } else {
+        label.classList.remove('over-limit');
+      }
+    }
+  });
+}
+
+// ============================================================
+// DRAG & DROP
+// ============================================================
+function setupDragDrop() {
+  ['backlog', 'todo', 'progress', 'done'].forEach(col => {
+    const container = document.getElementById(`cards-${col}`);
+    container.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      container.classList.add('drop-active');
+    });
+    container.addEventListener('dragleave', e => {
+      // Only remove if leaving the container, not entering a child
+      if (!container.contains(e.relatedTarget)) {
+        container.classList.remove('drop-active');
+      }
+    });
+    container.addEventListener('drop', e => {
+      e.preventDefault();
+      container.classList.remove('drop-active');
+      try {
+        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+        moveCard(data.cardId, data.fromCol, col);
+      } catch(err) {
+        console.error(err);
+      }
+    });
+  });
+}
+
+function moveCard(cardId, fromCol, toCol) {
+  if (fromCol === toCol) return;
+  // Check WIP limit
+  const target = STATE.columns[toCol];
+  if (target.wipLimit !== null && target.cards.length >= target.wipLimit) {
+    showToast(`Límite WIP excedido en ${target.name} (máximo ${target.wipLimit})`, 'warning');
+    return;
+  }
+  // Find and remove from source
+  const source = STATE.columns[fromCol];
+  const idx = source.cards.findIndex(c => c.id === cardId);
+  if (idx === -1) return;
+  const [card] = source.cards.splice(idx, 1);
+  // If moved to done, change severity to OK
+  if (toCol === 'done') {
+    card.sev = 'OK';
+  }
+  // If moved out of done, restore default Sev
+  if (fromCol === 'done' && toCol !== 'done') {
+    card.sev = 'Sev-3';
+  }
+  // Add to target
+  target.cards.push(card);
+  renderColumn(fromCol);
+  renderColumn(toCol);
+  updateWipLabels();
+  autosave();
+  showToast(`Tarjeta movida a ${target.name}`, 'success');
+}
+
+// ============================================================
+// MODAL (ADD/EDIT CARD)
+// ============================================================
+function openAddCardModal(col) {
+  modalContext = { col: col, cardId: null, selectedSev: col === 'done' ? 'OK' : 'Sev-3' };
+  document.getElementById('modal-title').textContent = `Nueva Tarjeta — ${STATE.columns[col].name}`;
+  document.getElementById('modal-card-title').value = '';
+  document.querySelectorAll('#severity-chooser button').forEach(b => {
+    b.classList.toggle('selected', b.dataset.sev === modalContext.selectedSev);
+  });
+  // Disable severity chooser for done column
+  document.querySelectorAll('#severity-chooser button').forEach(b => {
+    b.style.display = (col === 'done' && b.dataset.sev !== 'OK') || (col !== 'done' && b.dataset.sev === 'OK') ? 'none' : '';
+  });
+  document.getElementById('card-modal').classList.add('show');
+  setTimeout(() => document.getElementById('modal-card-title').focus(), 100);
+}
+
+function openEditCardModal(cardId, col) {
+  const card = STATE.columns[col].cards.find(c => c.id === cardId);
+  if (!card) return;
+  modalContext = { col: col, cardId: cardId, selectedSev: card.sev };
+  document.getElementById('modal-title').textContent = `Editar Tarjeta — ${STATE.columns[col].name}`;
+  document.getElementById('modal-card-title').value = card.title;
+  document.querySelectorAll('#severity-chooser button').forEach(b => {
+    b.classList.toggle('selected', b.dataset.sev === modalContext.selectedSev);
+  });
+  document.querySelectorAll('#severity-chooser button').forEach(b => {
+    b.style.display = (col === 'done' && b.dataset.sev !== 'OK') || (col !== 'done' && b.dataset.sev === 'OK') ? 'none' : '';
+  });
+  document.getElementById('card-modal').classList.add('show');
+  setTimeout(() => document.getElementById('modal-card-title').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('card-modal').classList.remove('show');
+}
+
+function saveCard() {
+  const title = document.getElementById('modal-card-title').value.trim();
+  if (!title) {
+    showToast('El título no puede estar vacío', 'error');
+    return;
+  }
+  // Check WIP limit when adding new card
+  if (!modalContext.cardId) {
+    const target = STATE.columns[modalContext.col];
+    if (target.wipLimit !== null && target.cards.length >= target.wipLimit) {
+      showToast(`Límite WIP excedido en ${target.name} (máximo ${target.wipLimit})`, 'warning');
+      return;
+    }
+    const newCard = { id: nextCardId++, title: title, sev: modalContext.selectedSev };
+    target.cards.push(newCard);
+    showToast('Tarjeta agregada', 'success');
+  } else {
+    const card = STATE.columns[modalContext.col].cards.find(c => c.id === modalContext.cardId);
+    if (card) {
+      card.title = title;
+      card.sev = modalContext.selectedSev;
+      showToast('Tarjeta actualizada', 'success');
+    }
+  }
+  renderColumn(modalContext.col);
+  updateWipLabels();
+  autosave();
+  closeModal();
+}
+
+// ============================================================
+// TEMPLATES
+// ============================================================
+function loadTemplate(name, showMsg = true) {
+  const tpl = TEMPLATES[name];
+  if (!tpl) return;
+  STATE.board.title = tpl.title;
+  STATE.board.subtitle = tpl.subtitle;
+  document.getElementById('board-title-input').value = tpl.title;
+  document.getElementById('board-subtitle-input').value = tpl.subtitle;
+  document.getElementById('display-title').textContent = tpl.title;
+  document.getElementById('display-subtitle').textContent = tpl.subtitle;
+  nextCardId = 1;
+  ['backlog', 'todo', 'progress', 'done'].forEach(col => {
+    STATE.columns[col].cards = (tpl.columns[col] || []).map(c => ({
+      id: nextCardId++,
+      title: c.title,
+      sev: c.sev
+    }));
+  });
+  renderAll();
+  autosave();
+  if (showMsg) showToast(`Plantilla cargada: ${tpl.title.substring(0, 40)}...`, 'success');
+}
+
+// ============================================================
+// SAVE / LOAD
+// ============================================================
+function autosave() {
+  try {
+    localStorage.setItem('kanban_autosave', JSON.stringify({
+      board: STATE.board,
+      student: STATE.student,
+      columns: STATE.columns,
+      nextCardId: nextCardId,
+      ts: Date.now()
+    }));
+  } catch(e) {}
+}
+
+function saveToStorage() {
+  autosave();
+  showToast('Tablero guardado en el navegador', 'success');
+}
+
+function loadFromStorage() {
+  const data = localStorage.getItem('kanban_autosave');
+  if (!data) {
+    showToast('No hay tablero guardado', 'error');
+    return;
+  }
+  try {
+    const parsed = JSON.parse(data);
+    if (parsed.board) {
+      STATE.board = parsed.board;
+      document.getElementById('board-title-input').value = STATE.board.title || '';
+      document.getElementById('board-subtitle-input').value = STATE.board.subtitle || '';
+      document.getElementById('display-title').textContent = STATE.board.title || '';
+      document.getElementById('display-subtitle').textContent = STATE.board.subtitle || '';
+    }
+    if (parsed.student) {
+      STATE.student = parsed.student;
+      document.getElementById('student-name').value = STATE.student.name || '';
+      document.getElementById('student-code').value = STATE.student.code || '';
+      document.getElementById('student-group').value = STATE.student.group || '';
+      document.getElementById('student-date').value = STATE.student.date || '';
+      document.getElementById('student-professor').value = STATE.student.professor || '';
+      updateStudentBadge();
+    }
+    if (parsed.columns) {
+      STATE.columns = parsed.columns;
+      nextCardId = parsed.nextCardId || 100;
+      renderAll();
+    }
+    showToast('Tablero cargado', 'success');
+  } catch(e) {
+    showToast('Error al cargar el tablero', 'error');
+  }
+}
+
+function resetAll() {
+  if (!confirm('¿Reiniciar el tablero? Se perderán los cambios no guardados.')) return;
+  document.getElementById('student-name').value = '';
+  document.getElementById('student-code').value = '';
+  document.getElementById('student-group').value = '';
+  document.getElementById('student-professor').value = '';
+  STATE.student = { name: '', code: '', group: '', date: '', professor: '' };
+  updateStudentBadge();
+  loadTemplate('phoenix');
+  showToast('Tablero reiniciado', 'success');
+}
+
+// ============================================================
+// EXPORT TO PDF
+// ============================================================
+function exportToPDF() {
+  showToast('Generando PDF...', 'info');
+
+  const target = document.querySelector('.main-container');
+  const originalStyle = target.style.cssText;
+  // Hide card actions for cleaner PDF
+  document.querySelectorAll('.card-actions').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.add-card-btn').forEach(el => el.style.display = 'none');
+
+  html2canvas(target, {
+    scale: 2,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    logging: false,
+    windowWidth: target.scrollWidth
+  }).then(canvas => {
+    // Restore
+    document.querySelectorAll('.card-actions').forEach(el => el.style.display = '');
+    document.querySelectorAll('.add-card-btn').forEach(el => el.style.display = '');
+
+    const { jsPDF } = window.jspdf;
+    const imgData = canvas.toDataURL('image/png');
+
+    // A4 landscape
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const pageW = 297;
+    const pageH = 210;
+    const margin = 8;
+    const usableW = pageW - 2*margin;
+    const usableH = pageH - 2*margin;
+
+    const imgRatio = canvas.height / canvas.width;
+    let imgW = usableW;
+    let imgH = imgW * imgRatio;
+    if (imgH > usableH) {
+      imgH = usableH;
+      imgW = imgH / imgRatio;
+    }
+    const offsetX = (pageW - imgW) / 2;
+    const offsetY = (pageH - imgH) / 2;
+
+    pdf.addImage(imgData, 'PNG', offsetX, offsetY, imgW, imgH);
+
+    pdf.set_title(STATE.board.title || 'Tablero Kanban');
+    pdf.set_author(STATE.student.name || 'Estudiante');
+    pdf.set_subject('Tablero Kanban — Curso 2026-2 TICS Aplicada a la Ingeniería');
+    pdf.set_creator('Generador de Tablero Kanban');
+
+    const filename = `Kanban_${(STATE.student.name || 'estudiante').replace(/\s+/g, '_')}.pdf`;
+    pdf.save(filename);
+    showToast('PDF generado: ' + filename, 'success');
+  }).catch(err => {
+    document.querySelectorAll('.card-actions').forEach(el => el.style.display = '');
+    document.querySelectorAll('.add-card-btn').forEach(el => el.style.display = '');
+    console.error(err);
+    showToast('Error al generar PDF', 'error');
+  });
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer = null;
+function showToast(msg, type = 'info') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'show ' + type;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.className = '';
+  }, 3000);
+}
+
+// Close modal on overlay click
+document.getElementById('card-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'card-modal') closeModal();
+});
+// Close modal on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+  // Ctrl/Cmd + Enter to save modal
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && document.getElementById('card-modal').classList.contains('show')) {
+    saveCard();
+  }
+});
+</script>
+
+</body>
+</html>
