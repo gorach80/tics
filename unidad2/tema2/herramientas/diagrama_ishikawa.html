@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Diagrama de Ishikawa — TICS Aplicada a la Ingeniería</title>
+<!-- jsPDF and html2canvas for PDF export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --primary: #1E3A8A;
+    --accent: #1E40AF;
+    --accent-light: #DBEAFE;
+    --border: #9CA3AF;
+    --text-primary: #1F2937;
+    --text-muted: #6B7280;
+    --bg: #FFFFFF;
+    --card-bg: #F9FAFB;
+    --success: #166534;
+    --warning: #92400E;
+    --danger: #991B1B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Liberation Sans', 'Segoe UI', Tahoma, sans-serif;
+    background: #F3F4F6;
+    color: var(--text-primary);
+    line-height: 1.5;
+    padding: 0;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--primary);
+    color: white;
+    padding: 18px 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  header h1 { font-size: 22px; margin-bottom: 4px; }
+  header .subtitle { font-size: 13px; opacity: 0.85; }
+
+  /* ===== LAYOUT ===== */
+  .container {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 1100px) {
+    .container { grid-template-columns: 1fr; }
+  }
+
+  /* ===== PANELS ===== */
+  .panel {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 16px;
+  }
+  .panel h2 {
+    font-size: 14px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--accent-light);
+  }
+  .panel h3 {
+    font-size: 13px;
+    color: var(--text-primary);
+    margin: 10px 0 6px 0;
+  }
+
+  /* ===== FORM FIELDS ===== */
+  .field { margin-bottom: 10px; }
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+  input[type="text"], input[type="date"], textarea, select {
+    width: 100%;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: white;
+    color: var(--text-primary);
+    transition: border 0.2s, box-shadow 0.2s;
+  }
+  input[type="text"]:focus, input[type="date"]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+  }
+  textarea { resize: vertical; min-height: 50px; }
+
+  .field-row { display: flex; gap: 10px; }
+  .field-row .field { flex: 1; }
+
+  /* ===== CATEGORIES ===== */
+  .category-block {
+    background: var(--card-bg);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .category-header input {
+    flex: 1;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: white;
+  }
+  .color-swatch {
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .causes-list { margin-left: 6px; }
+  .cause-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .cause-item input {
+    flex: 1;
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+  .cause-item .btn-remove {
+    background: var(--danger);
+    color: white;
+    border: none;
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .cause-item .btn-remove:hover { opacity: 0.85; }
+
+  .btn-add-cause {
+    background: transparent;
+    color: var(--accent);
+    border: 1px dashed var(--accent);
+    padding: 4px 10px;
+    font-size: 11px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 4px;
+    width: 100%;
+    text-align: center;
+  }
+  .btn-add-cause:hover { background: var(--accent-light); }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-secondary { background: white; color: var(--primary); border: 1.5px solid var(--primary); }
+  .btn-secondary:hover { background: var(--accent-light); }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { opacity: 0.9; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-danger:hover { opacity: 0.9; }
+  .btn-amber { background: var(--warning); color: white; }
+
+  .actions-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  /* ===== PREVIEW ===== */
+  #preview-panel {
+    position: sticky;
+    top: 20px;
+  }
+  .preview-wrapper {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    overflow: auto;
+    max-height: 80vh;
+  }
+  #diagram-svg {
+    display: block;
+    margin: 0 auto;
+    background: white;
+  }
+
+  /* ===== STUDENT INFO BADGE ON DIAGRAM ===== */
+  .student-badge {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 6px;
+  }
+  .student-badge .field-display {
+    display: flex;
+    flex-direction: column;
+  }
+  .student-badge .field-label {
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+  .student-badge .field-value {
+    font-size: 12px;
+    color: var(--text-primary);
+  }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--text-primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 9999;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.success { background: var(--success); }
+  #toast.error { background: var(--danger); }
+
+  /* ===== HINT ===== */
+  .hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 700px) {
+    .container { padding: 0 10px; }
+    header { padding: 14px 16px; }
+    header h1 { font-size: 18px; }
+    .actions-bar .btn { flex: 1; min-width: 120px; }
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: white; }
+    header, #controls-panel { display: none; }
+    .container { display: block; max-width: none; margin: 0; padding: 0; }
+    .preview-wrapper { border: none; padding: 0; max-height: none; overflow: visible; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Generador de Diagrama de Ishikawa (Espina de Pescado)</h1>
+  <div class="subtitle">Curso 2026-2 TICS APLICADA A LA INGENIERIA · PRESENCIAL 1/3 — ING-INDUSTRIAL</div>
+</header>
+
+<div class="container">
+
+  <!-- ===== LEFT: CONTROLS ===== -->
+  <div id="controls-panel">
+
+    <!-- Student info -->
+    <div class="panel">
+      <h2>Datos del Estudiante</h2>
+      <div class="field-row">
+        <div class="field">
+          <label>Nombre</label>
+          <input type="text" id="student-name" placeholder="Ej: Juan Pérez">
+        </div>
+        <div class="field">
+          <label>Código</label>
+          <input type="text" id="student-code" placeholder="Ej: 2026-001">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Grupo</label>
+          <input type="text" id="student-group" placeholder="Ej: 1/3">
+        </div>
+        <div class="field">
+          <label>Fecha</label>
+          <input type="date" id="student-date">
+        </div>
+      </div>
+      <div class="field">
+        <label>Profesor</label>
+        <input type="text" id="student-professor" placeholder="Nombre del profesor">
+      </div>
+    </div>
+
+    <!-- Diagram config -->
+    <div class="panel">
+      <h2>Configuración del Diagrama</h2>
+      <div class="field">
+        <label>Título del Diagrama</label>
+        <input type="text" id="diagram-title" placeholder="Ej: Diagrama de Ishikawa — Falla de nómina" value="Diagrama de Ishikawa">
+      </div>
+      <div class="field">
+        <label>Efecto / Problema (cabeza del pez)</label>
+        <textarea id="diagram-effect" placeholder="Ej: Caída de rentabilidad de planta">Caída de rentabilidad de planta</textarea>
+      </div>
+      <div class="hint">El efecto es el problema que se quiere analizar. Se coloca en la "cabeza" del pescado, a la derecha del diagrama.</div>
+    </div>
+
+    <!-- Categories -->
+    <div class="panel">
+      <h2>Categorías y Causas</h2>
+      <div class="hint" style="margin-bottom: 10px;">
+        Las 6 categorías son las "espinas" principales. Edita el nombre de cada categoría y agrega causas específicas.
+      </div>
+      <div id="categories-container"></div>
+      <div class="actions-bar" style="margin-top: 12px;">
+        <button class="btn btn-secondary" onclick="loadTemplate('manufacturing')">Plantilla 6M (manufactura)</button>
+        <button class="btn btn-secondary" onclick="loadTemplate('services')">Plantilla 4P+2 (servicios TI)</button>
+        <button class="btn btn-secondary" onclick="loadTemplate('blank')">Limpiar categorías</button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="panel">
+      <h2>Acciones</h2>
+      <div class="actions-bar">
+        <button class="btn btn-primary" onclick="exportToPDF()">Descargar PDF</button>
+        <button class="btn btn-secondary" onclick="window.print()">Imprimir</button>
+        <button class="btn btn-success" onclick="saveToStorage()">Guardar</button>
+        <button class="btn btn-secondary" onclick="loadFromStorage()">Cargar</button>
+        <button class="btn btn-danger" onclick="resetAll()">Reiniciar</button>
+      </div>
+      <div class="hint" style="margin-top: 8px;">
+        <b>Guardar</b> almacena en el navegador (localStorage). <b>Descargar PDF</b> genera un archivo PDF con el diagrama y los datos del estudiante.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== RIGHT: PREVIEW ===== -->
+  <div id="preview-panel">
+    <div class="panel">
+      <h2>Vista Previa del Diagrama</h2>
+      <div id="preview-wrapper" class="preview-wrapper">
+        <!-- Student badge -->
+        <div class="student-badge" id="student-badge">
+          <div class="field-display">
+            <span class="field-label">Estudiante</span>
+            <span class="field-value" id="badge-name">—</span>
+          </div>
+          <div class="field-display">
+            <span class="field-label">Código</span>
+            <span class="field-value" id="badge-code">—</span>
+          </div>
+          <div class="field-display">
+            <span class="field-label">Grupo</span>
+            <span class="field-value" id="badge-group">—</span>
+          </div>
+          <div class="field-display">
+            <span class="field-label">Profesor</span>
+            <span class="field-value" id="badge-professor">—</span>
+          </div>
+          <div class="field-display">
+            <span class="field-label">Fecha</span>
+            <span class="field-value" id="badge-date">—</span>
+          </div>
+          <div class="field-display">
+            <span class="field-label">Curso</span>
+            <span class="field-value">2026-2 TICS Ing. Industrial</span>
+          </div>
+        </div>
+        <svg id="diagram-svg" width="900" height="500" viewBox="0 0 900 500"></svg>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const STATE = {
+  student: { name: '', code: '', group: '', date: '', professor: '' },
+  diagram: { title: 'Diagrama de Ishikawa', effect: 'Caída de rentabilidad de planta' },
+  categories: []
+};
+
+// Default palette for categories
+const COLORS = ['#1E3A8A', '#0F766E', '#92400E', '#991B1B', '#6B21A8', '#166534'];
+
+// Templates
+const TEMPLATES = {
+  manufacturing: {
+    name: 'Plantilla 6M (manufactura)',
+    categories: [
+      { name: 'MANO DE OBRA', causes: ['Falta de capacitación', 'Fatiga del operario', 'Error humano'] },
+      { name: 'MÉTODOS', causes: ['Procedimiento no documentado', 'Falta de estándar', 'Instrucciones ambiguas'] },
+      { name: 'MAQUINARIA', causes: ['Equipo mal calibrado', 'Mantenimiento atrasado', 'Desgaste de herramienta'] },
+      { name: 'MATERIALES', causes: ['Materia prima defectuosa', 'Especificación incorrecta', 'Proveedor no calificado'] },
+      { name: 'MEDICIÓN', causes: ['Instrumento descalibrado', 'Método de medición inadecuado', 'Falta de registro'] },
+      { name: 'MEDIO AMBIENTE', causes: ['Temperatura fuera de rango', 'Humedad alta', 'Iluminación deficiente'] },
+    ]
+  },
+  services: {
+    name: 'Plantilla 4P+2 (servicios TI)',
+    categories: [
+      { name: 'PERSONAS', causes: ['Sin mesa de ayuda unificada', 'Sobrecarga del CCR', 'Falta de roles claros'] },
+      { name: 'PROCESOS', causes: ['Sin gestión de cambios formal', 'WIP ilimitado', 'Sin triage de solicitudes'] },
+      { name: 'TECNOLOGÍA', causes: ['Sistemas desconectados', 'Fallas de red recurrentes', 'Sin monitoreo proactivo'] },
+      { name: 'GESTIÓN', causes: ['Prioridades cambiantes', 'Sin métricas (SLA/MTTR)', 'Planificación reactiva'] },
+      { name: 'COMUNICACIÓN', causes: ['Silos entre Dev y Ops', 'Sin visibilidad de backlog', 'CAB inexistente'] },
+      { name: 'CULTURA', causes: ['"TI es un costo"', 'Cultura de culpa', 'Resistencia al cambio'] },
+    ]
+  },
+  blank: {
+    name: 'Categorías en blanco',
+    categories: [
+      { name: 'CATEGORÍA 1', causes: [] },
+      { name: 'CATEGORÍA 2', causes: [] },
+      { name: 'CATEGORÍA 3', causes: [] },
+      { name: 'CATEGORÍA 4', causes: [] },
+      { name: 'CATEGORÍA 5', causes: [] },
+      { name: 'CATEGORÍA 6', causes: [] },
+    ]
+  }
+};
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Set today's date
+  document.getElementById('student-date').value = new Date().toISOString().split('T')[0];
+
+  // Load template by default
+  loadTemplate('services');
+
+  // Attach listeners
+  ['student-name','student-code','student-group','student-date','student-professor'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateStudentBadge);
+  });
+  document.getElementById('diagram-title').addEventListener('input', e => {
+    STATE.diagram.title = e.target.value;
+    renderDiagram();
+  });
+  document.getElementById('diagram-effect').addEventListener('input', e => {
+    STATE.diagram.effect = e.target.value;
+    renderDiagram();
+  });
+  updateStudentBadge();
+
+  // Try to auto-load from storage
+  const auto = localStorage.getItem('ishikawa_autosave');
+  if (auto) {
+    try {
+      const data = JSON.parse(auto);
+      if (data && data.categories && data.categories.length === 6) {
+        // Auto-restore
+      }
+    } catch(e) {}
+  }
+});
+
+// ============================================================
+// STUDENT BADGE
+// ============================================================
+function updateStudentBadge() {
+  STATE.student.name = document.getElementById('student-name').value;
+  STATE.student.code = document.getElementById('student-code').value;
+  STATE.student.group = document.getElementById('student-group').value;
+  STATE.student.date = document.getElementById('student-date').value;
+  STATE.student.professor = document.getElementById('student-professor').value;
+
+  document.getElementById('badge-name').textContent = STATE.student.name || '—';
+  document.getElementById('badge-code').textContent = STATE.student.code || '—';
+  document.getElementById('badge-group').textContent = STATE.student.group || '—';
+  document.getElementById('badge-professor').textContent = STATE.student.professor || '—';
+  document.getElementById('badge-date').textContent = STATE.student.date ? formatDate(STATE.student.date) : '—';
+
+  autosave();
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+// ============================================================
+// CATEGORIES UI
+// ============================================================
+function renderCategoriesUI() {
+  const container = document.getElementById('categories-container');
+  container.innerHTML = '';
+  STATE.categories.forEach((cat, idx) => {
+    const block = document.createElement('div');
+    block.className = 'category-block';
+    block.style.borderLeftColor = cat.color;
+
+    const header = document.createElement('div');
+    header.className = 'category-header';
+
+    const swatch = document.createElement('div');
+    swatch.className = 'color-swatch';
+    swatch.style.background = cat.color;
+    swatch.title = 'Click para cambiar color';
+    swatch.onclick = () => cycleColor(idx);
+    header.appendChild(swatch);
+
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.value = cat.name;
+    nameInput.placeholder = `Categoría ${idx+1}`;
+    nameInput.oninput = e => { cat.name = e.target.value; renderDiagram(); autosave(); };
+    header.appendChild(nameInput);
+
+    block.appendChild(header);
+
+    const causesList = document.createElement('div');
+    causesList.className = 'causes-list';
+    cat.causes.forEach((cause, cIdx) => {
+      const causeItem = document.createElement('div');
+      causeItem.className = 'cause-item';
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = cause;
+      input.placeholder = `Causa ${cIdx+1}`;
+      input.oninput = e => { cat.causes[cIdx] = e.target.value; renderDiagram(); autosave(); };
+      const btn = document.createElement('button');
+      btn.className = 'btn-remove';
+      btn.textContent = '×';
+      btn.title = 'Eliminar causa';
+      btn.onclick = () => { cat.causes.splice(cIdx, 1); renderCategoriesUI(); renderDiagram(); autosave(); };
+      causeItem.appendChild(input);
+      causeItem.appendChild(btn);
+      causesList.appendChild(causeItem);
+    });
+
+    block.appendChild(causesList);
+
+    const addBtn = document.createElement('button');
+    addBtn.className = 'btn-add-cause';
+    addBtn.textContent = '+ Agregar causa';
+    addBtn.onclick = () => { cat.causes.push(''); renderCategoriesUI(); renderDiagram(); };
+    block.appendChild(addBtn);
+
+    container.appendChild(block);
+  });
+}
+
+function cycleColor(idx) {
+  const currentIdx = COLORS.indexOf(STATE.categories[idx].color);
+  STATE.categories[idx].color = COLORS[(currentIdx + 1) % COLORS.length];
+  renderCategoriesUI();
+  renderDiagram();
+  autosave();
+}
+
+// ============================================================
+// LOAD TEMPLATE
+// ============================================================
+function loadTemplate(templateName) {
+  const tpl = TEMPLATES[templateName];
+  if (!tpl) return;
+  STATE.categories = tpl.categories.map((c, i) => ({
+    name: c.name,
+    color: COLORS[i % COLORS.length],
+    causes: [...c.causes]
+  }));
+  renderCategoriesUI();
+  renderDiagram();
+  autosave();
+  showToast(`Plantilla cargada: ${tpl.name}`, 'success');
+}
+
+// ============================================================
+// RENDER DIAGRAM (SVG)
+// ============================================================
+function renderDiagram() {
+  const svg = document.getElementById('diagram-svg');
+  const W = 900, H = 500;
+
+  // Calculate dynamic height based on number of causes
+  const maxCauses = Math.max(...STATE.categories.map(c => c.causes.filter(x => x.trim()).length), 0);
+  const dynH = Math.max(H, 320 + maxCauses * 24);
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${dynH}`);
+  svg.setAttribute('height', dynH);
+
+  let html = '';
+
+  // Background
+  html += `<rect x="0" y="0" width="${W}" height="${dynH}" fill="white"/>`;
+
+  // Title
+  html += `<text x="${W/2}" y="28" text-anchor="middle" font-family="Liberation Sans, Arial, sans-serif" font-size="16" font-weight="bold" fill="#1F2937">${escapeXml(STATE.diagram.title)}</text>`;
+
+  // Spine (horizontal arrow)
+  const spineY = dynH / 2;
+  const spineStartX = 80;
+  const spineEndX = W - 130;
+  html += `<line x1="${spineStartX}" y1="${spineY}" x2="${spineEndX}" y2="${spineY}" stroke="#1F2937" stroke-width="2.5"/>`;
+  html += `<polygon points="${spineEndX},${spineY} ${spineEndX-12},${spineY-6} ${spineEndX-12},${spineY+6}" fill="#1F2937"/>`;
+
+  // Effect box (head of fish)
+  const effectBoxX = W - 130;
+  const effectBoxW = 120;
+  const effectBoxH = 80;
+  const effectBoxY = spineY - effectBoxH/2;
+  html += `<rect x="${effectBoxX}" y="${effectBoxY}" width="${effectBoxW}" height="${effectBoxH}" rx="6" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="2"/>`;
+
+  // Wrap effect text
+  const effectLines = wrapText(STATE.diagram.effect, 18);
+  const effectStartY = spineY - (effectLines.length - 1) * 9;
+  effectLines.forEach((line, i) => {
+    html += `<text x="${effectBoxX + effectBoxW/2}" y="${effectStartY + i*18}" text-anchor="middle" font-family="Liberation Sans, Arial, sans-serif" font-size="12" font-weight="bold" fill="#1F2937">${escapeXml(line)}</text>`;
+  });
+  html += `<text x="${effectBoxX + effectBoxW/2}" y="${effectBoxY - 6}" text-anchor="middle" font-family="Liberation Sans, Arial, sans-serif" font-size="9" font-weight="bold" fill="#6B7280">EFECTO</text>`;
+
+  // 6 branches: 3 on top, 3 on bottom
+  const branches = STATE.categories;
+  if (branches.length === 0) { svg.innerHTML = html; return; }
+  const topBranches = branches.slice(0, 3);
+  const bottomBranches = branches.slice(3, 6);
+
+  // Spacing for branches along the spine
+  const branchSpacing = (spineEndX - spineStartX - 100) / 3;
+  const branchStartX = spineStartX + 60;
+
+  // Render top branches
+  topBranches.forEach((cat, i) => {
+    const x = branchStartX + i * branchSpacing;
+    const branchEndX = x + 80;
+    const branchEndY = 80;
+    html += renderBranch(cat, x, spineY, branchEndX, branchEndY, 'top');
+  });
+
+  // Render bottom branches
+  bottomBranches.forEach((cat, i) => {
+    const x = branchStartX + i * branchSpacing;
+    const branchEndX = x + 80;
+    const branchEndY = dynH - 60;
+    html += renderBranch(cat, x, spineY, branchEndX, branchEndY, 'bottom');
+  });
+
+  // Footer
+  html += `<text x="${W/2}" y="${dynH - 8}" text-anchor="middle" font-family="Liberation Sans, Arial, sans-serif" font-size="9" fill="#6B7280" font-style="italic">Generado con la herramienta de Diagrama de Ishikawa · Curso 2026-2 TICS Aplicada a la Ingeniería</text>`;
+
+  svg.innerHTML = html;
+}
+
+function renderBranch(cat, spineX, spineY, endX, endY, position) {
+  const color = cat.color || '#1E3A8A';
+  let html = '';
+
+  // Diagonal line
+  html += `<line x1="${spineX}" y1="${spineY}" x2="${endX}" y2="${endY}" stroke="${color}" stroke-width="2"/>`;
+
+  // Category label box
+  const labelX = (spineX + endX) / 2;
+  const labelY = (spineY + endY) / 2;
+
+  // Background rectangle for label
+  const labelText = cat.name || `Categoría`;
+  const labelWidth = Math.max(80, labelText.length * 7 + 16);
+  const labelBoxY = labelY - 10 + (position === 'top' ? -6 : -4);
+  html += `<rect x="${labelX - labelWidth/2}" y="${labelBoxY}" width="${labelWidth}" height="20" rx="3" fill="white" stroke="${color}" stroke-width="1.2"/>`;
+  html += `<text x="${labelX}" y="${labelBoxY + 14}" text-anchor="middle" font-family="Liberation Sans, Arial, sans-serif" font-size="10" font-weight="bold" fill="${color}">${escapeXml(labelText.toUpperCase())}</text>`;
+
+  // Causes (small tick marks along the branch)
+  const validCauses = cat.causes.filter(c => c && c.trim());
+  validCauses.forEach((cause, i) => {
+    // Position along the branch (0 to 1)
+    const t = 0.15 + (i / Math.max(validCauses.length, 1)) * 0.7;
+    const cx = spineX + (endX - spineX) * t;
+    const cy = spineY + (endY - spineY) * t;
+
+    // Tick mark — for top branches causes go above the branch line; for bottom, below
+    const tickLen = 8;
+    let tickEndX, tickEndY;
+    if (position === 'top') {
+      // Causes go to the upper-right of the branch point
+      tickEndX = cx + tickLen;
+      tickEndY = cy - tickLen;
+    } else {
+      // Causes go to the lower-right of the branch point
+      tickEndX = cx + tickLen;
+      tickEndY = cy + tickLen;
+    }
+    html += `<line x1="${cx}" y1="${cy}" x2="${tickEndX}" y2="${tickEndY}" stroke="#1F2937" stroke-width="1"/>`;
+
+    // Cause text — to the right of the tick
+    const textX = tickEndX + 4;
+    const textY = tickEndY + (position === 'top' ? -2 : 4);
+
+    // Wrap cause text if too long
+    const causeLines = wrapText(cause, 24);
+    causeLines.forEach((line, j) => {
+      const ly = textY + j * 12;
+      html += `<text x="${textX}" y="${ly}" text-anchor="start" font-family="Liberation Sans, Arial, sans-serif" font-size="10" fill="#1F2937">${escapeXml(line)}</text>`;
+    });
+  });
+
+  return html;
+}
+
+// Helper to wrap text
+function wrapText(text, maxChars) {
+  if (!text) return [''];
+  const words = text.split(' ');
+  const lines = [];
+  let current = '';
+  words.forEach(w => {
+    if ((current + ' ' + w).trim().length > maxChars) {
+      if (current) lines.push(current.trim());
+      current = w;
+    } else {
+      current = (current + ' ' + w).trim();
+    }
+  });
+  if (current) lines.push(current);
+  return lines.length > 0 ? lines : [''];
+}
+
+function escapeXml(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+// ============================================================
+// SAVE / LOAD
+// ============================================================
+function autosave() {
+  try {
+    localStorage.setItem('ishikawa_autosave', JSON.stringify({
+      student: STATE.student,
+      diagram: STATE.diagram,
+      categories: STATE.categories,
+      ts: Date.now()
+    }));
+  } catch(e) {}
+}
+
+function saveToStorage() {
+  autosave();
+  showToast('Diagrama guardado en el navegador', 'success');
+}
+
+function loadFromStorage() {
+  const data = localStorage.getItem('ishikawa_autosave');
+  if (!data) {
+    showToast('No hay diagrama guardado', 'error');
+    return;
+  }
+  try {
+    const parsed = JSON.parse(data);
+    if (parsed.student) {
+      STATE.student = parsed.student;
+      document.getElementById('student-name').value = STATE.student.name || '';
+      document.getElementById('student-code').value = STATE.student.code || '';
+      document.getElementById('student-group').value = STATE.student.group || '';
+      document.getElementById('student-date').value = STATE.student.date || '';
+      document.getElementById('student-professor').value = STATE.student.professor || '';
+      updateStudentBadge();
+    }
+    if (parsed.diagram) {
+      STATE.diagram = parsed.diagram;
+      document.getElementById('diagram-title').value = STATE.diagram.title || '';
+      document.getElementById('diagram-effect').value = STATE.diagram.effect || '';
+    }
+    if (parsed.categories && Array.isArray(parsed.categories)) {
+      STATE.categories = parsed.categories;
+      renderCategoriesUI();
+      renderDiagram();
+    }
+    showToast('Diagrama cargado', 'success');
+  } catch(e) {
+    showToast('Error al cargar el diagrama', 'error');
+  }
+}
+
+function resetAll() {
+  if (!confirm('¿Estás seguro de reiniciar el diagrama? Se perderán los cambios no guardados.')) return;
+  document.getElementById('student-name').value = '';
+  document.getElementById('student-code').value = '';
+  document.getElementById('student-group').value = '';
+  document.getElementById('student-professor').value = '';
+  document.getElementById('diagram-title').value = 'Diagrama de Ishikawa';
+  document.getElementById('diagram-effect').value = 'Caída de rentabilidad de planta';
+  STATE.student = { name: '', code: '', group: '', date: '', professor: '' };
+  STATE.diagram = { title: 'Diagrama de Ishikawa', effect: 'Caída de rentabilidad de planta' };
+  loadTemplate('services');
+  updateStudentBadge();
+  showToast('Diagrama reiniciado', 'success');
+}
+
+// ============================================================
+// EXPORT TO PDF
+// ============================================================
+function exportToPDF() {
+  showToast('Generando PDF...', 'info');
+
+  const target = document.getElementById('preview-wrapper');
+
+  // Temporarily expand for capture
+  const originalMaxHeight = target.style.maxHeight;
+  const originalOverflow = target.style.overflow;
+  target.style.maxHeight = 'none';
+  target.style.overflow = 'visible';
+
+  html2canvas(target, {
+    scale: 2,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    logging: false
+  }).then(canvas => {
+    // Restore
+    target.style.maxHeight = originalMaxHeight;
+    target.style.overflow = originalOverflow;
+
+    const { jsPDF } = window.jspdf;
+    const imgData = canvas.toDataURL('image/png');
+
+    // A4 landscape: 297 x 210 mm
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const pageW = 297;
+    const pageH = 210;
+    const margin = 10;
+    const usableW = pageW - 2*margin;
+    const usableH = pageH - 2*margin;
+
+    // Calculate image dimensions preserving aspect ratio
+    const imgRatio = canvas.height / canvas.width;
+    let imgW = usableW;
+    let imgH = imgW * imgRatio;
+    if (imgH > usableH) {
+      imgH = usableH;
+      imgW = imgH / imgRatio;
+    }
+    const offsetX = (pageW - imgW) / 2;
+    const offsetY = (pageH - imgH) / 2;
+
+    pdf.addImage(imgData, 'PNG', offsetX, offsetY, imgW, imgH);
+
+    // Set metadata
+    pdf.set_title(STATE.diagram.title || 'Diagrama de Ishikawa');
+    pdf.set_author(STATE.student.name || 'Estudiante');
+    pdf.set_subject('Diagrama de Ishikawa — Curso 2026-2 TICS Aplicada a la Ingeniería');
+    pdf.set_creator('Generador de Diagrama de Ishikawa');
+
+    const filename = `Ishikawa_${(STATE.student.name || 'estudiante').replace(/\s+/g, '_')}.pdf`;
+    pdf.save(filename);
+    showToast('PDF generado: ' + filename, 'success');
+  }).catch(err => {
+    target.style.maxHeight = originalMaxHeight;
+    target.style.overflow = originalOverflow;
+    console.error(err);
+    showToast('Error al generar PDF', 'error');
+  });
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer = null;
+function showToast(msg, type = 'info') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'show ' + type;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.className = '';
+  }, 3000);
+}
+</script>
+
+</body>
+</html>
