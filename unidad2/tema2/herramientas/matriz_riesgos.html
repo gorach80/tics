@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Matriz de Categorización de Riesgos — TICS Aplicada a la Ingeniería</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --primary: #1E3A8A;
+    --accent: #1E40AF;
+    --accent-light: #DBEAFE;
+    --border: #9CA3AF;
+    --text-primary: #1F2937;
+    --text-muted: #6B7280;
+    --bg: #FFFFFF;
+    --card-bg: #F9FAFB;
+
+    /* Risk matrix cell colors */
+    --risk-low: #D1FAE5;        /* verde claro */
+    --risk-low-border: #166534;
+    --risk-medium: #FEF3C7;     /* amarillo pálido */
+    --risk-medium-border: #92400e;
+    --risk-high: #FEE2E2;       /* rosa/rojo claro */
+    --risk-high-border: #991B1B;
+    --risk-critical: #FECACA;   /* rojo más intenso */
+    --risk-critical-border: #7F1D1D;
+
+    --sev-low-text: #166534;
+    --sev-medium-text: #92400e;
+    --sev-high-text: #991B1B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Liberation Sans', 'Segoe UI', Tahoma, sans-serif;
+    background: #F3F4F6;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--primary);
+    color: white;
+    padding: 18px 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  header h1 { font-size: 22px; margin-bottom: 4px; }
+  header .subtitle { font-size: 13px; opacity: 0.85; }
+
+  /* ===== CONTROLS BAR ===== */
+  .controls-bar {
+    background: white;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .controls-bar .ctrl-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-right: 12px;
+    border-right: 1px solid var(--border);
+  }
+  .controls-bar .ctrl-group:last-child { border-right: none; }
+  .controls-bar label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .controls-bar input[type="text"], .controls-bar input[type="date"] {
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: white;
+  }
+  .controls-bar input[type="text"]:focus, .controls-bar input[type="date"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-light);
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-secondary { background: white; color: var(--primary); border: 1.5px solid var(--primary); }
+  .btn-secondary:hover { background: var(--accent-light); }
+  .btn-success { background: #166534; color: white; }
+  .btn-success:hover { opacity: 0.9; }
+  .btn-danger { background: #991B1B; color: white; }
+  .btn-danger:hover { opacity: 0.9; }
+  .btn-amber { background: #92400e; color: white; }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main-container {
+    padding: 16px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ===== STUDENT BADGE ===== */
+  .student-badge {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 6px;
+  }
+  .student-badge .field-display {
+    display: flex;
+    flex-direction: column;
+  }
+  .student-badge .field-label {
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+  .student-badge .field-value {
+    font-size: 12px;
+    color: var(--text-primary);
+  }
+
+  /* ===== BOARD TITLE ===== */
+  .board-title {
+    text-align: center;
+    padding: 6px 0 10px 0;
+  }
+  .board-title h2 {
+    font-size: 20px;
+    color: var(--text-primary);
+    font-weight: 700;
+    margin: 0;
+  }
+  .board-title .subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  /* ===== TWO-COLUMN LAYOUT: MATRIX + RISK REGISTER ===== */
+  .content-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 18px;
+    margin-top: 12px;
+  }
+  @media (max-width: 1100px) {
+    .content-layout { grid-template-columns: 1fr; }
+  }
+
+  /* ===== RISK MATRIX ===== */
+  .matrix-panel {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .matrix-wrapper {
+    display: grid;
+    grid-template-columns: 30px 60px 1fr;
+    grid-template-rows: 1fr 30px;
+    gap: 6px;
+    margin: 0 auto;
+    max-width: 700px;
+  }
+
+  .y-axis-title {
+    grid-column: 1;
+    grid-row: 1;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .y-axis-title::after { content: " ↑"; }
+
+  .y-axis-labels {
+    grid-column: 2;
+    grid-row: 1;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 4px;
+  }
+  .y-axis-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+  }
+
+  .matrix-grid {
+    grid-column: 3;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 4px;
+    aspect-ratio: 1;
+  }
+
+  .matrix-cell {
+    border: 2px solid var(--text-primary);
+    border-radius: 4px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+    position: relative;
+  }
+  .matrix-cell:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+  }
+  .matrix-cell .risk-level {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .matrix-cell .risk-action {
+    font-size: 10px;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+  .matrix-cell .risk-action b {
+    font-weight: 700;
+  }
+  .matrix-cell .cell-coords {
+    position: absolute;
+    top: 3px;
+    right: 5px;
+    font-size: 9px;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+  .matrix-cell .cell-count {
+    position: absolute;
+    bottom: 3px;
+    left: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: rgba(255,255,255,0.7);
+    padding: 1px 5px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  /* Cell colors */
+  .cell-low { background: var(--risk-low); }
+  .cell-medium { background: var(--risk-medium); }
+  .cell-high { background: var(--risk-high); }
+  .cell-critical { background: var(--risk-critical); }
+  .cell-low .risk-level { color: var(--sev-low-text); }
+  .cell-medium .risk-level { color: var(--sev-medium-text); }
+  .cell-high .risk-level { color: var(--sev-high-text); }
+  .cell-critical .risk-level { color: var(--sev-high-text); }
+
+  .x-axis-labels {
+    grid-column: 3;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+  .x-axis-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+  }
+  .x-axis-title {
+    grid-column: 3;
+    grid-row: 3;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+  .x-axis-title::after { content: " →"; }
+
+  /* ===== LEGEND ===== */
+  .legend {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text-primary);
+  }
+  .legend-swatch {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--text-primary);
+    border-radius: 3px;
+  }
+
+  /* ===== RISK REGISTER ===== */
+  .register-panel {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .register-panel h3 {
+    font-size: 14px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--accent-light);
+  }
+
+  .add-risk-form {
+    background: var(--card-bg);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .add-risk-form .field { margin-bottom: 8px; }
+  .add-risk-form label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .add-risk-form input[type="text"], .add-risk-form select, .add-risk-form textarea {
+    width: 100%;
+    padding: 6px 9px;
+    font-size: 12px;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: white;
+  }
+  .add-risk-form textarea { resize: vertical; min-height: 38px; }
+  .add-risk-form .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .add-risk-form .actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .risk-list {
+    max-height: 480px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card-bg);
+  }
+  .risk-item {
+    background: white;
+    border-left: 4px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin: 6px;
+    font-size: 11px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 8px;
+    align-items: start;
+  }
+  .risk-item.r-low { border-left-color: var(--sev-low-text); }
+  .risk-item.r-medium { border-left-color: var(--sev-medium-text); }
+  .risk-item.r-high { border-left-color: var(--sev-high-text); }
+  .risk-item.r-critical { border-left-color: #7F1D1D; }
+  .risk-item .ri-title {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 12px;
+  }
+  .risk-item .ri-meta {
+    display: flex;
+    gap: 6px;
+    font-size: 10px;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+  .risk-item .ri-meta .badge {
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 9px;
+  }
+  .ri-meta .badge.prob-baja, .ri-meta .badge.imp-bajo { background: var(--risk-low); color: var(--sev-low-text); }
+  .ri-meta .badge.prob-media, .ri-meta .badge.imp-medio { background: var(--risk-medium); color: var(--sev-medium-text); }
+  .ri-meta .badge.prob-alta, .ri-meta .badge.imp-alto { background: var(--risk-high); color: var(--sev-high-text); }
+  .ri-meta .badge.level-low { background: var(--risk-low); color: var(--sev-low-text); }
+  .ri-meta .badge.level-medium { background: var(--risk-medium); color: var(--sev-medium-text); }
+  .ri-meta .badge.level-high { background: var(--risk-high); color: var(--sev-high-text); }
+  .ri-meta .badge.level-critical { background: var(--risk-critical); color: #7F1D1D; }
+  .risk-item .ri-action {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-style: italic;
+    grid-column: 1 / -1;
+  }
+  .risk-item .ri-actions {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-self: center;
+  }
+  .risk-item .ri-actions button {
+    background: transparent;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 11px;
+    width: 22px;
+    height: 22px;
+    border-radius: 3px;
+    line-height: 1;
+    padding: 0;
+  }
+  .risk-item .ri-actions button:hover { background: #E5E7EB; color: var(--text-primary); }
+  .risk-item .ri-actions .btn-del:hover { background: #FEE2E2; color: var(--sev-high-text); }
+
+  .empty-state {
+    padding: 30px 16px;
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 12px;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 460px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal h3 {
+    font-size: 15px;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+  .modal .field { margin-bottom: 10px; }
+  .modal label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .modal input[type="text"], .modal select, .modal textarea {
+    width: 100%;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .modal textarea { resize: vertical; min-height: 60px; }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 14px;
+  }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--text-primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 9999;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.success { background: #166534; }
+  #toast.error { background: #991B1B; }
+  #toast.warning { background: #92400e; }
+
+  /* ===== FOOTER ===== */
+  .footer-note {
+    text-align: center;
+    padding: 12px 20px;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: white; }
+    header, .controls-bar, .footer-note { display: none; }
+    .main-container { padding: 0; max-width: none; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 700px) {
+    .controls-bar { padding: 10px; }
+    .controls-bar .ctrl-group { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    .matrix-wrapper { grid-template-columns: 25px 50px 1fr; }
+    .matrix-cell .risk-action { font-size: 8px; }
+    .matrix-cell .risk-level { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Generador de Matriz de Categorización de Riesgos</h1>
+  <div class="subtitle">Curso 2026-2 TICS APLICADA A LA INGENIERIA · PRESENCIAL 1/3 — ING-INDUSTRIAL</div>
+</header>
+
+<!-- ===== CONTROLS BAR ===== -->
+<div class="controls-bar">
+  <div class="ctrl-group">
+    <label>Título:</label>
+    <input type="text" id="matrix-title-input" value="Matriz de Categorización de Riesgos Tecnológicos (CAB)" style="width: 320px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Subtítulo:</label>
+    <input type="text" id="matrix-subtitle-input" value="Eje X: Impacto en el negocio · Eje Y: Probabilidad de ocurrencia" style="width: 280px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Estudiante:</label>
+    <input type="text" id="student-name" placeholder="Nombre" style="width: 120px;">
+    <input type="text" id="student-code" placeholder="Código" style="width: 90px;">
+    <input type="text" id="student-group" placeholder="Grupo" style="width: 60px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Profesor:</label>
+    <input type="text" id="student-professor" placeholder="Profesor" style="width: 130px;">
+  </div>
+  <div class="ctrl-group">
+    <label>Fecha:</label>
+    <input type="date" id="student-date">
+  </div>
+  <div class="ctrl-group" style="margin-left: auto;">
+    <button class="btn btn-primary" onclick="exportToPDF()">PDF</button>
+    <button class="btn btn-secondary" onclick="window.print()">Imprimir</button>
+    <button class="btn btn-success" onclick="saveToStorage()">Guardar</button>
+    <button class="btn btn-secondary" onclick="loadFromStorage()">Cargar</button>
+    <button class="btn btn-secondary" onclick="loadTemplate('cab')">Plantilla CAB</button>
+    <button class="btn btn-secondary" onclick="loadTemplate('blank')">Limpiar</button>
+    <button class="btn btn-danger" onclick="resetAll()">Reiniciar</button>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main-container" id="main-container">
+
+  <!-- Student badge -->
+  <div class="student-badge" id="student-badge">
+    <div class="field-display">
+      <span class="field-label">Estudiante</span>
+      <span class="field-value" id="badge-name">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Código</span>
+      <span class="field-value" id="badge-code">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Grupo</span>
+      <span class="field-value" id="badge-group">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Profesor</span>
+      <span class="field-value" id="badge-professor">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Fecha</span>
+      <span class="field-value" id="badge-date">—</span>
+    </div>
+    <div class="field-display">
+      <span class="field-label">Curso</span>
+      <span class="field-value">2026-2 TICS Ing. Industrial</span>
+    </div>
+  </div>
+
+  <!-- Board title -->
+  <div class="board-title">
+    <h2 id="display-title">Matriz de Categorización de Riesgos Tecnológicos (CAB)</h2>
+    <div class="subtitle" id="display-subtitle">Eje X: Impacto en el negocio · Eje Y: Probabilidad de ocurrencia</div>
+  </div>
+
+  <!-- Two-column layout: Matrix + Risk Register -->
+  <div class="content-layout">
+
+    <!-- ===== MATRIX PANEL ===== -->
+    <div class="matrix-panel">
+      <div class="matrix-wrapper" id="matrix-wrapper">
+        <div class="y-axis-title">PROBABILIDAD DE OCURRENCIA</div>
+        <div class="y-axis-labels">
+          <div class="y-axis-label">Alta</div>
+          <div class="y-axis-label">Media</div>
+          <div class="y-axis-label">Baja</div>
+        </div>
+        <div class="matrix-grid" id="matrix-grid">
+          <!-- 9 cells generated by JS -->
+        </div>
+        <div class="x-axis-labels">
+          <div class="x-axis-label">Bajo</div>
+          <div class="x-axis-label">Medio</div>
+          <div class="x-axis-label">Alto</div>
+        </div>
+        <div class="x-axis-title">IMPACTO EN EL NEGOCIO</div>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--risk-low);"></div>Riesgo Bajo/Mínimo</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--risk-medium);"></div>Riesgo Medio</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--risk-high);"></div>Riesgo Alto</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--risk-critical);"></div>Riesgo Crítico</div>
+      </div>
+    </div>
+
+    <!-- ===== RISK REGISTER PANEL ===== -->
+    <div class="register-panel">
+      <h3>Registro de Riesgos</h3>
+
+      <div class="add-risk-form">
+        <div class="field">
+          <label>Descripción del riesgo</label>
+          <input type="text" id="new-risk-title" placeholder="Ej: Cambio de cortafuegos en producción">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Probabilidad</label>
+            <select id="new-risk-prob">
+              <option value="baja">Baja</option>
+              <option value="media" selected>Media</option>
+              <option value="alta">Alta</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Impacto</label>
+            <select id="new-risk-imp">
+              <option value="bajo">Bajo</option>
+              <option value="medio" selected>Medio</option>
+              <option value="alto">Alto</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Acción de mitigación (opcional)</label>
+          <textarea id="new-risk-action" placeholder="Ej: Requiere CAB completo + ventana nocturna"></textarea>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="addRiskFromForm()">+ Agregar riesgo</button>
+          <button class="btn btn-secondary" onclick="clearForm()">Limpiar formulario</button>
+        </div>
+      </div>
+
+      <div class="risk-list" id="risk-list">
+        <div class="empty-state">No hay riesgos registrados.<br>Agrega el primer riesgo usando el formulario de arriba.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-note">
+    Generado con la herramienta de Matriz de Categorización de Riesgos · Curso 2026-2 TICS Aplicada a la Ingeniería · PRESENCIAL 1/3 — ING-INDUSTRIAL
+  </div>
+</div>
+
+<!-- ===== MODAL FOR EDIT RISK ===== -->
+<div class="modal-overlay" id="risk-modal">
+  <div class="modal">
+    <h3>Editar Riesgo</h3>
+    <div class="field">
+      <label>Descripción del riesgo</label>
+      <input type="text" id="edit-risk-title">
+    </div>
+    <div class="field-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+      <div class="field">
+        <label>Probabilidad</label>
+        <select id="edit-risk-prob">
+          <option value="baja">Baja</option>
+          <option value="media">Media</option>
+          <option value="alta">Alta</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Impacto</label>
+        <select id="edit-risk-imp">
+          <option value="bajo">Bajo</option>
+          <option value="medio">Medio</option>
+          <option value="alto">Alto</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Acción de mitigación</label>
+      <textarea id="edit-risk-action"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveEditedRisk()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const STATE = {
+  matrix: { title: '', subtitle: '' },
+  student: { name: '', code: '', group: '', date: '', professor: '' },
+  risks: []  // {id, title, prob, imp, action}
+};
+
+let nextRiskId = 1;
+let editingRiskId = null;
+
+// Matrix configuration: 9 cells with risk level, action, color
+// Rows: 0=Alta, 1=Media, 2=Baja (top to bottom)
+// Cols: 0=Bajo, 1=Medio, 2=Alto (left to right)
+const MATRIX_CONFIG = [
+  // Row 0: Alta probabilidad
+  [
+    { level: 'medio',   text: 'Riesgo Medio',   action: '<b>CAB estándar</b><br>+ rollback plan',     color: 'medium' },
+    { level: 'alto',    text: 'Riesgo Alto',    action: '<b>CAB completo</b><br>+ ventana nocturna', color: 'high' },
+    { level: 'critico', text: 'Riesgo Crítico', action: '<b>CAB + Comité</b><br>+ prueba en staging', color: 'critical' },
+  ],
+  // Row 1: Media probabilidad
+  [
+    { level: 'bajo',    text: 'Riesgo Bajo',    action: '<b>Auto-aprobar</b><br>+ notificar CAB',     color: 'low' },
+    { level: 'medio',   text: 'Riesgo Medio',   action: '<b>CAB estándar</b><br>+ rollback plan',     color: 'medium' },
+    { level: 'alto',    text: 'Riesgo Alto',    action: '<b>CAB completo</b><br>+ aprobación CIO',    color: 'high' },
+  ],
+  // Row 2: Baja probabilidad
+  [
+    { level: 'minimo',  text: 'Riesgo Mínimo',  action: '<b>Sin CAB</b><br>+ log de cambios',         color: 'low' },
+    { level: 'bajo',    text: 'Riesgo Bajo',    action: '<b>Auto-aprobar</b><br>+ notificar CAB',     color: 'low' },
+    { level: 'medio',   text: 'Riesgo Medio',   action: '<b>CAB estándar</b><br>+ rollback plan',     color: 'medium' },
+  ],
+];
+
+const PROB_LABELS = { baja: 'Baja', media: 'Media', alta: 'Alta' };
+const IMP_LABELS = { bajo: 'Bajo', medio: 'Medio', alto: 'Alto' };
+const PROB_ROW = { alta: 0, media: 1, baja: 2 };
+const IMP_COL = { bajo: 0, medio: 1, alto: 2 };
+
+const LEVEL_LABELS = {
+  minimo: 'Mínimo',
+  bajo: 'Bajo',
+  medio: 'Medio',
+  alto: 'Alto',
+  critico: 'Crítico'
+};
+
+// Templates
+const TEMPLATES = {
+  cab: {
+    title: 'Matriz de Categorización de Riesgos Tecnológicos (CAB)',
+    subtitle: 'Eje X: Impacto en el negocio · Eje Y: Probabilidad de ocurrencia',
+    risks: [
+      { title: 'Cambiar cableado del rack de servidores', prob: 'baja', imp: 'bajo', action: 'Sin CAB + log de cambios' },
+      { title: 'Actualizar documentación de procesos', prob: 'baja', imp: 'medio', action: 'Auto-aprobar + notificar CAB' },
+      { title: 'Reunión con proveedor de hardware', prob: 'baja', imp: 'medio', action: 'Auto-aprobar + notificar CAB' },
+      { title: 'Migrar base de datos legacy', prob: 'media', imp: 'alto', action: 'CAB completo + aprobación CIO' },
+      { title: 'Hotfix POS facturación', prob: 'alta', imp: 'alto', action: 'CAB + Comité + prueba en staging' },
+      { title: 'Patch de seguridad crítico', prob: 'alta', imp: 'medio', action: 'CAB completo + ventana nocturna' },
+      { title: 'Configurar monitoreo proactivo', prob: 'media', imp: 'bajo', action: 'Auto-aprobar + notificar CAB' },
+      { title: 'Release Phoenix v1.2', prob: 'alta', imp: 'alto', action: 'CAB + Comité + prueba en staging' },
+      { title: 'Actualizar firmware del SAN', prob: 'media', imp: 'alto', action: 'CAB completo + aprobación CIO' },
+    ]
+  },
+  blank: {
+    title: 'Matriz de Categorización de Riesgos',
+    subtitle: '',
+    risks: []
+  }
+};
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('student-date').value = new Date().toISOString().split('T')[0];
+
+  // Listeners
+  document.getElementById('matrix-title-input').addEventListener('input', e => {
+    STATE.matrix.title = e.target.value;
+    document.getElementById('display-title').textContent = e.target.value;
+    autosave();
+  });
+  document.getElementById('matrix-subtitle-input').addEventListener('input', e => {
+    STATE.matrix.subtitle = e.target.value;
+    document.getElementById('display-subtitle').textContent = e.target.value;
+    autosave();
+  });
+  ['student-name','student-code','student-group','student-date','student-professor'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateStudentBadge);
+  });
+
+  // Set defaults
+  document.getElementById('matrix-title-input').value = TEMPLATES.cab.title;
+  document.getElementById('matrix-subtitle-input').value = TEMPLATES.cab.subtitle;
+  STATE.matrix.title = TEMPLATES.cab.title;
+  STATE.matrix.subtitle = TEMPLATES.cab.subtitle;
+  document.getElementById('display-title').textContent = TEMPLATES.cab.title;
+  document.getElementById('display-subtitle').textContent = TEMPLATES.cab.subtitle;
+
+  renderMatrix();
+  loadTemplate('cab', false);
+  updateStudentBadge();
+});
+
+// ============================================================
+// STUDENT BADGE
+// ============================================================
+function updateStudentBadge() {
+  STATE.student.name = document.getElementById('student-name').value;
+  STATE.student.code = document.getElementById('student-code').value;
+  STATE.student.group = document.getElementById('student-group').value;
+  STATE.student.date = document.getElementById('student-date').value;
+  STATE.student.professor = document.getElementById('student-professor').value;
+
+  document.getElementById('badge-name').textContent = STATE.student.name || '—';
+  document.getElementById('badge-code').textContent = STATE.student.code || '—';
+  document.getElementById('badge-group').textContent = STATE.student.group || '—';
+  document.getElementById('badge-professor').textContent = STATE.student.professor || '—';
+  document.getElementById('badge-date').textContent = STATE.student.date ? formatDate(STATE.student.date) : '—';
+
+  autosave();
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+// ============================================================
+// RENDER MATRIX
+// ============================================================
+function renderMatrix() {
+  const grid = document.getElementById('matrix-grid');
+  grid.innerHTML = '';
+
+  for (let row = 0; row < 3; row++) {
+    for (let col = 0; col < 3; col++) {
+      const config = MATRIX_CONFIG[row][col];
+      const cell = document.createElement('div');
+      cell.className = `matrix-cell cell-${config.color}`;
+      cell.dataset.row = row;
+      cell.dataset.col = col;
+
+      const probKey = Object.keys(PROB_ROW).find(k => PROB_ROW[k] === row);
+      const impKey = Object.keys(IMP_COL).find(k => IMP_COL[k] === col);
+
+      // Count risks in this cell
+      const count = STATE.risks.filter(r => r.prob === probKey && r.imp === impKey).length;
+
+      cell.innerHTML = `
+        <div class="cell-coords">${PROB_LABELS[probKey][0]}·${IMP_LABELS[impKey][0]}</div>
+        <div class="risk-level">${config.text}</div>
+        <div class="risk-action">${config.action}</div>
+        ${count > 0 ? `<div class="cell-count">${count} riesgo${count > 1 ? 's' : ''}</div>` : ''}
+      `;
+
+      // Click to filter/show risks in this cell
+      cell.addEventListener('click', () => {
+        const risksInCell = STATE.risks.filter(r => r.prob === probKey && r.imp === impKey);
+        if (risksInCell.length > 0) {
+          showToast(`${risksInCell.length} riesgo(s) en celda ${PROB_LABELS[probKey]}/${IMP_LABELS[impKey]}: ${risksInCell.map(r => '"' + r.title + '"').join(', ')}`, 'info');
+        } else {
+          showToast(`Celda ${PROB_LABELS[probKey]}/${IMP_LABELS[impKey]}: ${config.text}`, 'info');
+        }
+      });
+
+      grid.appendChild(cell);
+    }
+  }
+}
+
+// ============================================================
+// RISK MANAGEMENT
+// ============================================================
+function addRiskFromForm() {
+  const title = document.getElementById('new-risk-title').value.trim();
+  const prob = document.getElementById('new-risk-prob').value;
+  const imp = document.getElementById('new-risk-imp').value;
+  const action = document.getElementById('new-risk-action').value.trim();
+
+  if (!title) {
+    showToast('La descripción del riesgo es obligatoria', 'error');
+    return;
+  }
+
+  const newRisk = {
+    id: nextRiskId++,
+    title: title,
+    prob: prob,
+    imp: imp,
+    action: action || getActionForCell(prob, imp)
+  };
+  STATE.risks.push(newRisk);
+
+  clearForm();
+  renderMatrix();
+  renderRiskList();
+  autosave();
+  showToast(`Riesgo agregado en celda ${PROB_LABELS[prob]}/${IMP_LABELS[imp]}`, 'success');
+}
+
+function getActionForCell(prob, imp) {
+  const row = PROB_ROW[prob];
+  const col = IMP_COL[imp];
+  const config = MATRIX_CONFIG[row][col];
+  // Strip HTML tags from action
+  const div = document.createElement('div');
+  div.innerHTML = config.action.replace(/<br>/g, ' ');
+  return div.textContent.trim();
+}
+
+function clearForm() {
+  document.getElementById('new-risk-title').value = '';
+  document.getElementById('new-risk-prob').value = 'media';
+  document.getElementById('new-risk-imp').value = 'medio';
+  document.getElementById('new-risk-action').value = '';
+}
+
+function renderRiskList() {
+  const list = document.getElementById('risk-list');
+  if (STATE.risks.length === 0) {
+    list.innerHTML = '<div class="empty-state">No hay riesgos registrados.<br>Agrega el primer riesgo usando el formulario de arriba.</div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  // Sort by risk level descending (critical first)
+  const sorted = [...STATE.risks].sort((a, b) => {
+    const levelA = getRiskLevel(a.prob, a.imp);
+    const levelB = getRiskLevel(b.prob, b.imp);
+    const order = { critico: 0, alto: 1, medio: 2, bajo: 3, minimo: 4 };
+    return order[levelA] - order[levelB];
+  });
+
+  sorted.forEach(risk => {
+    const level = getRiskLevel(risk.prob, risk.imp);
+    const item = document.createElement('div');
+    item.className = `risk-item r-${level}`;
+
+    item.innerHTML = `
+      <div class="ri-title">${escapeHtml(risk.title)}</div>
+      <div class="ri-actions">
+        <button class="btn-edit" onclick="openEditModal(${risk.id})" title="Editar">✎</button>
+        <button class="btn-del" onclick="deleteRisk(${risk.id})" title="Eliminar">×</button>
+      </div>
+      <div class="ri-meta">
+        <span class="badge prob-${risk.prob}">Prob: ${PROB_LABELS[risk.prob]}</span>
+        <span class="badge imp-${risk.imp}">Imp: ${IMP_LABELS[risk.imp]}</span>
+        <span class="badge level-${level}">${LEVEL_LABELS[level]}</span>
+      </div>
+      ${risk.action ? `<div class="ri-action">→ ${escapeHtml(risk.action)}</div>` : ''}
+    `;
+    list.appendChild(item);
+  });
+}
+
+function getRiskLevel(prob, imp) {
+  const row = PROB_ROW[prob];
+  const col = IMP_COL[imp];
+  return MATRIX_CONFIG[row][col].level;
+}
+
+function deleteRisk(id) {
+  if (!confirm('¿Eliminar este riesgo?')) return;
+  STATE.risks = STATE.risks.filter(r => r.id !== id);
+  renderMatrix();
+  renderRiskList();
+  autosave();
+  showToast('Riesgo eliminado', 'success');
+}
+
+function openEditModal(id) {
+  const risk = STATE.risks.find(r => r.id === id);
+  if (!risk) return;
+  editingRiskId = id;
+  document.getElementById('edit-risk-title').value = risk.title;
+  document.getElementById('edit-risk-prob').value = risk.prob;
+  document.getElementById('edit-risk-imp').value = risk.imp;
+  document.getElementById('edit-risk-action').value = risk.action || '';
+  document.getElementById('risk-modal').classList.add('show');
+  setTimeout(() => document.getElementById('edit-risk-title').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('risk-modal').classList.remove('show');
+  editingRiskId = null;
+}
+
+function saveEditedRisk() {
+  if (!editingRiskId) return;
+  const risk = STATE.risks.find(r => r.id === editingRiskId);
+  if (!risk) return;
+
+  const title = document.getElementById('edit-risk-title').value.trim();
+  if (!title) {
+    showToast('La descripción del riesgo es obligatoria', 'error');
+    return;
+  }
+  risk.title = title;
+  risk.prob = document.getElementById('edit-risk-prob').value;
+  risk.imp = document.getElementById('edit-risk-imp').value;
+  risk.action = document.getElementById('edit-risk-action').value.trim() || getActionForCell(risk.prob, risk.imp);
+
+  renderMatrix();
+  renderRiskList();
+  autosave();
+  closeModal();
+  showToast('Riesgo actualizado', 'success');
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ============================================================
+// TEMPLATES
+// ============================================================
+function loadTemplate(name, showMsg = true) {
+  const tpl = TEMPLATES[name];
+  if (!tpl) return;
+  STATE.matrix.title = tpl.title;
+  STATE.matrix.subtitle = tpl.subtitle;
+  document.getElementById('matrix-title-input').value = tpl.title;
+  document.getElementById('matrix-subtitle-input').value = tpl.subtitle;
+  document.getElementById('display-title').textContent = tpl.title;
+  document.getElementById('display-subtitle').textContent = tpl.subtitle;
+
+  nextRiskId = 1;
+  STATE.risks = (tpl.risks || []).map(r => ({
+    id: nextRiskId++,
+    title: r.title,
+    prob: r.prob,
+    imp: r.imp,
+    action: r.action
+  }));
+  renderMatrix();
+  renderRiskList();
+  autosave();
+  if (showMsg) showToast(`Plantilla cargada: ${tpl.title.substring(0, 40)}...`, 'success');
+}
+
+// ============================================================
+// SAVE / LOAD
+// ============================================================
+function autosave() {
+  try {
+    localStorage.setItem('risk_matrix_autosave', JSON.stringify({
+      matrix: STATE.matrix,
+      student: STATE.student,
+      risks: STATE.risks,
+      nextRiskId: nextRiskId,
+      ts: Date.now()
+    }));
+  } catch(e) {}
+}
+
+function saveToStorage() {
+  autosave();
+  showToast('Matriz guardada en el navegador', 'success');
+}
+
+function loadFromStorage() {
+  const data = localStorage.getItem('risk_matrix_autosave');
+  if (!data) {
+    showToast('No hay matriz guardada', 'error');
+    return;
+  }
+  try {
+    const parsed = JSON.parse(data);
+    if (parsed.matrix) {
+      STATE.matrix = parsed.matrix;
+      document.getElementById('matrix-title-input').value = STATE.matrix.title || '';
+      document.getElementById('matrix-subtitle-input').value = STATE.matrix.subtitle || '';
+      document.getElementById('display-title').textContent = STATE.matrix.title || '';
+      document.getElementById('display-subtitle').textContent = STATE.matrix.subtitle || '';
+    }
+    if (parsed.student) {
+      STATE.student = parsed.student;
+      document.getElementById('student-name').value = STATE.student.name || '';
+      document.getElementById('student-code').value = STATE.student.code || '';
+      document.getElementById('student-group').value = STATE.student.group || '';
+      document.getElementById('student-date').value = STATE.student.date || '';
+      document.getElementById('student-professor').value = STATE.student.professor || '';
+      updateStudentBadge();
+    }
+    if (parsed.risks) {
+      STATE.risks = parsed.risks;
+      nextRiskId = parsed.nextRiskId || 100;
+      renderMatrix();
+      renderRiskList();
+    }
+    showToast('Matriz cargada', 'success');
+  } catch(e) {
+    showToast('Error al cargar la matriz', 'error');
+  }
+}
+
+function resetAll() {
+  if (!confirm('¿Reiniciar la matriz? Se perderán los cambios no guardados.')) return;
+  document.getElementById('student-name').value = '';
+  document.getElementById('student-code').value = '';
+  document.getElementById('student-group').value = '';
+  document.getElementById('student-professor').value = '';
+  STATE.student = { name: '', code: '', group: '', date: '', professor: '' };
+  updateStudentBadge();
+  loadTemplate('cab');
+  showToast('Matriz reiniciada', 'success');
+}
+
+// ============================================================
+// EXPORT TO PDF
+// ============================================================
+function exportToPDF() {
+  showToast('Generando PDF...', 'info');
+
+  const target = document.getElementById('main-container');
+
+  html2canvas(target, {
+    scale: 2,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    logging: false,
+    windowWidth: target.scrollWidth
+  }).then(canvas => {
+    const { jsPDF } = window.jspdf;
+    const imgData = canvas.toDataURL('image/png');
+
+    // A4 landscape
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const pageW = 297;
+    const pageH = 210;
+    const margin = 8;
+    const usableW = pageW - 2*margin;
+    const usableH = pageH - 2*margin;
+
+    const imgRatio = canvas.height / canvas.width;
+    let imgW = usableW;
+    let imgH = imgW * imgRatio;
+    if (imgH > usableH) {
+      imgH = usableH;
+      imgW = imgH / imgRatio;
+    }
+    const offsetX = (pageW - imgW) / 2;
+    const offsetY = (pageH - imgH) / 2;
+
+    pdf.addImage(imgData, 'PNG', offsetX, offsetY, imgW, imgH);
+
+    pdf.set_title(STATE.matrix.title || 'Matriz de Categorización de Riesgos');
+    pdf.set_author(STATE.student.name || 'Estudiante');
+    pdf.set_subject('Matriz de Categorización de Riesgos — Curso 2026-2 TICS Aplicada a la Ingeniería');
+    pdf.set_creator('Generador de Matriz de Riesgos');
+
+    const filename = `Matriz_Riesgos_${(STATE.student.name || 'estudiante').replace(/\s+/g, '_')}.pdf`;
+    pdf.save(filename);
+    showToast('PDF generado: ' + filename, 'success');
+  }).catch(err => {
+    console.error(err);
+    showToast('Error al generar PDF', 'error');
+  });
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer = null;
+function showToast(msg, type = 'info') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'show ' + type;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.className = '';
+  }, 3500);
+}
+
+// Close modal on overlay click
+document.getElementById('risk-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'risk-modal') closeModal();
+});
+// Close modal on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && document.getElementById('risk-modal').classList.contains('show')) {
+    saveEditedRisk();
+  }
+});
+</script>
+
+</body>
+</html>
