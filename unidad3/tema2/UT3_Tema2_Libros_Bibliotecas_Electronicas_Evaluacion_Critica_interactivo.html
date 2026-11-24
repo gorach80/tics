@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UT3 · Tema 2 — Libros y Bibliotecas Electrónicas · Evaluación Crítica de la Información | UPSE</title>
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#f1f5f9;color:#1e293b;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+.page{max-width:900px;margin:0 auto;padding:10px}
+h1,h2,h3,h4{letter-spacing:-0.01em}
+h1{font-size:26px;font-weight:800;margin:0 0 8px}
+h2{font-size:17px;font-weight:700;margin:0;color:#0f172a}
+h3{font-size:15px;font-weight:700;margin:0 0 10px;color:#0f172a}
+h4{font-size:13px;font-weight:700;margin:0 0 6px;color:#0f172a}
+p{margin:0 0 10px;font-size:13.5px;color:#475569}
+ul,ol{margin:0 0 10px;padding-left:20px;font-size:13px;color:#475569}
+li{margin-bottom:6px}
+small{color:#64748b}
+a{color:#2563eb}
+.card{background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:24px}
+.badge{background:#1d4ed8;color:#fff;padding:4px 12px;border-radius:9999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:inline-block;margin-bottom:12px}
+.sec-title{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sec-title .n{background:#dbeafe;color:#1d4ed8;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:0 0 auto}
+.kbox{border-radius:8px;padding:12px;border:1px solid}
+.kbox-c{background-color:#eff6ff;border-color:#bfdbfe}
+.kbox-v{background-color:#f0fdf4;border-color:#bbf7d0}
+.kbox-a{background-color:#fffbeb;border-color:#fde68a}
+.kbox-r{background-color:#fef2f2;border-color:#fecaca}
+.kbox-g{background-color:#f8fafc;border-color:#e2e8f0}
+.kbox-h{background-color:#112240;border-color:#112240;color:#e2e8f0}
+.kbox h4{color:#0f172a}
+.kbox-a h4{color:#92400e}.kbox-v h4{color:#065f46}.kbox-c h4{color:#1d4ed8}.kbox-r h4{color:#991b1b}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:left;vertical-align:top}
+thead th{background:#111e2e;color:#fff;border-right:1px solid #1e293b}
+tbody tr:nth-child(odd){background:#f8fafc}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabs-bar{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 10px;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+.tab-btn{flex:0 0 auto;background:#ffffff;border:1px solid #cbd5e1;color:#334155;padding:8px 14px;border-radius:9999px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.tab-btn:hover{border-color:#2563eb;color:#1d4ed8}
+.tab-btn.active{background:#1d4ed8;border-color:#1d4ed8;color:#ffffff}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.url-note{background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:8px 12px;font-size:11.5px;color:#64748b;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.url-note code{background:#e2e8f0;color:#0f172a;padding:1px 6px;border-radius:4px;font-size:11px;word-break:break-all}
+.url-note a.ulink{font-size:11px;color:#2563eb;word-break:break-all}
+.copy-btn{background:#1d4ed8;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;flex:0 0 auto}
+.copy-btn:hover{background:#1e40af}
+details.sr{border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;padding:10px 12px;margin-bottom:12px}
+details.sr summary{cursor:pointer;font-size:12.5px;font-weight:700;color:#1d4ed8;user-select:none}
+details.sr[open] summary{margin-bottom:8px}
+details.sr .sr-body{font-size:12.5px;color:#334155}
+.calc-in{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:6px;padding:7px 9px;font-size:12.5px;font-family:inherit;background:#fff;color:#1e293b}
+.calc-out{background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #2563eb;border-radius:8px;padding:12px;font-size:12.8px;color:#1e293b;display:none;margin-top:10px}
+.calc-out.ok{display:block}
+.calc-out.err{display:block;border-left-color:#dc2626;background:#fef2f2}
+.btn-main{background:#1d4ed8;color:#ffffff;border:none;border-radius:8px;padding:9px 16px;font-size:12.8px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-main:hover{background:#1e40af}
+.btn-ghost{background:#ffffff;color:#334155;border:1px solid #cbd5e1;border-radius:8px;padding:8px 14px;font-size:12.3px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-ghost:hover{border-color:#2563eb;color:#1d4ed8}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.opt-btn{background:#fff;border:1.5px solid #cbd5e1;border-radius:8px;padding:9px 12px;font-size:12.5px;font-family:inherit;cursor:pointer;text-align:left;color:#334155;width:100%;display:block;margin-bottom:7px}
+.opt-btn:hover{border-color:#2563eb}
+.opt-btn.sel{border-color:#2563eb;background:#eff6ff;color:#1d4ed8;font-weight:700}
+.opt-btn.right{border-color:#059669;background:#f0fdf4;color:#065f46;font-weight:700}
+.opt-btn.wrong{border-color:#dc2626;background:#fef2f2;color:#991b1b;font-weight:700}
+.qbox{border:1px solid #e2e8f0;border-radius:10px;background:#fff;padding:14px;margin-bottom:14px}
+.tl{list-style:none;padding:0;margin:0}
+.tl li{position:relative;padding:0 0 18px 26px;border-left:2px solid #cbd5e1;margin-left:8px}
+.tl li:before{content:'';position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;background:#2563eb;border:2px solid #fff;box-shadow:0 0 0 2px #bfdbfe}
+.tl li:last-child{border-left-color:transparent}
+.fw-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #e2e8f0;background:#fff;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;color:#334155;cursor:pointer;user-select:none}
+.fw-pill.on{background:#112240;color:#fff;border-color:#112240}
+.fase-panel{display:none}
+.fase-panel.active{display:block}
+.fase-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.fase-step{border:1.5px solid #e2e8f0;border-radius:8px;padding:10px;background:#fff;cursor:pointer;font-size:12.5px;font-weight:700;color:#334155;text-align:left;font-family:inherit}
+.fase-step small{display:block;font-weight:600;color:#64748b;margin-top:2px;font-size:11px}
+.fase-step.cur{border-color:#2563eb;background:#eff6ff;color:#1d4ed8}
+.fase-step.done{border-color:#059669;background:#f0fdf4;color:#065f46}
+.prog-track{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:10px 0 4px 0}
+.prog-fill{height:100%;background:linear-gradient(90deg,#2563eb,#059669);border-radius:999px;transition:width .3s}
+textarea.txt{width:100%;min-height:90px;border:1px solid #cbd5e1;border-radius:8px;padding:10px;font-family:inherit;font-size:12.5px;color:#1e293b;box-sizing:border-box;background:#fff;resize:vertical}
+.sq{border:1px solid #e2e8f0;border-radius:8px;padding:12px;background:#fff}
+.sq .sv{font-size:22px;font-weight:800;color:#0f172a;display:block;line-height:1.2}
+.sq .sl{font-size:11px;color:#64748b;display:block;margin-top:4px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.bar-lab{flex:0 0 170px;font-size:12px;font-weight:600;color:#334155}
+.bar-tr{flex:1 1 150px;height:16px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.bar-fi{height:100%;border-radius:999px;background:linear-gradient(90deg,#2563eb,#059669);transition:width .4s}
+.bar-val{flex:0 0 auto;font-size:12px;color:#475569;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1e293b;line-height:1.5;max-width:900px;margin:0 auto;padding:10px;">
+
+  <!-- ENCABEZADO PRINCIPAL -->
+  <div style="background-color:#112240;border-radius:12px;padding:24px;color:#ffffff;margin-bottom:24px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);">
+    <span style="background-color:#1d4ed8;color:#ffffff;padding:4px 12px;border-radius:9999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;display:inline-block;margin-bottom:12px;">UNIDAD TEMÁTICA 3 · TEMA 2</span>
+    <h1 style="color:#ffffff;font-size:26px;font-weight:800;margin:0 0 8px 0;letter-spacing:-0.025em;">Libros y Bibliotecas Electrónicas: Evaluación Crítica de la Información en la Web</h1>
+    <p style="color:#94a3b8;font-size:14px;margin:0;">Fundamentos de uso de Internet y herramientas de seguridad en los sistemas de información — E-books, bibliotecas digitales, criterios de validez, fiabilidad y relevancia, método SIFT y decisiones fundamentadas.</p>
+  </div>
+
+  <!-- RESULTADOS DE APRENDIZAJE CLAVE (RdA) -->
+  <div style="background-color:#ffffff;border:1px solid #e2e8f0;border-left:5px solid #2563eb;border-radius:10px;padding:20px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+    <div style="display:flex;align-items:center;margin-bottom:12px;">
+      <span style="background-color:#dbeafe;color:#1d4ed8;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;margin-right:10px;">✓</span>
+      <h2 style="font-size:17px;font-weight:700;color:#0f172a;margin:0;">Resultado de Aprendizaje y Objetivos</h2>
+    </div>
+    <div class="kbox kbox-c" style="margin-bottom:12px;">
+      <p style="margin:0;font-size:13px;"><strong>Resultado de aprendizaje (RA):</strong> evaluar críticamente la información disponible en la web mediante criterios de <strong>validez</strong>, <strong>fiabilidad</strong> y <strong>relevancia</strong>, con el fin de utilizarla eficazmente en la resolución de problemas y la toma de decisiones fundamentadas.</p>
+    </div>
+    <ul style="margin:0;padding-left:20px;font-size:13.5px;color:#334155;">
+      <li style="margin-bottom:8px;"><strong>3.1:</strong> Describe la evolución y el estado actual del libro electrónico y del préstamo digital de bibliotecas, con cifras verificadas (Gutenberg 1971, Kindle 2007, 739,5 M de préstamos en 2024).</li>
+      <li style="margin-bottom:8px;"><strong>3.2:</strong> Mapea las principales bibliotecas electrónicas y digitales —globales e hispanas— y las usa según el tipo de necesidad informativa.</li>
+      <li style="margin-bottom:8px;"><strong>3.3:</strong> Explica el panorama empírico de la desinformación web (MIT/Science, Stanford SHEG, Edelman, Reuters, WEF) y sus implicaciones para el ingeniero.</li>
+      <li style="margin-bottom:8px;"><strong>3.4:</strong> Aplica los criterios de validez, fiabilidad y relevancia, el modelo de calidad de Wang y Strong, el método SIFT con lectura lateral, y los instrumentos de decisión (matriz ponderada, FMEA, Delphi) para cerrar el ciclo: información evaluada → decisión documentada.</li>
+    </ul>
+  </div>
+
+  <!-- BARRA DE PESTAÑAS (URL INDEPENDIENTE POR PESTAÑA) -->
+  <div class="tabs-bar" id="tabsbar" role="tablist" aria-label="Secciones del tema 2">
+    <button type="button" class="tab-btn active" data-tab="tb1" onclick="goTab('tb1')">1 · El libro electrónico</button>
+    <button type="button" class="tab-btn" data-tab="tb2" onclick="goTab('tb2')">2 · Bibliotecas digitales</button>
+    <button type="button" class="tab-btn" data-tab="tb3" onclick="goTab('tb3')">3 · Desinformación</button>
+    <button type="button" class="tab-btn" data-tab="tb4" onclick="goTab('tb4')">4 · Calidad: Wang y Strong</button>
+    <button type="button" class="tab-btn" data-tab="tb5" onclick="goTab('tb5')">5 · Validez · Fiabilidad · Relevancia</button>
+    <button type="button" class="tab-btn" data-tab="tb6" onclick="goTab('tb6')">6 · SIFT y lectura lateral</button>
+    <button type="button" class="tab-btn" data-tab="tb7" onclick="goTab('tb7')">7 · Sesgos y decisión</button>
+    <button type="button" class="tab-btn" data-tab="tb8" onclick="goTab('tb8')">8 · Caso de estudio (4 fases)</button>
+    <button type="button" class="tab-btn" data-tab="tb9" onclick="goTab('tb9')">9 · Autoevaluación</button>
+  </div>
+
+  <!-- ============ PESTAÑA 1: EL LIBRO ELECTRÓNICO ============ -->
+  <div id="tb1" class="tab-panel active">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tb1"></code> <a class="ulink" id="lnk-tb1" href="#tb1" onclick="goTab('tb1');return false;"></a> — cópiela para volver directo a esta sección o compartirla.</span><button type="button" class="copy-btn" id="cpbtn-tb1" onclick="copiarURL('tb1')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">1</span><h2>El libro electrónico: historia, formatos y ecosistema</h2></div>
+      <p>El <strong>libro electrónico (e-book)</strong> es la forma más antigua y a la vez más renovada del documento digital: nació en <strong>1971</strong>, antes que la propia web, y hoy es una industria global de miles de millones de dólares que convive con el papel sin reemplazarlo del todo. Para el estudiante de Ingeniería Industrial y de Seguridad Industrial, el e-book es el primer eslabón de la cadena «acceso a la información electrónica → evaluación crítica → decisión fundamentada» que gobierna esta unidad: qué formatos existen, dónde se obtienen libros legítimos y cómo se citan es competencia instrumental inmediata.</p>
+
+      <h3>Línea de tiempo: de un archivo de texto a la industria global</h3>
+      <ul class="tl">
+        <li><strong>1971 · Project Gutenberg</strong> — El 4 de julio, Michael S. Hart (Universidad de Illinois) teclea la Declaración de Independencia de EE. UU. en un mainframe y la pone en la red: nace el proyecto digital más antiguo de Internet. Hoy ofrece <strong>&gt;75.000 libros</strong> de dominio público, gratuitos y sin DRM.</li>
+        <li><strong>1993 · PDF de Adobe</strong> — El formato de documento portátil llega a la web: fijación exacta de la página, ideal para documentos técnicos.</li>
+        <li><strong>1998 · Rocket eBook y SoftBook</strong> — Primeros lectores dedicados (~USD 499) con LCD: fracaso comercial pionero que demostró demanda de lectura portátil.</li>
+        <li><strong>2004 · Sony Librie</strong> — Primer lector con pantalla de <strong>tinta electrónica E Ink</strong>: legible a plena luz del sol y con consumo mínimo de batería.</li>
+        <li><strong>19 nov. 2007 · Amazon Kindle</strong> — USD 399, agotado en 5,5 horas, con &gt;88.000 títulos el día de lanzamiento: el punto de inflexión comercial.</li>
+        <li><strong>2007 · EPUB 1.0 (IDPF)</strong> — El estándar abierto que separa el contenido del aparato: el mismo libro, reflujable a cualquier pantalla.</li>
+        <li><strong>2022 · EPUB 3.3 (W3C)</strong> — El estándar pasa a la W3C: accesibilidad e interoperabilidad reforzadas.</li>
+        <li><strong>2024 · Préstamo digital masivo</strong> — 739,5 millones de préstamos de bibliotecas vía OverDrive/Libby (+17 % interanual).</li>
+      </ul>
+
+      <h3 style="margin-top:18px;">Formatos de e-book y gestión de derechos (DRM)</h3>
+      <p>Un e-book es un archivo, y el <strong>formato</strong> determina qué puede hacerse con él:</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:16%;">Formato</th><th style="width:38%;">Características</th><th>Uso recomendado</th></tr></thead>
+        <tbody>
+          <tr><td><strong>EPUB 3.3</strong></td><td>Estándar abierto (W3C); texto reflujable que se adapta a cualquier pantalla; soporta accesibilidad.</td><td>Lectura general; estándar de la industria editorial y de las bibliotecas públicas.</td></tr>
+          <tr><td><strong>PDF</strong></td><td>Conserva el diseño fijo de la página; no refluye.</td><td>Documentos técnicos con fórmulas, planos y normas; incómodo para leer en teléfono.</td></tr>
+          <tr><td><strong>MOBI / AZW / KF8</strong></td><td>Formatos propietarios de Amazon.</td><td>Ecosistema Kindle.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="kbox kbox-a" style="margin-top:12px;">
+        <h4>🔑 Concepto clave: DRM y dominio público</h4>
+        <p style="margin:0;font-size:12.5px;">La mayoría de los e-books comerciales vienen protegidos con <strong>DRM</strong> (gestión digital de derechos): un cifrado que restringe copiar, imprimir o prestar el archivo —por eso «comprar» un e-book se parece más a adquirir una <strong>licencia de uso</strong> que a poseer el objeto—. En cambio, una obra entra en <strong>dominio público</strong> cuando expiran sus derechos de autor (en la mayoría de países, 70 años tras la muerte del autor): cualquiera puede copiarla y distribuirla. Los &gt;75.000 títulos de Project Gutenberg no llevan DRM: son la vía gratuita y legal de lectura por excelencia.</p>
+      </div>
+
+      <h3 style="margin-top:16px;">El e-book en cifras verificadas</h3>
+      <div class="grid3" style="margin-bottom:12px;">
+        <div class="sq"><span class="sv">739,5 M</span><span class="sl">préstamos digitales de bibliotecas en 2024 vía OverDrive/Libby: 366,2 M e-books + 278,3 M audiolibros; 92.000+ bibliotecas en 115 países (820,5 M en 2025)</span></div>
+        <div class="sq"><span class="sv">USD 15.650 M</span><span class="sl">ingresos mundiales de e-books proyectados por Statista para 2026; en EE. UU. los formatos digitales rondan el 14 % del total editorial (AAP 2024)</span></div>
+        <div class="sq"><span class="sv">g = −0,21</span><span class="sl">efecto del meta-análisis Delgado et al. (2018; 54 estudios, 171.055 participantes): el papel supera a la pantalla en comprensión, sobre todo en textos largos con tiempo limitado</span></div>
+      </div>
+      <p>¿Y la comprensión? La respuesta cuantificada es fina, no maniquea: la lectura <strong>superficial</strong> en pantalla funciona bien; la lectura <strong>profunda de estudio</strong> conviene planificarla —con tiempo suficiente, sin multitareas y preferentemente anotando—, sea en papel o en pantalla. Revisiones posteriores (Clinton 2019; Støle et al. 2020) matizan el hallazgo sin revertirlo.</p>
+
+      <h3 style="margin-top:16px;">Interactivo: ¿qué formato y qué fuente?</h3>
+      <p>Para cada necesidad de lectura, elija la combinación formato + fuente legítima más adecuada.</p>
+      <div id="ebk-q"></div>
+      <div id="ebk-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 2: BIBLIOTECAS ELECTRÓNICAS Y DIGITALES ============ -->
+  <div id="tb2" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tb2"></code> <a class="ulink" id="lnk-tb2" href="#tb2" onclick="goTab('tb2');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tb2" onclick="copiarURL('tb2')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">2</span><h2>Bibliotecas electrónicas y digitales: el mapa global</h2></div>
+      <p>Conviene distinguir dos términos que a veces se confunden: una <strong>biblioteca digital</strong> es una colección curada de materiales ya digitalizados o nacidos digitales —libros escaneados, manuscritos, fotografías, mapas— gestionada por una institución; una <strong>biblioteca electrónica</strong> (o híbrida) es la que además <strong>presta contenidos en línea</strong> a sus usuarios registrados, como hace cualquier universidad con sus bases de datos y e-books. El mapa se entiende por escala: de los ~19.000 ítems de la World Digital Library a los 609,8 millones de registros de WorldCat hay <strong>cuatro órdenes de magnitud</strong>.</p>
+
+      <h3>2.1 · Megacolecciones globales</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:24%;">Biblioteca / servicio</th><th style="width:30%;">Naturaleza</th><th style="width:24%;">Escala verificada</th><th>Acceso</th></tr></thead>
+        <tbody>
+          <tr><td><strong>WorldCat (OCLC)</strong></td><td>Catálogo cooperativo mundial</td><td>609,8 M de registros</td><td>Gratis (localización)</td></tr>
+          <tr><td><strong>Google Books</strong></td><td>Digitalización masiva (2004; uso justo confirmado en 2015)</td><td>&gt;40 M de títulos</td><td>Fragmentos gratis</td></tr>
+          <tr><td><strong>HathiTrust</strong></td><td>Consorcio académico</td><td>18 M de volúmenes</td><td>Mixto según derechos</td></tr>
+          <tr><td><strong>Europeana</strong></td><td>Patrimonio cultural de la UE</td><td>&gt;58 M de objetos (~3.700 instituciones)</td><td>Gratis</td></tr>
+          <tr><td><strong>DPLA (EE. UU.)</strong></td><td>Agregador nacional</td><td>&gt;53 M de objetos</td><td>Gratis</td></tr>
+          <tr><td><strong>World Digital Library (UNESCO)</strong></td><td>Patrimonial (2009-2020, integrada en la Library of Congress)</td><td>~19.000 ítems de ~200 países</td><td>Gratis</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:16px;">2.2 · El mundo hispano</h3>
+      <ul>
+        <li><strong>Biblioteca Virtual Miguel de Cervantes</strong> — creada por la Universidad de Alicante, abrió el 27 de julio de 1999 con ~800 libros y hoy supera los <strong>300.000 registros</strong> de clásicos en español y lenguas cooficiales, con portales de autores y bibliotecas temáticas. El punto de partida natural del estudiante hispanohablante.</li>
+        <li><strong>Gallica</strong> — la biblioteca digital de la Biblioteca Nacional de Francia: <strong>10 millones de documentos</strong>.</li>
+        <li><strong>Biblioteca Digital Hispánica</strong> (BNE) y la Biblioteca Digital Mundial completan el circuito patrimonial.</li>
+      </ul>
+      <div class="kbox kbox-v">
+        <h4>📏 Regla de uso</h4>
+        <p style="margin:0;font-size:12.5px;">Para clásicos y fuentes primarias históricas, estas bibliotecas son <strong>gratuitas, legítimas y citables</strong> —muy por encima de cualquier PDF anónimo de dudosa procedencia que circule por redes—.</p>
+      </div>
+
+      <h3 style="margin-top:16px;">2.3 · Bibliotecas universitarias: bases de suscripción y préstamo digital</h3>
+      <p>La biblioteca electrónica que el estudiante usará a diario es la de su propia universidad. Su valor se compone de dos servicios. Primero, las <strong>bases de datos de suscripción</strong>: EBSCO (Academic Search Complete: texto completo de ~5.600 revistas activas), ProQuest, JSTOR (&gt;12 millones de artículos de 900 editores) y para ingeniería la plataforma O'Reilly con &gt;35.000 libros técnicos a texto completo. Segundo, el <strong>préstamo digital</strong>: la biblioteca compra N licencias de un título y cada «préstamo» las agota como si fuera un ejemplar físico, con listas de espera incluidas (OverDrive/Libby: 739,5 M de préstamos en 2024).</p>
+      <div class="kbox kbox-a">
+        <h4>⚖️ Sabías que… (la polémica del préstamo digital)</h4>
+        <p style="margin:0;font-size:12.5px;">En <strong>Hachette v. Internet Archive (2023)</strong> los tribunales de EE. UU. rechazaron la defensa del «préstamo digital controlado» (copiar y prestar tantos ejemplares como se poseen físicamente): el e-book es un territorio legal distinto al del libro impreso. Usar las vías institucionales —carné de biblioteca, bases de suscripción, dominio público— es la forma legal y trazable de acceso.</p>
+      </div>
+
+      <h3 style="margin-top:16px;">Interactivo: el mapa en barras</h3>
+      <p>Compare la escala real de las grandes bibliotecas (el orden de las barras se revela al pulsar el botón; los valores están en millones de unidades verificadas 2018-2025).</p>
+      <div id="bib-bars"></div>
+      <div style="margin-top:10px;"><button type="button" class="btn-main" onclick="bibReveal()">Revelar y ordenar las escalas</button></div>
+      <div id="bib-out" class="calc-out"></div>
+
+      <h3 style="margin-top:18px;">Interactivo: ¿qué fuente uso para cada necesidad?</h3>
+      <div id="bib-q"></div>
+      <div id="bib2-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 3: DESINFORMACIÓN ============ -->
+  <div id="tb3" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tb3"></code> <a class="ulink" id="lnk-tb3" href="#tb3" onclick="goTab('tb3');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tb3" onclick="copiarURL('tb3')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">3</span><h2>El ecosistema de información de la web: abundancia y contaminación</h2></div>
+      <p>Acceder ya no es el problema: la web ofrece más información de la que ninguna generación humana tuvo a su alcance, y precisamente por eso el problema se desplazó <strong>del acceso al filtro</strong>. La evaluación crítica de la información no es una cortesía académica sino una competencia de supervivencia profesional: el ingeniero que decide con datos contaminados produce decisiones contaminadas —que llegan al proceso, al presupuesto o al elemento de protección de las personas.</p>
+
+      <h3>3.1 · La falsedad viaja más rápido: el estudio del MIT</h3>
+      <p>La evidencia más citada del campo es <em>The spread of true and false news online</em> (Vosoughi, Roy y Aral, <strong>Science, 2018</strong>): ~126.000 cascadas de rumores tuiteadas 4,5 millones de veces por ~3 millones de personas entre 2006 y 2017, contrastadas contra seis organizaciones independientes de verificación. Resultados contundentes:</p>
+      <div class="grid3" style="margin-bottom:10px;">
+        <div class="sq"><span class="sv">+70 %</span><span class="sl">más probable de ser retuiteada una noticia falsa que una verdadera</span></div>
+        <div class="sq"><span class="sv">6×</span><span class="sl">más tiempo necesitaba la verdad para llegar a 1.500 personas</span></div>
+        <div class="sq"><span class="sv">20×</span><span class="sl">más rápido alcanzaba lo falso una profundidad de difusión diez veces mayor</span></div>
+      </div>
+      <p>El dato más incómodo para el optimismo tecnológico: la diferencia <strong>no se explicaba por los bots</strong> —los robots compartían verdadero y falso por igual— sino por los humanos: la novedad y la reacción emocional de lo falso lo hacía más compartible.</p>
+
+      <h3 style="margin-top:14px;">3.2 · ¿Evalúan los que crecieron con la web? El retrato de Stanford</h3>
+      <p>El Stanford History Education Group (<strong>Breakstone et al., 2019</strong>) evaluó a 3.446 estudiantes de secundaria de EE. UU. en seis tareas de razonamiento cívico en línea:</p>
+      <ul>
+        <li>El <strong>96 %</strong> no consideró los vínculos de un sitio sobre cambio climático con la industria fósil <em>pese a que la propia página los listaba</em>.</li>
+        <li><strong>Dos tercios</strong> no distinguieron un artículo de noticias de contenido patrocinado.</li>
+        <li>El <strong>52 %</strong> juzgó «evidencia sólida» de fraude electoral un video filmado en Rusia.</li>
+        <li>El <strong>90 %</strong> obtuvo crédito en cuatro de las seis tareas o menos.</li>
+      </ul>
+      <p>Conclusión: la familiaridad tecnológica <strong>no produce competencia evaluativa</strong>. La generación que más horas pasa en línea no evalúa mejor por defecto; la competencia hay que entrenarla con método —exactamente lo que hacen las pestañas 5 y 6 de esta unidad.</p>
+
+      <h3 style="margin-top:14px;">3.3 · Confianza y preocupación global: Edelman, Reuters y el WEF</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:26%;">Fuente</th><th style="width:34%;">Hallazgo verificado</th><th>Año</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Edelman Trust Barometer</strong></td><td>69 % de las personas teme ser engañada deliberadamente por líderes gubernamentales, empresariales y periodistas —máximo histórico de la serie—.</td><td>2025</td></tr>
+          <tr><td><strong>Reuters Institute DNR</strong> (47 mercados)</td><td>59 % preocupado por la información falsa en línea (máximos: 81 % Sudáfrica, 72 % EE. UU.); confianza general en noticias: 40 %.</td><td>2024</td></tr>
+          <tr><td><strong>WEF Global Risks Report</strong></td><td>La desinformación y la información errónea clasificadas como el <strong>riesgo global n.º 1 a dos años</strong> —repite el primer puesto en 2024 y 2025—.</td><td>2024-2025</td></tr>
+          <tr><td><strong>APWG</strong></td><td>3.759.576 ataques de phishing en 2024; casi millón y medio solo en el primer semestre de 2025.</td><td>2025</td></tr>
+          <tr><td><strong>Interisle</strong></td><td>~19,5 millones de dominios comprometidos o registrados con propósito malicioso (+126 % interanual).</td><td>2025</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:16px;">3.4 · La infodemia: cuando el exceso de información enferma</h3>
+      <p>La OMS dio nombre al fenómeno durante la COVID-19: <strong>infodemia</strong> —demasiada información, incluida la falsa o engañosa, en entornos digitales y físicos durante un brote—, término popularizado por su director general el 15 de febrero de 2020 y formalizado en el llamado a la acción «Managing the Infodemic» (diciembre 2020). La palabra es técnica, no periodística: la sobrecarga informativa degrada la capacidad de decisión igual que la contaminación degrada la calidad de un insumo industrial. La UNESCO institucionalizó la respuesta educativa con la <strong>Semana Mundial de la Alfabetización Mediática e Informacional (MIL)</strong> cada 24-31 de octubre, y la IFLA publicó su infografía «How to Spot Fake News» con ocho verificaciones mínimas antes de compartir.</p>
+      <div class="kbox kbox-r">
+        <h4>🛡️ La metáfora del EPP informacional</h4>
+        <p style="margin:0;font-size:12.5px;">En ese entorno, la <strong>biblioteca electrónica curada</strong> y el <strong>criterio de evaluación explícito</strong> son los equivalentes digitales del EPP: el equipo de protección personal del que trabaja con información. La falsedad circula mejor que la verdad (MIT), los usuarios no evalúan por default (Stanford) y el riesgo es global y corto-plazo (WEF): quien no filtra, absorbe.</p>
+      </div>
+
+      <h3 style="margin-top:16px;">Interactivo: ¿qué dicen los estudios?</h3>
+      <p>Asocie cada hallazgo con el estudio que lo produjo.</p>
+      <div id="mit-q"></div>
+      <div id="mit-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 4: WANG Y STRONG ============ -->
+  <div id="tb4" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tb4"></code> <a class="ulink" id="lnk-tb4" href="#tb4" onclick="goTab('tb4');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tb4" onclick="copiarURL('tb4')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">4</span><h2>El modelo de Wang y Strong y la calidad de la información</h2></div>
+      <p>Antes de evaluar en la web conviene saber qué significa «información de calidad» como concepto formal. La referencia fundacional es el modelo de <strong>Wang y Strong</strong> («Beyond Accuracy: What Data Quality Means to Data Consumers», <em>Journal of Management Information Systems</em>, 1996): entrevistaron a consumidores de datos y derivaron <strong>15 dimensiones</strong> de calidad organizadas en <strong>4 categorías</strong>. La lección es potente para esta carrera: la calidad no es un atributo absoluto del dato sino un <strong>ajuste entre el dato y su contexto de uso</strong> —un dato exactísimo pero irrelevante, o perfecto pero tardío, es un dato de mala calidad.</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:22%;">Categoría</th><th style="width:30%;">Pregunta que responde</th><th>Dimensiones (15)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Intrínseca</strong></td><td>¿El dato es bueno en sí?</td><td>Exactitud · objetividad · credibilidad · reputación</td></tr>
+          <tr><td><strong>Contextual</strong></td><td>¿Sirve a mi problema aquí y ahora?</td><td>Relevancia · oportunidad · completitud · valor añadido · cantidad apropiada</td></tr>
+          <tr><td><strong>Representacional</strong></td><td>¿Está bien presentado e interpretable?</td><td>Interpretabilidad · facilidad de comprensión · consistencia · concisión</td></tr>
+          <tr><td><strong>Accesibilidad</strong></td><td>¿Puedo llegar a él de forma segura?</td><td>Accesibilidad · seguridad del acceso</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:16px;">4.1 · Del modelo de calidad a los criterios de la unidad</h3>
+      <p>Esta unidad opera el modelo condensándolo en <strong>tres criterios operativos</strong> que deben dominarse de memoria y aplicarse siempre en el mismo orden: <strong>validez</strong> (¿es cierto y de dónde viene?), <strong>fiabilidad</strong> (¿se sostiene si se comprueba?) y <strong>relevancia</strong> (¿sirve a mi problema?). Los tres no son sinónimos y su distinción es técnica:</p>
+      <div class="grid3">
+        <div class="kbox kbox-c">
+          <h4>✅ Validez</h4>
+          <p style="margin:0;font-size:12.3px;">Propiedad de la <strong>fuente y del método</strong>: autoría verificable, metodología explícita y —en lo científico— revisión por pares.</p>
+        </div>
+        <div class="kbox kbox-v">
+          <h4>🔁 Fiabilidad</h4>
+          <p style="margin:0;font-size:12.3px;">Propiedad del <strong>resultado y su replicabilidad</strong>: la afirmación se confirma en fuentes independientes y los datos se reproducen. Una fuente puede ser válida en apariencia y sistemáticamente sesgada.</p>
+        </div>
+        <div class="kbox kbox-a">
+          <h4>🎯 Relevancia</h4>
+          <p style="margin:0;font-size:12.3px;">Propiedad del <strong>contexto</strong>: aplicabilidad al caso concreto, al nivel de detalle y al momento de la decisión.</p>
+        </div>
+      </div>
+      <div class="kbox kbox-g" style="margin-top:12px;">
+        <h4>⚙️ Los tres criterios en un ejemplo industrial</h4>
+        <p style="margin:0;font-size:12.5px;">Un proveedor afirma que su arnés de seguridad soporta «más de 2.000 kg». <strong>Validez:</strong> ¿quién lo afirma y con qué ensayo (norma, laboratorio acreditado)? <strong>Fiabilidad:</strong> ¿dos ensayos independientes y el certificado original coinciden? <strong>Relevancia:</strong> ¿2.000 kg es la carga que mi caso exige, con mi factor de seguridad? Un dato puede pasar dos filtros y fallar el tercero —y con eso basta para que la decisión sea defectuosa—.</p>
+      </div>
+
+      <h3 style="margin-top:16px;">4.2 · La pirámide de evidencia</h3>
+      <p>En el terreno científico-técnico la validez tiene escalas objetivas: la <strong>pirámide de evidencia</strong> ordena los tipos de estudio por fortaleza interna —revisiones sistemáticas y metaanálisis en la cúspide, luego ensayos controlados aleatorizados, estudios de cohortes, casos y controles, series de casos, y la <strong>opinión de expertos en la base</strong>—. Para el ingeniero: una revisión sistemática o una norma técnica internacional (ISO, ANSI, IEC) pesa más que un ensayo suelto, y un ensayo publicado con metodología pesa más que la experiencia anecdótica de un proveedor. La pirámide también previene el error inverso: citar «un experto lo dijo» no es evidencia —es la base de la pirámide, no su cúspide—.</p>
+
+      <h3 style="margin-top:16px;">Interactivo: clasifique las dimensiones de Wang y Strong</h3>
+      <p>¿En qué categoría del modelo cae cada dimensión o evidencia?</p>
+      <div id="ws-q"></div>
+      <div id="ws-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 5: VALIDEZ · FIABILIDAD · RELEVANCIA ============ -->
+  <div id="tb5" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tb5"></code> <a class="ulink" id="lnk-tb5" href="#tb5" onclick="goTab('tb5');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tb5" onclick="copiarURL('tb5')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">5</span><h2>Evaluar críticamente la web I — criterios operativos</h2></div>
+      <p>Este módulo convierte los conceptos en <strong>criterios operativos</strong>: las preguntas concretas que se hacen a cualquier fuente antes de usarla. La regla metodológica: todo criterio debe poder responderse con <strong>evidencia verificable</strong> en la propia página o fuera de ella —nunca con la impresión subjetiva que la página produce—, porque esa impresión es exactamente lo que el diseño web de las fuentes no fiables optimiza.</p>
+
+      <h3>5.1 · Validez en la práctica: autoría, procedencia y método</h3>
+      <ul>
+        <li><strong>¿Quién afirma?</strong> Nombre y apellido del autor o institución, con afiliación verificable y contacto —la anonimidad es una señal de alerta grave en información técnica—.</li>
+        <li><strong>¿Con qué método?</strong> Los datos tienen metodología explícita (muestra, procedimiento, fecha) o la afirmación es indebidamente verificable.</li>
+        <li><strong>¿Con qué respaldo editorial?</strong> El canal publicador tiene control de calidad: revisión por pares, editorial académica, organismo de normalización, prensa con correcciones públicas.</li>
+        <li><strong>¿Desde cuándo?</strong> La información está fechada y el dato no está caducado respecto del estado del arte —una norma técnica derogada es un dato inválido aunque siga «en línea»—.</li>
+      </ul>
+      <p><small>El dominio (.edu, .gob, .org, .com) es solo un indicio orientativo de procedencia institucional, no una garantía: los sitios comerciales publican excelente información técnica y las universidades hospedan páginas personales no institucionales.</small></p>
+
+      <h3 style="margin-top:14px;">5.2 · Fiabilidad en la práctica: corroboración y trazabilidad</h3>
+      <ul>
+        <li><strong>Corroboración:</strong> la afirmación central aparece confirmada por al menos <strong>dos fuentes genuinamente independientes</strong> —independencia significa organizaciones distintas con intereses distintos, no dos sitios que citan al mismo original—.</li>
+        <li><strong>Trazabilidad:</strong> la cifra o cita puede seguirse hasta su <strong>fuente primaria</strong> (el informe, el estudio, la norma); el trayecto no se rompe en «según expertos» o «estudios demuestran» sin enlace.</li>
+        <li><strong>Congruencia:</strong> los datos son internamente coherentes —las sumas suman, los porcentajes no superan el 100 %, los años no son anacrónicos—.</li>
+        <li><strong>Alerta de copia:</strong> que la misma frase exacta aparezca en decenas de sitios indica <strong>propagación, no verificación</strong>: la viralidad es métrica de difusión, no de verdad (la dinámica del +70 % del MIT).</li>
+      </ul>
+
+      <h3 style="margin-top:14px;">5.3 · Relevancia en la práctica: aplicabilidad al problema</h3>
+      <ul>
+        <li><strong>¿Responde a mi pregunta?</strong> El dato resuelve la incógnita del problema, no un asunto vecino.</li>
+        <li><strong>¿A qué escala?</strong> La población, muestra, industria o jurisdicción del dato son comparables a las del caso —una tasa de accidentes de la construcción noruega no es directamente la de una planta ecuatoriana—.</li>
+        <li><strong>¿A qué nivel?</strong> La profundidad es la que el problema exige (un valor de referencia para una estimación preliminar no es el mismo nivel que un cálculo normativo).</li>
+        <li><strong>¿A tiempo?</strong> El dato llegó dentro de la ventana de la decisión —información perfecta que llega tarde a la reunión es, operativamente, información nula—.</li>
+      </ul>
+
+      <h3 style="margin-top:14px;">Matriz de criterios con evidencias y señales de alerta</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:22%;">Criterio</th><th style="width:26%;">Pregunta de verificación</th><th style="width:28%;">Evidencia que la responde</th><th>Señal de alerta</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Validez — autoría</strong></td><td>¿Quién afirma y con qué respaldo?</td><td>Autor con afiliación y contacto; editorial con control</td><td>Anonimato; «expertos dicen»</td></tr>
+          <tr><td><strong>Validez — método</strong></td><td>¿Cómo se obtuvo el dato?</td><td>Metodología, muestra y fecha explícitas</td><td>Cifra sin origen ni procedimiento</td></tr>
+          <tr><td><strong>Validez — vigencia</strong></td><td>¿Está vigente?</td><td>Fecha clara; norma o estándar en vigor</td><td>Dato caduco; norma derogada</td></tr>
+          <tr><td><strong>Fiabilidad — corroboración</strong></td><td>¿Otras fuentes independientes lo confirman?</td><td>Dos+ fuentes con intereses distintos</td><td>Décimas de copias del mismo texto</td></tr>
+          <tr><td><strong>Fiabilidad — trazabilidad</strong></td><td>¿Puedo seguir la cita al original?</td><td>Enlace o referencia a la fuente primaria</td><td>Cadena rota en «según informes»</td></tr>
+          <tr><td><strong>Relevancia — aplicabilidad</strong></td><td>¿Responde a mi problema?</td><td>Escala, industria y jurisdicción comparables</td><td>Dato de otro contexto «parecido»</td></tr>
+          <tr><td><strong>Relevancia — oportunidad</strong></td><td>¿Llega a tiempo a la decisión?</td><td>Dato vigente dentro de la ventana decisoria</td><td>Información perfecta pero tardía</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="kbox kbox-v" style="margin-top:12px;">
+        <h4>👁️ Sabías que…</h4>
+        <p style="margin:0;font-size:12.5px;">El 96 % de los estudiantes del estudio Stanford no consideró los conflictos de interés que la <strong>propia página declaraba</strong>: la información estaba disponible y bastaba leerla. La evaluación crítica no siempre exige más información —a menudo solo exige leer lo que ya está escrito: la sección «quiénes somos», el pie con la fuente de financiación, la fecha de actualización—.</p>
+      </div>
+
+      <h3 style="margin-top:16px;">Interactivo: validez, fiabilidad o relevancia — ¿qué criterio falla?</h3>
+      <p>Cada escenario describe una fuente o situación; identifique el criterio que está en juego o falla.</p>
+      <div id="vfr-q"></div>
+      <div id="vfr-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 6: SIFT Y LECTURA LATERAL ============ -->
+  <div id="tb6" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tb6"></code> <a class="ulink" id="lnk-tb6" href="#tb6" onclick="goTab('tb6');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tb6" onclick="copiarURL('tb6')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">6</span><h2>Evaluar críticamente la web II — el método SIFT y la lectura lateral</h2></div>
+      <p>Los criterios dicen <strong>qué preguntar</strong>; este módulo enseña <strong>cómo responderlo en minutos</strong>, con el método de verificación que usan los profesionales. El instrumento central es <strong>SIFT</strong> —Stop, Investigate the source, Find better coverage, Trace claims—, publicado por Mike Caulfield en 2019 como síntesis de las tácticas de los verificadores de hechos. Su premisa es realista: no se dispone de una hora por fuente, se dispone de <strong>minutos</strong>; SIFT optimiza esa inversión: la mayoría de las fuentes defectuosas se descartan antes de leerlas a fondo, y solo las que sobreviven merecen lectura profunda.</p>
+
+      <h3>6.1 · Los cuatro movimientos</h3>
+      <div class="fase-steps" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));">
+        <div class="sq"><strong style="font-size:13px;">S · Stop</strong><p style="font-size:11.5px;margin:4px 0 0 0;">Registrar la propia reacción: el titular que provoca indignación, alivio o certeza es la primera información. Las fuentes no fiables están diseñadas para producir reacción fuerte y compartirse sin verificar (+70 % del MIT).</p></div>
+        <div class="sq"><strong style="font-size:13px;">I · Investigate the source</strong><p style="font-size:11.5px;margin:4px 0 0 0;">Salir de la página y preguntar a la web quién está detrás del sitio: qué dicen terceros sobre ese medio, blog o «instituto». Es la lectura lateral.</p></div>
+        <div class="sq"><strong style="font-size:13px;">F · Find better coverage</strong><p style="font-size:11.5px;margin:4px 0 0 0;">En vez de certificar la fuente, buscar cobertura mejor del mismo hecho: si el dato es cierto, los medios verificados también lo reportan; si solo aparece en un sitio, ese silencio es el dato.</p></div>
+        <div class="sq"><strong style="font-size:13px;">T · Trace claims</strong><p style="font-size:11.5px;margin:4px 0 0 0;">Rastrear la cita, cifra o imagen hasta su contexto original: la descontextualización es el método de fabricación de falsedades más rentable.</p></div>
+      </div>
+
+      <h3 style="margin-top:16px;">6.2 · La lectura lateral: la técnica que separa expertos de novatos</h3>
+      <p>Wineburg y McGrew estudiaron cómo verificadores profesionales y estudiantes evaluaban sitios web. Los profesionales no leían «más despacio» ni «más críticamente» <em>dentro</em> de la página: la <strong>abandonaban casi de inmediato</strong> y leían <strong>lateralmente</strong> —abriendo pestañas nuevas para preguntar qué decían terceros sobre la fuente—, mientras los estudiantes se quedaban leyendo verticalmente dentro del sitio, evaluando su diseño y su retórica. La lectura lateral es el hábito técnico más contraintuitivo y más rentable que esta unidad puede instalar: <strong>ante una fuente desconocida, el primer clic correcto no es «leer más», es «salir y preguntar por la fuente»</strong>.</p>
+      <div class="kbox kbox-c">
+        <h4>🔍 Verificación en el propio entorno de búsqueda</h4>
+        <p style="margin:0;font-size:12.5px;">Tácticas de bajo costo: buscar el nombre del sitio seguido de «sesgo», «scam», «quién financia» o «fact check»; usar el operador <code>site:</code> para confinar la búsqueda al dominio investigado; y para imágenes, la <strong>búsqueda inversa</strong> (clic derecho en la imagen) para localizar su origen y fecha real. Son las operaciones de los verificadores de <strong>LatamChequea</strong> —red regional con más de 48 organizaciones de 21 países— y de <strong>EcuadorChequea</strong>, el primer medio ecuatoriano de verificación, activo desde 2017.</p>
+      </div>
+
+      <h3 style="margin-top:16px;">6.3 · Protocolo integrado: la ficha CRAAP + SIFT</h3>
+      <p>El test <strong>CRAAP</strong> (Currency, Relevance, Authority, Accuracy, Purpose; Blakeslee, 2004) es la ficha de puntuación ideal para documentar una evaluación formal; <strong>SIFT</strong> es el procedimiento de campo para la verificación cotidiana en minutos. Operan en complemento:</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:26%;">Momento</th><th style="width:24%;">Herramienta</th><th style="width:28%;">Uso</th><th>Producto</th></tr></thead>
+        <tbody>
+          <tr><td>Verificación cotidiana (minutos)</td><td>SIFT + lectura lateral</td><td>Descartar fuentes defectuosas antes de leer a fondo</td><td>Decisión: descartar / seguir</td></tr>
+          <tr><td>Evaluación formal (para citar)</td><td>Ficha CRAAP</td><td>Documentar los 5 criterios de la fuente que se usará</td><td>Ficha con evidencia por criterio</td></tr>
+          <tr><td>Alcance del dato</td><td>Trazabilidad (Trace)</td><td>Volver al informe o estudio original de la cifra</td><td>Cita de la fuente primaria en APA</td></tr>
+          <tr><td>Caso sospechoso de manipulación</td><td>Verificación profesional</td><td>Consultar verificadores (LatamChequea, EcuadorChequea)</td><td>Veredicto publicado</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:16px;">Interactivo: aplique SIFT a tres mensajes</h3>
+      <p>Para cada situación, elija el movimiento SIFT que corresponde ejecutar primero.</p>
+      <div id="sift-q"></div>
+      <div id="sift-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 7: SESGOS Y DECISIÓN ============ -->
+  <div id="tb7" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tb7"></code> <a class="ulink" id="lnk-tb7" href="#tb7" onclick="goTab('tb7');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tb7" onclick="copiarURL('tb7')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">7</span><h2>El decisor humano: sesgos cognitivos y racionalidad limitada</h2></div>
+      <p>Evaluar la información es la mitad del problema; la otra mitad es el decisor. La psicología cognitiva demostró que el razonamiento humano no funciona como el modelo del decisor económico racional: opera con dos sistemas —el <strong>Sistema 1</strong>, rápido, intuitivo y emocional, y el <strong>Sistema 2</strong>, lento, deliberado y lógico (Kahneman, 2011)—. El problema aparece cuando el Sistema 1 responde donde el problema exige al Sistema 2 —con cifras, riesgos y decisiones técnicas—, porque sus respuestas llegan cargadas de <strong>sesgos sistemáticos y repetibles</strong>.</p>
+
+      <h3>7.1 · Cuatro experimentos clásicos que todo ingeniero debe conocer</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:20%;">Sesgo</th><th style="width:44%;">Experimento original</th><th>Lección para la práctica</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Confirmación</strong></td><td><strong>Wason 2-4-6 (1960):</strong> dada la tríada «2-4-6» que cumple una regla oculta, el sujeto propone tríos y recibe sí/no. La regla era «números ascendentes», pero solo <strong>6 de 29</strong> (≈21 %) la acertaron al primer intento: la mayoría ensayó tríos que confirmaban su hipótesis (pares crecientes de 2 en 2) en lugar de probar tríos que la podrían refutar.</td><td>Buscar evidencia que <em>refute</em>, no solo que confirme. Pruébelo usted mismo en el laboratorio de abajo.</td></tr>
+          <tr><td><strong>Dunning-Kruger</strong></td><td><strong>Kruger y Dunning (1999):</strong> los autores del cuartil inferior de desempeño se autoevaluaron en el <strong>percentil 62</strong> cuando su desempeño real era el <strong>percentil 12</strong>: la incompetencia incluye no reconocerse incompetente.</td><td>En seguridad industrial: el operador que sobreestima su competencia no ve la necesidad del procedimiento.</td></tr>
+          <tr><td><strong>Anclaje</strong></td><td><strong>Tversky y Kahneman (1974):</strong> una rueda de la fortuna sorteaba 10 o 65 delante de los sujetos, que luego estimaban el % de países africanos en la ONU: medias de <strong>25 % vs. 45 %</strong>. Un número irrelevante presentado antes sesgó la estimación técnica.</td><td>«Siempre se hizo así» es un ancla; las cotizaciones iniciales también.</td></tr>
+          <tr><td><strong>Disponibilidad</strong></td><td><strong>Tversky y Kahneman (1973):</strong> los sujetos estimaban más frecuentes las palabras fáciles de recordar —lo que viene fácilmente a la mente parece más frecuente—.</td><td>Exactamente el sesgo que explota la viralidad de la falsedad (MIT): lo viral se siente «verdadero».</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:16px;">🧪 Laboratorio: juegue usted la tarea 2-4-6 de Wason</h3>
+      <p>La regla oculta es la misma del experimento original. Proponga tríos de números y recibirá sí/no según cumplan la regla; cuando crea tenerla, declárela. <strong>Pista estratégica:</strong> el experimento demuestra que casi nadie prueba tríos que <em>podrían refutar</em> su hipótesis —ese es el punto del juego—.</p>
+      <div class="kbox kbox-g">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <label style="font-size:12px;font-weight:600;color:#334155;">Trío: <input class="calc-in" id="wason-a" type="number" style="width:70px;display:inline-block;" placeholder="a"></label>
+          <label style="font-size:12px;font-weight:600;color:#334155;"><input class="calc-in" id="wason-b" type="number" style="width:70px;display:inline-block;" placeholder="b"></label>
+          <label style="font-size:12px;font-weight:600;color:#334155;"><input class="calc-in" id="wason-c" type="number" style="width:70px;display:inline-block;" placeholder="c"></label>
+          <button type="button" class="btn-main" onclick="wasonProbar()">Probar trío</button>
+        </div>
+        <div id="wason-hist" style="margin-top:10px;font-size:12.5px;color:#334155;">Intentos: 0 · Sin pruebas aún.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <select class="calc-in" id="wason-regla" style="flex:1 1 240px;">
+            <option value="">— Declare su hipótesis de regla —</option>
+            <option value="0">Tres números pares crecientes de 2 en 2</option>
+            <option value="1">Tres números ascendentes (cualquier incremento)</option>
+            <option value="2">Tres números pares ascendentes</option>
+            <option value="3">Tres números menores que 100</option>
+          </select>
+          <button type="button" class="btn-main" onclick="wasonDeclarar()">Declarar regla</button>
+          <button type="button" class="btn-ghost" onclick="wasonReset()">Reiniciar</button>
+        </div>
+      </div>
+      <div id="wason-out" class="calc-out"></div>
+
+      <h3 style="margin-top:16px;">7.2 · Racionalidad limitada y la respuesta de la ingeniería</h3>
+      <p><strong>Herbert Simon</strong> (Nobel de Economía, 1978) formuló la <strong>racionalidad limitada</strong>: personas y organizaciones deciden con información incompleta y capacidad cognitiva finita, por lo que «maximizan» en práctica <strong>satisfaciendo</strong> —buscan la primera opción suficientemente buena, no la óptima—. La ingeniería industrial respondió construyendo instrumentos que fuerzan el trabajo deliberado del Sistema 2 y documentan el fundamento de la decisión:</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:24%;">Instrumento</th><th style="width:30%;">Qué estructura</th><th style="width:24%;">Cuándo usarlo</th><th>Llave de cálculo</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Matriz de decisión ponderada (Pugh)</strong></td><td>Criterios con pesos × alternativas puntuadas</td><td>Elegir entre opciones de compra, diseño, proveedor</td><td>Σ (peso × puntaje) por alternativa</td></tr>
+          <tr><td><strong>FMEA</strong></td><td>Modos de falla con S × O × D</td><td>Riesgos de proceso, producto o seguridad</td><td>RPN (1-1000); prioridad de acción AIAG-VDA 2019</td></tr>
+          <tr><td><strong>Delphi</strong></td><td>Juicio de expertos en rondas anónimas</td><td>Estimaciones sin datos duros (2-3 rondas)</td><td>Convergencia intercuartílica por rondas</td></tr>
+          <tr><td><strong>Costo-beneficio</strong></td><td>Costos vs. beneficios monetizados</td><td>Justificar inversión o control de riesgo</td><td>VPN, TIR, razón B/C</td></tr>
+          <tr><td><strong>Árbol de decisión</strong></td><td>Alternativas secuenciales con incertidumbre</td><td>Decidir por etapas con eventos probables</td><td>Valor esperado del camino</td></tr>
+        </tbody>
+      </table></div>
+      <div class="kbox kbox-r" style="margin-top:12px;">
+        <h4>⚠️ Sesgo y seguridad industrial</h4>
+        <p style="margin:0;font-size:12.5px;">El estudio fundacional de Heinrich (1931) atribuyó el 88 % de los accidentes industriales a actos inseguros y solo el 10 % a condiciones inseguras; la literatura actual de OSHA/EU-OSHA mantiene que el 80-90 % involucra error humano. Parte de ese «error» es <strong>decisional</strong>: anclarse a «siempre se hizo así» (anclaje), no buscar evidencia de que el procedimiento alternativo sería mejor (confirmación) o sobreestimar la propia experiencia (Dunning-Kruger). La evaluación crítica y la decisión documentada son, literalmente, herramientas de prevención de accidentes.</p>
+      </div>
+    </div>
+
+    <!-- Matriz ponderada interactiva -->
+    <div class="card">
+      <h3>Calculadora: matriz de decisión ponderada (ejemplo del capítulo 8 del material)</h3>
+      <p>Una empresa elige proveedor de EPP con 5 criterios y pesos: <strong>validez de certificación (0,30)</strong>, <strong>fiabilidad de fuente (0,25)</strong>, <strong>relevancia técnica (0,20)</strong>, <strong>costo (0,15)</strong> y <strong>plazo (0,10)</strong>. Tres alternativas con puntajes 1-5. Ajuste los puntajes y observe cómo responde el modelo: <strong>SD = Σ (peso × puntaje)</strong>. Verifique que los pesos sumen 1,00.</p>
+      <div class="tblwrap"><table style="font-size:12px;">
+        <thead><tr><th>Criterio (peso)</th><th>A · certificado</th><th>B · nacional</th><th>C · importado económico</th></tr></thead>
+        <tbody>
+          <tr><td>Validez de certificación (0,30)</td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p0a" value="5"></td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p0b" value="4"></td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p0c" value="2"></td></tr>
+          <tr><td>Fiabilidad de fuente (0,25)</td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p1a" value="4"></td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p1b" value="3"></td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p1c" value="2"></td></tr>
+          <tr><td>Relevancia técnica (0,20)</td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p2a" value="5"></td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p2b" value="4"></td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p2c" value="3"></td></tr>
+          <tr><td>Costo (0,15)</td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p3a" value="2"></td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p3b" value="4"></td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p3c" value="5"></td></tr>
+          <tr><td>Plazo (0,10)</td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p4a" value="3"></td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p4b" value="5"></td><td><input class="calc-in" type="number" min="1" max="5" step="1" id="m-p4c" value="4"></td></tr>
+        </tbody>
+      </table></div>
+      <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button type="button" class="btn-main" onclick="matrizCalc()">Calcular SD por alternativa</button>
+        <button type="button" class="btn-ghost" onclick="matrizReset()">Restaurar ejemplo del material</button>
+      </div>
+      <div id="matriz-out" class="calc-out"></div>
+      <p style="margin-top:8px;"><small>Con los valores del material: A = 4,10 · B = 3,85 · C = 2,85. Nota crítica: los pesos codifican el juicio de valor —si el costo pesara 0,30 la respuesta cambiaría—; por eso la matriz se documenta con sus pesos, para que el desacuerdo se debata sobre los criterios y no sobre las intuiciones.</small></p>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 8: CASO DE ESTUDIO EN 4 FASES (DESARROLLADO POR EL ESTUDIANTE) ============ -->
+  <div id="tb8" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tb8"></code> <a class="ulink" id="lnk-tb8" href="#tb8" onclick="goTab('tb8');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tb8" onclick="copiarURL('tb8')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">8</span><h2>Caso de estudio: el certificado que llegó por WhatsApp (AndesMetal S.A.)</h2></div>
+      <p><strong>Contexto.</strong> Usted es pasante de seguridad industrial en <strong>AndesMetal S.A.</strong>, planta de ensamble metalmecánica de Ambato con 180 trabajadores. La jefa de planta le encarga renovar los guantes anticorte del área de corte y troquelado: el presupuesto alcanza para uno de tres proveedores y la decisión debe documentarse el viernes. Ese mismo lunes, el ingeniero de mantenimiento le reenvía un mensaje de WhatsApp que circula entre supervisores:</p>
+      <div class="kbox kbox-r" style="margin-bottom:12px;">
+        <p style="margin:0;font-size:12.8px;font-style:italic;">💬 «Nuevo estudio de laboratorio alemán demuestra que los guantes de fibra estándar duplican cortes con sierra; exige clase B o superior certificada EN 388:2016+A1:2018» — el mensaje trae la foto de un certificado borroneado.</p>
+      </div>
+      <div class="kbox kbox-g" style="margin-bottom:14px;">
+        <h4>📋 Lo que usted reúne en dos días (material de trabajo)</h4>
+        <ul style="margin:6px 0 0 0;">
+          <li><strong>Norma EN 388:2016+A1:2018</strong> — texto oficial del organismo europeo de normalización; vigente; define las clases de corte. <em>Estado: fuente primaria.</em></li>
+          <li><strong>EBSCO (suscripción de la empresa)</strong> — revisión sistemática reciente sobre lesiones de mano; muestra multiplanta europea. <em>Estado: citar.</em></li>
+          <li><strong>Proveedor A</strong> — certificado de un laboratorio acreditado, verificable en el sitio del acreditador; excelente clase de corte. <em>Estado: fuente primaria.</em></li>
+          <li><strong>Proveedor B</strong> — fabricante nacional sin certificado europeo publicado, buenas referencias de planta y mejor plazo.</li>
+          <li><strong>Proveedor C (web «clase 3X»)</strong> — sitio comercial sin método ni norma citada; la cifra no coincide con su propio PDF; sin fecha. <em>Estado: descartar.</em></li>
+          <li><strong>Estadística interna de planta</strong> — registro de 3 años de incidentes del área (n = 7). <em>Estado: integrar (contexto propio).</em></li>
+          <li><strong>Mensaje de WhatsApp «estudio alemán»</strong> — sin autor, sin laboratorio, sin enlace; la foto no es trazable; no aparece en ningún verificador; cifras idénticas en 2022 y 2024. <em>Estado: descartar.</em></li>
+        </ul>
+      </div>
+      <p>La jefa le recuerda la norma interna: <strong>decisiones documentadas con criterios explícitos</strong>. El caso se desarrolla en cuatro fases — <strong>usted</strong> debe analizar, decidir y redactar.</p>
+
+      <h3>Las cuatro fases del caso</h3>
+      <div class="fase-steps" id="fase-steps">
+        <button type="button" class="fase-step cur" id="fs1" onclick="goFase(1)">FASE 1 · Verificación SIFT<small>El mensaje de WhatsApp y las fuentes</small></button>
+        <button type="button" class="fase-step" id="fs2" onclick="goFase(2)">FASE 2 · Evaluación V·F·R<small>CRAAP de la revisión sistemática</small></button>
+        <button type="button" class="fase-step" id="fs3" onclick="goFase(3)">FASE 3 · Matriz de decisión<small>Pesos justificados y cálculo</small></button>
+        <button type="button" class="fase-step" id="fs4" onclick="goFase(4)">FASE 4 · Sesgos y nota de decisión<small>Documento final para la jefa de planta</small></button>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="fase-prog" style="width:0%"></div></div>
+      <p style="font-size:11.5px;color:#64748b;margin-bottom:0;"><span id="fase-prog-txt">Fase 1 de 4 — avance del caso: 0%</span></p>
+
+      <!-- FASE 1 -->
+      <div class="fase-panel active" id="fase1">
+        <div class="kbox kbox-h" style="margin:14px 0;">
+          <h4 style="color:#ffffff;">FASE 1 · Verificación: aplique SIFT al mensaje de WhatsApp (trabajo del estudiante)</h4>
+          <p style="font-size:12.5px;color:#e2e8f0;margin:0;">Antes de dejar que el mensaje condicione la compra, verifíquelo con el método de los profesionales. R1 del caso.</p>
+        </div>
+        <h4>Actividad 1.1 · Los cuatro movimientos sobre el mensaje (15 min)</h4>
+        <p style="font-size:12.5px;">Aplique cada movimiento SIFT al mensaje del «estudio alemán» y anote qué encontró. Luego responda la pregunta técnica.</p>
+        <textarea class="txt" id="fa1a" placeholder="S — Stop: ¿qué reacción produce el mensaje y para qué está diseñado?&#10;I — Investigate: ¿quién está detrás? ¿qué encuentran terceros y verificadores sobre ese «laboratorio alemán»?&#10;F — Find better coverage: ¿los medios y la literatura verificados reportan ese estudio? ¿Qué indica ese silencio?&#10;T — Trace claims: ¿a dónde lleva la foto del certificado borroneado? ¿Las cifras de 2022 y 2024 coinciden?"></textarea>
+        <h4 style="margin-top:12px;">Actividad 1.2 · La señal decisiva (10 min)</h4>
+        <p style="font-size:12.5px;">¿Qué única señal de invalidez es <strong>suficiente por sí sola</strong> para descartar el mensaje como fuente para una decisión de seguridad? Márlquela y justifique.</p>
+        <div id="f1-señales"></div>
+        <textarea class="txt" id="fa1b" style="margin-top:8px;" placeholder="Justificación: ¿por qué esa señal basta sola y qué dice el criterio de validez (autoría/método/vigencia) al respecto?"></textarea>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button type="button" class="btn-main" onclick="faseCheck(1)">Guardar fase 1 y continuar</button>
+          <details class="sr" style="margin:0;flex:1 1 260px;"><summary>Pista</summary><div class="sr-body">La validez exige autoría verificable y método explícito (pestaña 5). ¿Cuál de las cinco señales del mensaje rompe <em>primero</em> ese requisito —sin necesidad de investigar más nada—?</div></details>
+        </div>
+        <div id="fase1-out" class="calc-out"></div>
+      </div>
+
+      <!-- FASE 2 -->
+      <div class="fase-panel" id="fase2">
+        <div class="kbox kbox-h" style="margin:14px 0;">
+          <h4 style="color:#ffffff;">FASE 2 · Evaluación formal: ficha CRAAP de la revisión sistemática (trabajo del estudiante)</h4>
+          <p style="font-size:12.5px;color:#e2e8f0;margin:0;">La revisión sistemática de EBSCO sobrevivió a SIFT; ahora documéntela con la ficha CRAAP de 5 criterios antes de citarla. R3 del caso.</p>
+        </div>
+        <h4>Actividad 2.1 · Puntúe la revisión sistemática con CRAAP (20 min)</h4>
+        <p style="font-size:12.5px;">Asigne 1-5 a cada criterio para la revisión sistemática sobre lesiones de mano (muestra multiplanta europea) y escriba la evidencia que respalda cada puntaje.</p>
+        <div id="craap-tbl"></div>
+        <h4 style="margin-top:12px;">Actividad 2.2 · Cita en APA 7 (10 min)</h4>
+        <p style="font-size:12.5px;">Redacte la cita de la norma EN 388:2016+A1:2018 en formato APA 7 (las normas se citan como documento institucional con número de norma).</p>
+        <textarea class="txt" id="fa2a" placeholder="Referencia APA 7 de la norma EN 388..."></textarea>
+        <h4 style="margin-top:12px;">Actividad 2.3 · Relevancia de la estadística interna (10 min)</h4>
+        <p style="font-size:12.5px;">El registro de 3 años de incidentes (n = 7) no pasa el filtro de validez como evidencia publicada. ¿Por qué es igualmente decisivo para la decisión, y con qué criterio de Wang y Strong se integra? (Vincule con la categoría <em>contextual</em>.)</p>
+        <textarea class="txt" id="fa2b" placeholder="Por qué integra el dato interno y bajo qué dimensión de calidad..."></textarea>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button type="button" class="btn-main" onclick="faseCheck(2)">Guardar fase 2 y continuar</button>
+          <details class="sr" style="margin:0;flex:1 1 260px;"><summary>Pista CRAAP</summary><div class="sr-body">C-urrency (¿es reciente para un tema de seguridad?), R-elevance (¿muestra multiplanta aplica a una metalmecánica de Ambato?), A-uthority (¿quién firma y dónde está indexada?), A-ccuracy (¿revisión sistemática = cúspide de la pirámide?), P-urpose (¿financiamiento o conflicto?).</div></details>
+        </div>
+        <div id="fase2-out" class="calc-out"></div>
+      </div>
+
+      <!-- FASE 3 -->
+      <div class="fase-panel" id="fase3">
+        <div class="kbox kbox-h" style="margin:14px 0;">
+          <h4 style="color:#ffffff;">FASE 3 · Decisión: matriz ponderada con sus propios pesos (trabajo del estudiante)</h4>
+          <p style="font-size:12.5px;color:#e2e8f0;margin:0;">R2 del caso: puntúe A, B y C con la matriz ponderada usando pesos justificados por usted y compárela con la decisión del material (A = 4,10 · B = 3,85 · C = 2,85).</p>
+        </div>
+        <h4>Actividad 3.1 · Defina sus pesos (15 min)</h4>
+        <p style="font-size:12.5px;">Asigne pesos a los cinco criterios. La suma debe ser exactamente 1,00. Piense: para una decisión de <strong>seguridad</strong>, ¿qué merece más peso —el costo o la validez de la certificación?</p>
+        <div id="pesos-tbl"></div>
+        <div id="pesos-msg" class="calc-out"></div>
+        <h4 style="margin-top:12px;">Actividad 3.2 · Puntúe y calcule (15 min)</h4>
+        <p style="font-size:12.5px;">Asigne puntajes 1-5 a cada alternativa según la evidencia reunida en las fases 1-2 (proveedor A: certificado verificable y excelente clase de corte; B: sin certificado europeo publicado, buen plazo; C: web sin método, descartado en SIFT pero puntúelo igual). El sistema calculará SD = Σ (peso × puntaje).</p>
+        <div id="punt-tbl"></div>
+        <div style="margin-top:10px;"><button type="button" class="btn-main" onclick="casoMatrizCalc()">Calcular mi matriz</button></div>
+        <div id="caso-matriz-out" class="calc-out"></div>
+        <h4 style="margin-top:12px;">Actividad 3.3 · Compare y justifique (10 min)</h4>
+        <textarea class="txt" id="fa3a" placeholder="¿Coincide su resultado con A = 4,10 / B = 3,85 / C = 2,85 del material? ¿Qué pesos explicarían una diferencia? ¿Qué riesgo residual asume con su elección y cómo lo mitigaría?"></textarea>
+        <div style="margin-top:12px;"><button type="button" class="btn-main" onclick="faseCheck(3)">Guardar fase 3 y continuar</button></div>
+        <div id="fase3-out" class="calc-out"></div>
+      </div>
+
+      <!-- FASE 4 -->
+      <div class="fase-panel" id="fase4">
+        <div class="kbox kbox-h" style="margin:14px 0;">
+          <h4 style="color:#ffffff;">FASE 4 · Sesgos y nota de decisión (trabajo del estudiante)</h4>
+          <p style="font-size:12.5px;color:#e2e8f0;margin:0;">R4 y R5 del caso: identifique qué sesgos amenazan esta decisión específica y redacte la nota de decisión de una página para la jefa de planta.</p>
+        </div>
+        <h4>Actividad 4.1 · ¿Qué sesgos amenazan esta decisión? (15 min)</h4>
+        <p style="font-size:12.5px;">Seleccione los sesgos que aplican a este caso concreto (cuidado: no todos aplican) y explique cómo se manifestarían aquí.</p>
+        <div id="sesgos-chips"></div>
+        <textarea class="txt" id="fa4a" style="margin-top:8px;" placeholder="Cómo se manifestaría cada sesgo seleccionado en ESTE caso (el mensaje de WhatsApp, el plazo del viernes, el historial del proveedor...) y qué paso del ciclo de 6 pasos lo neutraliza"></textarea>
+        <h4 style="margin-top:12px;">Actividad 4.2 · Nota de decisión (20 min)</h4>
+        <p style="font-size:12.5px;">Redacte la nota de decisión de una página para la jefa de planta: pregunta de información, fuentes evaluadas (con su estado: descartar/citar/fuente primaria/integrar), matriz con pesos, decisión y fecha de próxima revisión. Después marque la checklist de auditabilidad.</p>
+        <textarea class="txt" id="fa4b" style="min-height:120px;" placeholder="NOTA DE DECISIÓN — Renovación guantes anticorte AndesMetal&#10;1. Pregunta de información: ...&#10;2. Fuentes evaluadas: ...&#10;3. Matriz (pesos y puntajes): ...&#10;4. Decisión: ...&#10;5. Próxima revisión: ..."></textarea>
+        <div id="caso-chk"></div>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button type="button" class="btn-main" onclick="faseCheck(4)">Finalizar caso y ver rúbrica</button>
+          <button type="button" class="btn-ghost" onclick="casoReset()">Reiniciar el caso</button>
+          <button type="button" class="btn-ghost" onclick="casoDescargar()">Descargar mis respuestas (.txt)</button>
+        </div>
+        <div id="fase4-out" class="calc-out"></div>
+
+        <div id="rubrica" style="display:none;margin-top:16px;">
+          <h3 style="border-top:1px solid #e2e8f0;padding-top:14px;">Rúbrica de evaluación del caso (5 criterios × 5 puntos = 25 puntos)</h3>
+          <div class="tblwrap"><table style="font-size:12px;">
+            <thead><tr><th style="width:24%;">Criterio</th><th style="width:24%;">Insuficiente (0-2)</th><th style="width:24%;">Satisfactorio (3-4)</th><th>Excelente (5)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Aplicación de SIFT (R1)</strong></td><td>Opina sin evidencia</td><td>Aplica los 4 movimientos</td><td>Prioriza la señal decisiva y descarta con argumento</td></tr>
+              <tr><td><strong>Matriz ponderada (R2)</strong></td><td>No calcula o mal</td><td>Calcula bien y ordena</td><td>Justifica pesos y compara escenarios</td></tr>
+              <tr><td><strong>Ficha CRAAP y APA (R3)</strong></td><td>Incompleta</td><td>Los 5 criterios + APA correcto</td><td>Integra hallazgos en el veredicto</td></tr>
+              <tr><td><strong>Identificación de sesgos (R4)</strong></td><td>No distingue sesgos</td><td>Nombra los aplicables</td><td>Ancla cada sesgo al paso que lo neutraliza</td></tr>
+              <tr><td><strong>Nota de decisión (R5)</strong></td><td>Vaga o sin fuentes</td><td>Estructura completa</td><td>Auditable: reproduce cálculo y criterios</td></tr>
+            </tbody>
+          </table></div>
+          <p style="font-size:11.5px;color:#64748b;margin:8px 0 0 0;">≥21 sobresaliente · 15-20 muy bueno · 12-14 suficiente (revisar fases débiles) · &lt;12 debe rehacer el caso con la guía de las pestañas 4-7.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 9: AUTOEVALUACIÓN ============ -->
+  <div id="tb9" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tb9"></code> <a class="ulink" id="lnk-tb9" href="#tb9" onclick="goTab('tb9');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tb9" onclick="copiarURL('tb9')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">9</span><h2>Autoevaluación final (12 preguntas del material)</h2></div>
+      <p>Las doce preguntas de opción múltiple del capítulo 10 del material. Responda todas y pulse «Finalizar» para ver su resultado con la justificación de cada respuesta.</p>
+      <div id="quiz-boxes"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+        <button type="button" class="btn-main" id="quiz-fin-btn" onclick="quizFin()">Finalizar y ver resultado</button>
+        <button type="button" class="btn-ghost" onclick="quizReset()">Reiniciar autoevaluación</button>
+      </div>
+      <div id="quiz-result" class="calc-out"></div>
+    </div>
+
+    <div style="background-color:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:20px;">
+      <h3 style="font-size:15px;font-weight:700;color:#0f172a;margin:0 0 12px 0;">Metodología y Sistema de Evaluación (UPSE)</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;font-size:12.5px;color:#475569;">
+        <div>
+          <strong style="color:#1e293b;display:block;margin-bottom:4px;">Estrategia Metodológica:</strong>
+          Horas de Acompañamiento Docente (ACD), aprendizaje colaborativo con los laboratorios interactivos (Wason, matriz ponderada), y el caso integrador AndesMetal trabajado de forma autónoma en Moodle, Zoom y Teams.
+        </div>
+        <div>
+          <strong style="color:#1e293b;display:block;margin-bottom:4px;">Técnicas de Evaluación:</strong>
+          <ul style="margin:0;padding-left:16px;">
+            <li>Inmediata: control interactivo en sesión sincrónica (pestaña 9).</li>
+            <li>Continua: laboratorios de SIFT, CRAAP y matriz ponderada (pestañas 6-7).</li>
+            <li>Especial: caso de estudio en 4 fases (pestaña 8) con la rúbrica de 25 puntos + preguntas de desarrollo D1-D5 del material.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== PESTAÑAS CON URL INDEPENDIENTE (ROUTING POR HASH) ===== */
+var TAB_IDS=['tb1','tb2','tb3','tb4','tb5','tb6','tb7','tb8','tb9'];
+function showTab(id){
+  if(TAB_IDS.indexOf(id)<0)id='tb1';
+  TAB_IDS.forEach(function(t){document.getElementById(t).classList.toggle('active',t===id);});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-tab')===id);});
+  updUrlNotes(id);
+}
+function updUrlNotes(id){
+  var base=location.href.split('#')[0];
+  var c=document.getElementById('url-'+id);
+  if(c)c.textContent=base+'#'+id;
+  var l=document.getElementById('lnk-'+id);
+  if(l){l.textContent=base+'#'+id;l.href='#'+id;}
+}
+function goTab(id){
+  if(TAB_IDS.indexOf(id)<0)id='tb1';
+  if(location.hash!=='#'+id){location.hash=id;}
+  showTab(id);
+  var m=document.getElementById('tabsbar');
+  if(m){var b=m.querySelector('[data-tab="'+id+'"]');if(b)b.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function copiarURL(id){
+  var base=location.href.split('#')[0]+'#'+id;
+  var done=function(){var b=document.getElementById('cpbtn-'+id);if(b){b.textContent='✔ Copiada';setTimeout(function(){b.textContent='Copiar URL';},1800);}};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(base).then(done,done);}
+  else{
+    var ta=document.createElement('textarea');ta.value=base;document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');}catch(e){}
+    document.body.removeChild(ta);done();
+  }
+}
+window.addEventListener('hashchange',function(){showTab(location.hash.replace('#',''));window.scrollTo(0,0);});
+
+/* ===== PESTAÑA 1: FORMATO Y FUENTE ===== */
+var EBK_Q=[
+  {t:'Leer «Don Quijote» gratis y legalmente en el teléfono, adaptando el texto a la pantalla.',ops:['EPUB de dominio público (p. ej. Project Gutenberg o Cervantes Virtual)','PDF con DRM de una tienda','AZW propietario sin lector Kindle'],c:0,fb:'Clásico = dominio público → EPUB reflujable sin DRM: gratuito, legal y adaptable a cualquier pantalla.'},
+  {t:'Consultar una norma técnica con planos y fórmulas conservando la paginación exacta.',ops:['PDF','EPUB reflujable','Audiolibro'],c:0,fb:'El PDF conserva el diseño fijo de la página: eso es exactamente lo que exige un documento técnico normativo.'},
+  {t:'Sacar un libro técnico reciente de ingeniería a texto completo desde la universidad.',ops:['Plataforma O\'Reilly vía suscripción de la biblioteca (libro con DRM y licencia institucional)','Un PDF anónimo de un grupo de WhatsApp','Fotocopiar el índice'],c:0,fb:'O\'Reilly (&gt;35.000 libros técnicos) es la vía institucional legítima; el PDF anónimo de procedencia dudosa viola los tres criterios de la unidad.'},
+  {t:'Llevar 200 novelas de viaje en un lector de tinta electrónica comprando en Amazon.',ops:['Ecosistema Kindle (MOBI/AZW)','Enviar CDs por correo','Imprimir en papel bond'],c:0,fb:'El ecosistema Kindle con formatos propietarios y DRM es la solución de mercado para ese caso de uso masivo portátil.'}
+];
+var ebkSel={};
+function buildEbk(){
+  var h='';
+  EBK_Q.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+q.t+'</p>';
+    q.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="ebk-'+i+'-'+j+'" onclick="ebkPick('+i+','+j+')">'+o+'</button>';
+    });
+    h+='</div>';
+  });
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap;"><button type="button" class="btn-main" onclick="ebkEval()">Evaluar respuestas</button></div>';
+  document.getElementById('ebk-q').innerHTML=h;
+}
+function ebkPick(i,j){
+  ebkSel[i]=j;
+  EBK_Q[i].ops.forEach(function(_,k){document.getElementById('ebk-'+i+'-'+k).className='opt-btn';});
+  document.getElementById('ebk-'+i+'-'+j).className='opt-btn sel';
+}
+function ebkEval(){
+  var el=document.getElementById('ebk-out'),n=0,h='',todo=true;
+  for(var i=0;i<EBK_Q.length;i++){if(ebkSel[i]===undefined){todo=false;break;}}
+  if(!todo){el.className='calc-out err';el.innerHTML='⚠ Responda los '+EBK_Q.length+' casos antes de evaluar.';return;}
+  EBK_Q.forEach(function(q,i){
+    var ok=ebkSel[i]===q.c;
+    if(ok)n++;
+    document.getElementById('ebk-'+i+'-'+ebkSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok)document.getElementById('ebk-'+i+'-'+q.c).className='opt-btn right';
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' '+(i+1)+'. '+q.fb+'</div>';
+  });
+  h='<strong>Resultado: '+n+' / '+EBK_Q.length+'</strong><br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+
+/* ===== PESTAÑA 2: BARRAS + FUENTES ===== */
+var BIB=[
+  {n:'WorldCat (OCLC) — registros',v:609.8},
+  {n:'Google Books — títulos',v:40},
+  {n:'Europeana — objetos',v:58},
+  {n:'DPLA — objetos',v:53},
+  {n:'HathiTrust — volúmenes',v:18},
+  {n:'Gallica (BnF) — documentos',v:10},
+  {n:'Cervantes Virtual — registros',v:0.3},
+  {n:'Project Gutenberg — libros',v:0.075}
+];
+function buildBib(){
+  var h='<p style="font-size:12.5px;margin-bottom:10px;">Sin revelar: cada biblioteca con su cifra (millones de unidades). Intente ordenarlas de memoria antes de pulsar.</p>';
+  BIB.forEach(function(b){h+='<div class="bar-row"><span class="bar-lab">'+b.n+'</span><div class="bar-tr"><div class="bar-fi" id="bibbar-'+b.v+'" style="width:0%"></div></div><span class="bar-val" id="bibval-'+b.v+'">?</span></div>';});
+  document.getElementById('bib-bars').innerHTML=h;
+}
+function bibReveal(){
+  var max=609.8;
+  BIB.forEach(function(b){
+    var w=Math.max(1.5,Math.log10(b.v+1)/Math.log10(max+1)*100);
+    document.getElementById('bibbar-'+b.v).style.width=w+'%';
+    var el=document.getElementById('bibval-'+b.v);
+    el.textContent=b.v>=1?b.v.toLocaleString('es')+' M':(b.v*1000).toLocaleString('es')+' mil';
+  });
+  var el=document.getElementById('bib-out');
+  el.className='calc-out ok';
+  el.innerHTML='Las barras usan <strong>escala logarítmica</strong> (como la figura 2.1 del material): de los ~19.000 ítems de la antigua World Digital Library a los 609,8 M de registros de WorldCat hay <strong>cuatro órdenes de magnitud</strong>. Nótese el contraste de naturaleza: WorldCat <em>localiza</em> (catálogo cooperativo), Google Books muestra <em>fragmentos</em>, y las suscripciones académicas (EBSCO, JSTOR, O\'Reilly) entregan el <em>texto completo</em> bajo licencia.';
+}
+var BIB_Q=[
+  {t:'Localizar en qué bibliotecas del mundo existe un ejemplar de una tesis antigua.',ops:['WorldCat (OCLC)','OverDrive/Libby','O\'Reilly'],c:0,fb:'WorldCat es un catálogo cooperativo de 609,8 M de registros: localiza ejemplares, no los presta.'},
+  {t:'Descargar gratuitamente y de forma legal «El Quijote» en español.',ops:['Biblioteca Virtual Miguel de Cervantes','EBSCO','Kindle Unlimited'],c:0,fb:'Cervantes Virtual (&gt;300.000 registros de clásicos) es la vía hispana gratuita y legítima por excelencia.'},
+  {t:'Acceder al texto completo de artículos revisados por pares para una revisión bibliográfica.',ops:['Bases de suscripción (EBSCO/JSTOR) vía la universidad','Google Books (fragmentos)','Un canal de Telegram'],c:0,fb:'Las bases de suscripción entregan texto completo con control editorial; Google Books solo fragmentos de obras protegidas.'},
+  {t:'Pedir en préstamo un e-book best-seller reciente con el carné de la biblioteca pública.',ops:['OverDrive/Libby','HathiTrust','DPLA'],c:0,fb:'OverDrive/Libby es la plataforma de préstamo digital: 739,5 M de préstamos en 2024, con licencias DRM y listas de espera como un ejemplar físico.'},
+  {t:'Consultar manuscritos y patrimonio digitalizado de instituciones europeas.',ops:['Europeana','WorldCat','Project Gutenberg'],c:0,fb:'Europeana reúne &gt;58 M de objetos de ~3.700 instituciones de patrimonio cultural de la UE.'}
+];
+var bibSel={};
+function buildBibQ(){
+  var h='';
+  BIB_Q.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+q.t+'</p>';
+    q.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="bq-'+i+'-'+j+'" onclick="bibPick('+i+','+j+')">'+o+'</button>';
+    });
+    h+='</div>';
+  });
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap;"><button type="button" class="btn-main" onclick="bibEval()">Evaluar respuestas</button></div>';
+  document.getElementById('bib-q').innerHTML=h;
+}
+function bibPick(i,j){
+  bibSel[i]=j;
+  BIB_Q[i].ops.forEach(function(_,k){document.getElementById('bq-'+i+'-'+k).className='opt-btn';});
+  document.getElementById('bq-'+i+'-'+j).className='opt-btn sel';
+}
+function bibEval(){
+  var el=document.getElementById('bib2-out'),n=0,h='',todo=true;
+  for(var i=0;i<BIB_Q.length;i++){if(bibSel[i]===undefined){todo=false;break;}}
+  if(!todo){el.className='calc-out err';el.innerHTML='⚠ Responda los '+BIB_Q.length+' casos antes de evaluar.';return;}
+  BIB_Q.forEach(function(q,i){
+    var ok=bibSel[i]===q.c;
+    if(ok)n++;
+    document.getElementById('bq-'+i+'-'+bibSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok)document.getElementById('bq-'+i+'-'+q.c).className='opt-btn right';
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' '+(i+1)+'. '+q.fb+'</div>';
+  });
+  h='<strong>Resultado: '+n+' / '+BIB_Q.length+'</strong><br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+
+/* ===== PESTAÑA 3: ESTUDIOS ===== */
+var MIT_Q=[
+  {t:'«La noticia falsa es un 70 % más probable de ser retuiteada que la verdadera.»',ops:['MIT / Science (Vosoughi, Roy y Aral, 2018)','Stanford SHEG (2019)','Edelman (2025)'],c:0,fb:'MIT/Science 2018: ~126.000 cascadas, 4,5 M de tuits, 3 M de personas — y la diferencia la explicaban los humanos, no los bots.'},
+  {t:'«El 96 % de estudiantes no consideró conflictos de interés que la propia página declaraba.»',ops:['Stanford SHEG (Breakstone et al., 2019)','Reuters Institute (2024)','OMS (2020)'],c:0,fb:'SHEG 2019: 3.446 estudiantes; el 90 % aprobó 4 de 6 tareas o menos: la familiaridad tecnológica no produce competencia evaluativa.'},
+  {t:'«El 69 % teme ser engañado deliberadamente por sus líderes —máximo histórico—.»',ops:['Edelman Trust Barometer (2025)','WEF Global Risks (2024)','APWG (2025)'],c:0,fb:'Edelman 2025: la confianza se mide en máximos de preocupación por decepción deliberada de líderes.'},
+  {t:'«La desinformación es el riesgo global n.º 1 a corto plazo.»',ops:['WEF Global Risks Report (2024-2025)','Statista (2026)','Delgado et al. (2018)'],c:0,fb:'El WEF clasificó la desinformación como riesgo n.º 1 a dos años, repitiendo el primer puesto en 2024 y 2025.'},
+  {t:'«El exceso de información, incluida la falsa, durante un brote.»',ops:['OMS: infodemia (2020)','Interisle (2025)','OverDrive (2025)'],c:0,fb:'La OMS popularizó «infodemia» el 15-02-2020 y la formalizó en «Managing the Infodemic» (dic. 2020).'},
+  {t:'~19,5 millones de dominios maliciosos, +126 % interanual.»',ops:['Interisle (2025)','Reuters Institute (2024)','UNESCO'],c:0,fb:'Interisle dimensiona el vector técnico: la superficie de engaño también crece.'}
+];
+var mitSel={};
+function buildMit(){
+  var h='';
+  MIT_Q.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+q.t+'</p>';
+    q.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="mq-'+i+'-'+j+'" onclick="mitPick('+i+','+j+')">'+o+'</button>';
+    });
+    h+='</div>';
+  });
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap;"><button type="button" class="btn-main" onclick="mitEval()">Evaluar respuestas</button></div>';
+  document.getElementById('mit-q').innerHTML=h;
+}
+function mitPick(i,j){
+  mitSel[i]=j;
+  MIT_Q[i].ops.forEach(function(_,k){document.getElementById('mq-'+i+'-'+k).className='opt-btn';});
+  document.getElementById('mq-'+i+'-'+j).className='opt-btn sel';
+}
+function mitEval(){
+  var el=document.getElementById('mit-out'),n=0,h='',todo=true;
+  for(var i=0;i<MIT_Q.length;i++){if(mitSel[i]===undefined){todo=false;break;}}
+  if(!todo){el.className='calc-out err';el.innerHTML='⚠ Asocie los '+MIT_Q.length+' hallazgos antes de evaluar.';return;}
+  MIT_Q.forEach(function(q,i){
+    var ok=mitSel[i]===q.c;
+    if(ok)n++;
+    document.getElementById('mq-'+i+'-'+mitSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok)document.getElementById('mq-'+i+'-'+q.c).className='opt-btn right';
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' '+(i+1)+'. '+q.fb+'</div>';
+  });
+  h='<strong>Resultado: '+n+' / '+MIT_Q.length+'</strong><br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+
+/* ===== PESTAÑA 4: WANG Y STRONG ===== */
+var WS_Q=[
+  {t:'La «exactitud» del dato.',ops:['Intrínseca','Contextual','Accesibilidad'],c:0,fb:'Exactitud, objetividad, credibilidad y reputación: el dato «bueno en sí» — categoría intrínseca.'},
+  {t:'Que el dato llegue a tiempo para la ventana de la decisión.',ops:['Contextual','Representacional','Intrínseca'],c:0,fb:'La oportunidad es una de las 5 dimensiones contextuales: ¿sirve a mi problema aquí y ahora?'},
+  {t:'Que la cifra esté presentada con unidades claras y sin ambigüedad.',ops:['Representacional','Intrínseca','Accesibilidad'],c:0,fb:'Interpretabilidad, comprensibilidad, consistencia y concisión: categoría representacional.'},
+  {t:'Que el acceso al dato esté protegido con autenticación.',ops:['Accesibilidad','Contextual','Representacional'],c:0,fb:'La seguridad del acceso (con la accesibilidad misma) cierra el modelo: ¿puedo llegar a él de forma segura?'},
+  {t:'Un dato perfectísimo pero que no responde a la pregunta del problema.',ops:['Falla la categoría contextual (relevancia)','Falla la categoría intrínseca','No falla nada: es un buen dato'],c:0,fb:'La calidad es un ajuste entre dato y contexto de uso: exacto pero irrelevante = mala calidad (lección central de Wang y Strong).'}
+];
+var wsSel={};
+function buildWs(){
+  var h='';
+  WS_Q.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+q.t+'</p>';
+    q.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="ws-'+i+'-'+j+'" onclick="wsPick('+i+','+j+')">'+o+'</button>';
+    });
+    h+='</div>';
+  });
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap;"><button type="button" class="btn-main" onclick="wsEval()">Evaluar respuestas</button></div>';
+  document.getElementById('ws-q').innerHTML=h;
+}
+function wsPick(i,j){
+  wsSel[i]=j;
+  WS_Q[i].ops.forEach(function(_,k){document.getElementById('ws-'+i+'-'+k).className='opt-btn';});
+  document.getElementById('ws-'+i+'-'+j).className='opt-btn sel';
+}
+function wsEval(){
+  var el=document.getElementById('ws-out'),n=0,h='',todo=true;
+  for(var i=0;i<WS_Q.length;i++){if(wsSel[i]===undefined){todo=false;break;}}
+  if(!todo){el.className='calc-out err';el.innerHTML='⚠ Responda los '+WS_Q.length+' casos antes de evaluar.';return;}
+  WS_Q.forEach(function(q,i){
+    var ok=wsSel[i]===q.c;
+    if(ok)n++;
+    document.getElementById('ws-'+i+'-'+wsSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok)document.getElementById('ws-'+i+'-'+q.c).className='opt-btn right';
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' '+(i+1)+'. '+q.fb+'</div>';
+  });
+  h='<strong>Resultado: '+n+' / '+WS_Q.length+'</strong><br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+
+/* ===== PESTAÑA 5: V·F·R ===== */
+var VFR_Q=[
+  {t:'Un informe con datos impecables... de la construcción en Noruega, para decidir sobre una planta en Ambato.',ops:['Relevancia (escala/jurisdicción)','Validez (autoría)','Fiabilidad (corroboración)'],c:0,fb:'Válido y quizá fiable, pero irrelevante: la población y jurisdicción no son comparables — falla el filtro de aplicabilidad.'},
+  {t:'Un artículo firmado por un investigador con afiliación y metodología explícita.',ops:['Pasa el filtro de validez (autoría y método)','Falla fiabilidad automáticamente','Es irrelevante por definición'],c:0,fb:'Autoría verificable + método explícito = criterio de validez satisfecho en primera instancia; aún falta corroborar y juzgar relevancia.'},
+  {t:'Una cifra que solo aparece en un sitio web, y en decenas más que copian la misma frase textual.',ops:['Fiabilidad: propagación no es verificación','Validez: tiene fecha','Relevancia: es un dato popular'],c:0,fb:'Décimas de copias del mismo texto indican propagación, no verificación: la viralidad es métrica de difusión, no de verdad (MIT).'},
+  {t:'«Según estudios demuestran...» sin enlace ni referencia al estudio.',ops:['Fiabilidad: trazabilidad rota','Validez: vigencia','Relevancia: oportunidad'],c:0,fb:'La cadena se rompe en «según estudios»: no se puede seguir la cita hasta la fuente primaria.'},
+  {t:'Un dato impecable que llega a la reunión después de tomada la decisión.',ops:['Relevancia (oportunidad)','Validez (método)','Fiabilidad (congruencia)'],c:0,fb:'Información perfecta pero tardía es, operativamente, información nula: falla la oportunidad, dimensión contextual.'},
+  {t:'Una norma técnica que fue derogada y reemplazada, pero sigue publicada en línea.',ops:['Validez (vigencia)','Relevancia (escala)','Fiabilidad (corroboración)'],c:0,fb:'Dato caduco = dato inválido aunque siga «en línea»: la vigencia es parte de la validez.'}
+];
+var vfrSel={};
+function buildVfr(){
+  var h='';
+  VFR_Q.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+q.t+'</p>';
+    q.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="vf-'+i+'-'+j+'" onclick="vfrPick('+i+','+j+')">'+o+'</button>';
+    });
+    h+='</div>';
+  });
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap;"><button type="button" class="btn-main" onclick="vfrEval()">Evaluar respuestas</button></div>';
+  document.getElementById('vfr-q').innerHTML=h;
+}
+function vfrPick(i,j){
+  vfrSel[i]=j;
+  VFR_Q[i].ops.forEach(function(_,k){document.getElementById('vf-'+i+'-'+k).className='opt-btn';});
+  document.getElementById('vf-'+i+'-'+j).className='opt-btn sel';
+}
+function vfrEval(){
+  var el=document.getElementById('vfr-out'),n=0,h='',todo=true;
+  for(var i=0;i<VFR_Q.length;i++){if(vfrSel[i]===undefined){todo=false;break;}}
+  if(!todo){el.className='calc-out err';el.innerHTML='⚠ Responda los '+VFR_Q.length+' casos antes de evaluar.';return;}
+  VFR_Q.forEach(function(q,i){
+    var ok=vfrSel[i]===q.c;
+    if(ok)n++;
+    document.getElementById('vf-'+i+'-'+vfrSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok)document.getElementById('vf-'+i+'-'+q.c).className='opt-btn right';
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' '+(i+1)+'. '+q.fb+'</div>';
+  });
+  h='<strong>Resultado: '+n+' / '+VFR_Q.length+'</strong><br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+
+/* ===== PESTAÑA 6: SIFT ===== */
+var SIFT_Q=[
+  {t:'Al abrir el enlace siento indignación inmediata y ganas de reenviarlo a todos los grupos.',ops:['Stop','Investigate the source','Trace claims'],c:0,fb:'Stop: registrar la propia reacción es la primera información — las fuentes no fiables están diseñadas para producirla.'},
+  {t:'Nunca había oído hablar del sitio que publica la noticia; quiero saber quién está detrás.',ops:['Investigate the source','Find better coverage','Stop'],c:0,fb:'Investigate: salir de la página y leer lateralmente qué dicen terceros sobre la fuente.'},
+  {t:'El dato parece cierto pero es tan importante que quiero ver si medios verificados también lo reportan.',ops:['Find better coverage','Stop','Investigate the source'],c:0,fb:'Find better coverage: si el dato es cierto, los verificados también lo reportan; si solo aparece en un sitio, ese silencio es el dato.'},
+  {t:'El mensaje incluye la foto de un certificado borroneado y quiero saber si es auténtico y de qué año.',ops:['Trace claims','Stop','Find better coverage'],c:0,fb:'Trace: rastrear la imagen hasta su contexto original — la búsqueda inversa localiza origen y fecha reales.'}
+];
+var siftSel={};
+function buildSift(){
+  var h='';
+  SIFT_Q.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+q.t+'</p>';
+    q.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="sf-'+i+'-'+j+'" onclick="siftPick('+i+','+j+')">'+o+'</button>';
+    });
+    h+='</div>';
+  });
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap;"><button type="button" class="btn-main" onclick="siftEval()">Evaluar respuestas</button></div>';
+  document.getElementById('sift-q').innerHTML=h;
+}
+function siftPick(i,j){
+  siftSel[i]=j;
+  SIFT_Q[i].ops.forEach(function(_,k){document.getElementById('sf-'+i+'-'+k).className='opt-btn';});
+  document.getElementById('sf-'+i+'-'+j).className='opt-btn sel';
+}
+function siftEval(){
+  var el=document.getElementById('sift-out'),n=0,h='',todo=true;
+  for(var i=0;i<SIFT_Q.length;i++){if(siftSel[i]===undefined){todo=false;break;}}
+  if(!todo){el.className='calc-out err';el.innerHTML='⚠ Responda los '+SIFT_Q.length+' casos antes de evaluar.';return;}
+  SIFT_Q.forEach(function(q,i){
+    var ok=siftSel[i]===q.c;
+    if(ok)n++;
+    document.getElementById('sf-'+i+'-'+siftSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok)document.getElementById('sf-'+i+'-'+q.c).className='opt-btn right';
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' '+(i+1)+'. '+q.fb+'</div>';
+  });
+  h='<strong>Resultado: '+n+' / '+SIFT_Q.length+'</strong><br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+
+/* ===== PESTAÑA 7: WASON ===== */
+var wasonN=0,wasonRefutados=0;
+function wasonProbar(){
+  var a=parseFloat(document.getElementById('wason-a').value),
+      b=parseFloat(document.getElementById('wason-b').value),
+      c=parseFloat(document.getElementById('wason-c').value);
+  var el=document.getElementById('wason-out');
+  if(isNaN(a)||isNaN(b)||isNaN(c)){el.className='calc-out err';el.innerHTML='⚠ Escriba los tres números del trío.';return;}
+  var cumple=(b>a&&c>b); /* regla real: tres números estrictamente ascendentes */
+  wasonN++;
+  var esRefutador=(a%2!==0||b-a!==2||c-b!==2||c%2!==0); /* trio que rompe la hipótesis ingenua 'pares de 2 en 2' */
+  if(esRefutador)wasonRefutados++;
+  var hist=document.getElementById('wason-hist');
+  hist.innerHTML='Intentos: <strong>'+wasonN+'</strong> · Respuesta del sistema: <strong>'+(cumple?'SÍ cumple la regla':'NO la cumple')+'</strong> · Tríos potencialmente <em>refutadores</em> de la hipótesis «pares de 2 en 2»: <strong>'+wasonRefutados+'</strong>';
+  el.className='calc-out ok';
+  el.innerHTML='Trío ('+a+', '+b+', '+c+') → <strong>'+(cumple?'SÍ cumple la regla oculta':'NO cumple la regla oculta')+'</strong>. '+(esRefutador?'Este trío podría refutar la hipótesis ingenua «pares crecientes de 2 en 2»: si esa fuera la regla y el sistema dijera SÍ, su hipótesis caería. Así se prueba de verdad.':'Este trío solo confirma la hipótesis ingenua: aunque diga SÍ, no distingue entre «ascendentes» y «pares de 2 en 2». Wason mostró que casi nadie sale de aquí.');
+}
+function wasonDeclarar(){
+  var v=document.getElementById('wason-regla').value;
+  var el=document.getElementById('wason-out');
+  if(v===''){el.className='calc-out err';el.innerHTML='⚠ Seleccione una hipótesis de regla antes de declarar.';return;}
+  if(v==='1'){
+    el.className='calc-out ok';
+    el.innerHTML='🎉 <strong>Correcto: la regla era «tres números ascendentes».</strong> Lo logró en '+wasonN+' intento(s) con '+wasonRefutados+' trío(s) refutador(es). En el experimento original de Wason (1960) solo <strong>6 de 29</strong> sujetos (≈21 %) acertaron al primer intento: la mayoría solo propuso tríos confirmatorios de su hipótesis inicial. Ese es el <strong>sesgo de confirmación</strong>: en la práctica profesional se traduce en buscar solo fuentes que apoyen la decisión que ya se quería tomar.';
+  }else{
+    var nombres=['pares crecientes de 2 en 2','pares ascendentes','menores que 100'];
+    el.className='calc-out err';
+    el.innerHTML='❌ La regla <strong>no</strong> es «'+nombres[v]+'»: recuerde que el trío 2-4-6 la cumple, pero también la cumplirían 1-2-3, 3-9-11 o 10-20-30. Su hipótesis es más estrecha que la evidencia que tiene —<em>exactamente</em> lo que le pasaba al 79 % de los sujetos de Wason. Pruebe un trío que su hipótesis rechazaría (p. ej. 1-2-3) y observe que el sistema responde SÍ: ahí cae la hipótesis ingenua.';
+  }
+}
+function wasonReset(){
+  wasonN=0;wasonRefutados=0;
+  ['wason-a','wason-b','wason-c'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('wason-regla').value='';
+  document.getElementById('wason-hist').innerHTML='Intentos: 0 · Sin pruebas aún.';
+  document.getElementById('wason-out').className='calc-out';
+}
+
+/* ===== PESTAÑA 7: MATRIZ PONDERADA (CALCULADORA) ===== */
+var MAT_PESOS=[0.30,0.25,0.20,0.15,0.10];
+var MAT_DEFAULT={a:[5,4,5,2,3],b:[4,3,4,4,5],c:[2,2,3,5,4]};
+function matGet(){
+  var r={a:[],b:[],c:[]};
+  for(var i=0;i<5;i++){['a','b','c'].forEach(function(k){var v=parseInt(document.getElementById('m-p'+i+k).value);r[k].push(isNaN(v)?0:Math.min(5,Math.max(1,v)));});}
+  return r;
+}
+function matrizCalc(){
+  var el=document.getElementById('matriz-out');
+  var p=matGet();
+  var sd={a:0,b:0,c:0};
+  for(var i=0;i<5;i++){['a','b','c'].forEach(function(k){sd[k]+=MAT_PESOS[i]*p[k][i];});}
+  var tot=sd.a+sd.b+sd.c; /* solo para formato */
+  function f2(x){return (Math.round(x*100)/100).toFixed(2).replace('.',',');}
+  var ganador=sd.a>=sd.b&&sd.a>=sd.c?'A (proveedor certificado)':(sd.b>=sd.c?'B (nacional)':'C (importado económico)');
+  el.className='calc-out ok';
+  el.innerHTML='<strong>SD(A) = '+f2(sd.a)+'</strong> · <strong>SD(B) = '+f2(sd.b)+'</strong> · <strong>SD(C) = '+f2(sd.c)+'</strong> — decide: <strong>'+ganador+'</strong>.<br><small>Verificación de pesos: 0,30+0,25+0,20+0,15+0,10 = 1,00 ✔. Con el ejemplo del material (A: 5,4,5,2,3 · B: 4,3,4,4,5 · C: 2,2,3,5,4): A = 4,10 · B = 3,85 · C = 2,85.</small>';
+}
+function matrizReset(){
+  for(var i=0;i<5;i++){['a','b','c'].forEach(function(k){document.getElementById('m-p'+i+k).value=MAT_DEFAULT[k][i];});}
+  matrizCalc();
+}
+
+/* ===== PESTAÑA 8: CASO ANDESMETAL ===== */
+var FASES=['fase1','fase2','fase3','fase4'];
+var faseHechas={1:false,2:false,3:false,4:false};
+var FASE_TITULOS=['Verificación SIFT','Evaluación V·F·R (CRAAP)','Matriz de decisión','Sesgos y nota de decisión'];
+function goFase(n){
+  FASES.forEach(function(f,i){
+    document.getElementById(f).classList.toggle('active',i===n-1);
+    var s=document.getElementById('fs'+(i+1));
+    s.classList.toggle('cur',i===n-1);
+    s.classList.toggle('done',faseHechas[i+1]);
+  });
+  document.getElementById('fase-prog').style.width=((n-1)/4*100)+'%';
+  document.getElementById('fase-prog-txt').textContent='Fase '+n+' de 4 — '+FASE_TITULOS[n-1]+' · avance del caso: '+Math.round((n-1)/4*100)+'%';
+  var panel=document.getElementById('fase'+n);
+  if(panel)panel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+/* Fase 1: señales seleccionables */
+var SENALES=[
+  {t:'Sin autor ni laboratorio identificable',ok:true},
+  {t:'La foto del certificado no es trazable a laboratorio o acreditador',ok:true},
+  {t:'No aparece en ningún verificador (EcuadorChequea/LatamChequea)',ok:true},
+  {t:'Las cifras son idénticas en 2022 y 2024 (dato reciclado)',ok:true},
+  {t:'Llegó por WhatsApp y no por un canal editorial',ok:false}
+];
+var senSel={};
+function buildSenales(){
+  var h='';
+  SENALES.forEach(function(s,i){
+    h+='<button type="button" class="fw-pill" id="sen'+i+'" onclick="senToggle('+i+')">'+s.t+'</button> ';
+  });
+  document.getElementById('f1-señales').innerHTML=h;
+}
+function senToggle(i){
+  senSel[i]=!senSel[i];
+  document.getElementById('sen'+i).classList.toggle('on',!!senSel[i]);
+}
+/* Fase 2: CRAAP */
+var CRAAP=[
+  {k:'C',n:'Currency (vigencia)'},
+  {k:'R',n:'Relevance (relevancia)'},
+  {k:'A',n:'Authority (autoridad)'},
+  {k:'A2',n:'Accuracy (exactitud)'},
+  {k:'P',n:'Purpose (propósito)'}
+];
+var craapP=[0,0,0,0,0];
+function buildCraap(){
+  var h='<div class="tblwrap"><table style="font-size:12px;"><thead><tr><th>Criterio</th><th style="width:80px;">Puntaje 1-5</th><th>Evidencia que lo respalda</th></tr></thead><tbody>';
+  CRAAP.forEach(function(c,i){
+    h+='<tr><td><strong>'+c.n+'</strong></td><td><select class="calc-in" id="cr'+i+'" onchange="craapSet('+i+')"><option value="0">—</option>'+[1,2,3,4,5].map(function(v){return '<option'+(craapP[i]===v?' selected':'')+'>'+v+'</option>';}).join('')+'</select></td><td><input class="calc-in" id="cre'+i+'" type="text" placeholder="Evidencia (metodología, muestra, fecha, indexación...)"></td></tr>';
+  });
+  h+='</tbody></table></div>';
+  document.getElementById('craap-tbl').innerHTML=h;
+}
+function craapSet(i){craapP[i]=parseInt(document.getElementById('cr'+i).value)||0;}
+/* Fase 3: pesos y puntajes del estudiante */
+var CRIT3=['Validez de certificación','Fiabilidad de fuente','Relevancia técnica','Costo','Plazo'];
+var peso3=[0.30,0.25,0.20,0.15,0.10];
+var punt3={a:[5,4,5,2,3],b:[4,3,4,4,5],c:[2,2,3,5,4]};
+function buildPesos3(){
+  var h='<div class="tblwrap"><table style="font-size:12px;"><thead><tr><th>Criterio</th><th style="width:110px;">Su peso (0-1)</th></tr></thead><tbody>';
+  CRIT3.forEach(function(c,i){
+    h+='<tr><td>'+c+'</td><td><input class="calc-in" type="number" min="0" max="1" step="0.05" id="w'+i+'" value="'+peso3[i]+'" onchange="peso3Set('+i+')"></td></tr>';
+  });
+  h+='</tbody></table></div>';
+  document.getElementById('pesos-tbl').innerHTML=h;
+  pesosMsg();
+}
+function peso3Set(i){peso3[i]=parseFloat(document.getElementById('w'+i).value)||0;pesosMsg();}
+function pesosMsg(){
+  var s=peso3.reduce(function(a,b){return a+b;},0);
+  var el=document.getElementById('pesos-msg');
+  var ok=Math.abs(s-1)<0.001;
+  el.className='calc-out '+(ok?'ok':'err');
+  el.innerHTML=(ok?'✔ Suma de pesos = 1,00. Correcto.':'⚠ Suma actual: '+s.toFixed(2).replace('.',',')+' — ajuste los pesos hasta sumar exactamente 1,00.');
+}
+function buildPunt3(){
+  var h='<div class="tblwrap"><table style="font-size:12px;"><thead><tr><th>Criterio</th><th>A · certificado</th><th>B · nacional</th><th>C · web «3X»</th></tr></thead><tbody>';
+  CRIT3.forEach(function(c,i){
+    h+='<tr><td>'+c+'</td>';
+    ['a','b','c'].forEach(function(k){
+      h+='<td><input class="calc-in" type="number" min="1" max="5" step="1" id="pu'+i+k+'" value="'+punt3[k][i]+'"></td>';
+    });
+    h+='</tr>';
+  });
+  h+='</tbody></table></div>';
+  document.getElementById('punt-tbl').innerHTML=h;
+}
+function casoMatrizCalc(){
+  var el=document.getElementById('caso-matriz-out');
+  var s=peso3.reduce(function(a,b){return a+b;},0);
+  if(Math.abs(s-1)>=0.001){el.className='calc-out err';el.innerHTML='⚠ Corrija primero los pesos: suman '+s.toFixed(2).replace('.',',')+' y deben sumar 1,00.';return;}
+  var sd={a:0,b:0,c:0};
+  for(var i=0;i<5;i++){
+    var w=peso3[i];
+    ['a','b','c'].forEach(function(k){
+      var v=parseInt(document.getElementById('pu'+i+k).value);
+      if(isNaN(v))v=3;v=Math.min(5,Math.max(1,v));
+      sd[k]+=w*v;
+    });
+  }
+  function f2(x){return (Math.round(x*100)/100).toFixed(2).replace('.',',');}
+  var ganador=sd.a>=sd.b&&sd.a>=sd.c?'A (proveedor certificado)':(sd.b>=sd.c?'B (nacional)':'C (importado económico)');
+  var coincide=Math.abs(sd.a-4.10)<0.05&&Math.abs(sd.b-3.85)<0.05&&Math.abs(sd.c-2.85)<0.05;
+  el.className='calc-out ok';
+  el.innerHTML='<strong>Su matriz: SD(A) = '+f2(sd.a)+' · SD(B) = '+f2(sd.b)+' · SD(C) = '+f2(sd.c)+' — decide '+ganador+'.</strong><br>'+(coincide?'Coincide con el ejemplo del material (4,10 / 3,85 / 2,85): usó los pesos estándar.':'Difiere del ejemplo del material (4,10 / 3,85 / 2,85): sus pesos codifican otro juicio de valor — documente en la actividad 3.3 por qué.')+'<br><small>Recuerde: el desacuerdo profesional se debatirá sobre los pesos y criterios, no sobre intuiciones.</small>';
+}
+/* Fase 4: chips de sesgos */
+var SESGOS=[
+  {n:'Confirmación',ok:true},
+  {n:'Anclaje',ok:true},
+  {n:'Disponibilidad',ok:true},
+  {n:'Dunning-Kruger',ok:false},
+  {n:'Sesgo de optimismo',ok:false}
+];
+var sgSel={};
+function buildSesgos(){
+  var h='';
+  SESGOS.forEach(function(s,i){
+    h+='<button type="button" class="fw-pill" id="sg'+i+'" onclick="sgToggle('+i+')">'+s.n+'</button> ';
+  });
+  document.getElementById('sesgos-chips').innerHTML=h;
+}
+function sgToggle(i){
+  sgSel[i]=!sgSel[i];
+  document.getElementById('sg'+i).classList.toggle('on',!!sgSel[i]);
+}
+/* Checklist final */
+var casoChkItems=[
+  'La nota declara la pregunta de información que la originó',
+  'Cada fuente citada tiene su estado (descartar / citar / primaria / integrar)',
+  'La matriz aparece con pesos y puntajes reproducibles',
+  'La decisión se sigue aritméticamente de la matriz',
+  'Se identifican los sesgos aplicables y el paso que los neutraliza',
+  'La estadística interna (n = 7) queda integrada como contexto',
+  'Hay fecha de próxima revisión de la decisión',
+  'La APA 7 de la norma EN 388 es citable tal cual está escrita'
+];
+var casoChkEstado=[];
+function buildCasoChk(){
+  casoChkEstado=casoChkItems.map(function(){return false;});
+  var h='';
+  casoChkItems.forEach(function(c,i){h+='<label class="chk" style="display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:#334155;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="cck'+i+'" onchange="casoChkSet('+i+')"><span>'+c+'</span></label>';});
+  document.getElementById('caso-chk').innerHTML=h;
+}
+function casoChkSet(i){casoChkEstado[i]=document.getElementById('cck'+i).checked;}
+/* Validación por fases */
+function faseCheck(n){
+  var el=document.getElementById('fase'+n+'-out');
+  var ok=true,msg='';
+  if(n===1){
+    var a=document.getElementById('fa1a').value.trim();
+    var sMoves=(a.toUpperCase().match(/\b(S ?—|I ?—|F ?—|T ?—|STOP|INVESTIGATE|FIND|TRACE)\b/gi)||[]).length;
+    var senOk=Object.keys(senSel).filter(function(i){return senSel[i];}).length;
+    if(a.length<60||sMoves<3){ok=false;msg='Desarrolle los cuatro movimientos SIFT en la actividad 1.1 (mencione al menos 3 por su letra o nombre; lleva '+sMoves+').';}
+    else if(senOk===0){ok=false;msg='Marque al menos una señal decisiva en la actividad 1.2.';}
+    else if(document.getElementById('fa1b').value.trim().length<30){ok=false;msg='Justifique la señal decisiva (actividad 1.2): ¿por qué basta sola?';}
+    else{
+      var todas=senOk===SENALES.length;
+      msg='✅ Fase 1 guardada. '+sMoves+' movimientos documentados y '+senOk+' señal(es) marcadas.'+(todas?'':' Nota: hay '+SENALES.length+' señales de invalidez en el mensaje — conviene revisarlas todas.')+' El mensaje se descarta: sin autor verificable ni método, no satisface el criterio de validez.';
+    }
+  }
+  if(n===2){
+    var a2=document.getElementById('fa2a').value.trim(),b2=document.getElementById('fa2b').value.trim();
+    var nCr=0;
+    for(var i=0;i<CRAAP.length;i++){if(craapP[i]>0)nCr++;}
+    var evOk=CRAAP.every(function(_,i){return document.getElementById('cre'+i).value.trim().length>5;});
+    if(nCr<CRAAP.length){ok=false;msg='Puntúe los '+CRAAP.length+' criterios CRAAP (lleva '+nCr+').';}
+    else if(!evOk){ok=false;msg='Escriba la evidencia que respalda cada puntaje de la ficha CRAAP.';}
+    else if(a2.length<40||a2.toUpperCase().indexOf('EN 388')<0||a2.indexOf('(')<0){ok=false;msg='Redacte la cita APA 7 completa de la norma EN 388 (institución, año, título y número de norma entre paréntesis).';}
+    else if(b2.length<40){ok=false;msg='Complete la justificación de la estadística interna (actividad 2.3): ¿por qué integrarla y bajo qué dimensión de Wang y Strong?';}
+    else{msg='✅ Fase 2 guardada. Ficha CRAAP completa ('+nCr+'/5 criterios con evidencia) y cita APA registrada. La revisión sistemática queda documentada como fuente citable.';}
+  }
+  if(n===3){
+    var s=peso3.reduce(function(x,y){return x+y;},0);
+    var a3=document.getElementById('fa3a').value.trim();
+    if(Math.abs(s-1)>=0.001){ok=false;msg='⚠ Los pesos suman '+s.toFixed(2).replace('.',',')+' y deben sumar exactamente 1,00.';}
+    else if(a3.length<40){ok=false;msg='Complete la comparación y justificación de la actividad 3.3 (¿coincide con el material? ¿qué pesos explicarían la diferencia? ¿riesgo residual?).';}
+    else{
+      var elM=document.getElementById('caso-matriz-out');
+      var calculado=elM.className.indexOf('ok')>=0;
+      msg='✅ Fase 3 guardada. Pesos validados (Σ = 1,00).'+(calculado?' Matriz calculada y comparada con el ejemplo del material.':' Sugerencia: pulse «Calcular mi matriz» para dejar registrada su decisión aritmética.');
+    }
+  }
+  if(n===4){
+    var a4=document.getElementById('fa4a').value.trim(),b4=document.getElementById('fa4b').value.trim();
+    var sgOk=Object.keys(sgSel).filter(function(i){return sgSel[i];});
+    var nSg=sgOk.length;
+    if(nSg===0){ok=false;msg='Seleccione en la actividad 4.1 los sesgos que aplican a este caso.';}
+    else if(a4.length<60){ok=false;msg='Explique cómo se manifestaría cada sesgo seleccionado en este caso y qué paso del ciclo lo neutraliza.';}
+    else if(b4.length<120||b4.toUpperCase().indexOf('DECISI')<0){ok=false;msg='Redacte la nota de decisión completa (mínimo 3 líneas con la estructura: pregunta, fuentes, matriz, decisión, revisión).';}
+    else{
+      var nChk=0;casoChkEstado.forEach(function(v){if(v)nChk++;});
+      var falsos=SESGOS.filter(function(s,i){return !s.ok&&sgSel[i];}).length;
+      msg='✅ ¡Caso completado! Sesgos marcados: '+nSg+(falsos>0?' (ojo: incluyó '+falsos+' que NO aplican a este caso — revise la pestaña 7)':' — los tres aplicables, correcto')+'. Checklist de auditabilidad: '+nChk+'/8. La rúbrica de 25 puntos se muestra abajo; descargue sus respuestas y entréguelas por Moodle.';
+      document.getElementById('rubrica').style.display='block';
+      document.getElementById('fase-prog').style.width='100%';
+      document.getElementById('fase-prog-txt').textContent='Caso completado — avance 100%';
+      FASES.forEach(function(f,i){faseHechas[i+1]=true;document.getElementById('fs'+(i+1)).classList.add('done');});
+    }
+  }
+  if(ok&&n<4){faseHechas[n]=true;goFase(n+1);}
+  el.className='calc-out '+(ok?'ok':'err');
+  el.innerHTML=msg;
+}
+function casoReset(){
+  ['fa1a','fa1b','fa2a','fa2b','fa3a','fa4a','fa4b'].forEach(function(id){
+    var e=document.getElementById(id);if(e)e.value='';
+  });
+  senSel={};sgSel={};
+  craapP=[0,0,0,0,0];
+  peso3=[0.30,0.25,0.20,0.15,0.10];
+  faseHechas={1:false,2:false,3:false,4:false};
+  document.getElementById('rubrica').style.display='none';
+  [1,2,3,4].forEach(function(n){var el=document.getElementById('fase'+n+'-out');if(el)el.className='calc-out';});
+  document.getElementById('caso-matriz-out').className='calc-out';
+  buildSenales();buildCraap();buildPesos3();buildPunt3();buildSesgos();buildCasoChk();goFase(1);
+}
+function casoDescargar(){
+  var L=[];
+  L.push('CASO DE ESTUDIO UT3-T2 — ANDESMETAL S.A. · El certificado que llegó por WhatsApp');
+  L.push('Estudiante: ____________________  Fecha: '+new Date().toLocaleDateString('es-EC'));
+  L.push('');
+  L.push('FASE 1 · VERIFICACIÓN SIFT');
+  L.push('1.1 Los cuatro movimientos:');L.push(document.getElementById('fa1a').value||'(vacío)');L.push('');
+  var sen=SENALES.filter(function(s,i){return senSel[i];}).map(function(s){return s.t;});
+  L.push('1.2 Señales marcadas: '+(sen.length?sen.join(' · '):'(ninguna)'));
+  L.push('Justificación de la señal decisiva:');L.push(document.getElementById('fa1b').value||'(vacío)');L.push('');
+  L.push('FASE 2 · FICHA CRAAP Y APA');
+  L.push('Puntajes CRAAP: '+CRAAP.map(function(c,i){return c.k+'='+craapP[i];}).join(' · '));
+  L.push('Evidencias: '+CRAAP.map(function(c,i){return c.k+': '+(document.getElementById('cre'+i).value||'-');}).join(' | '));
+  L.push('Cita APA 7 de la norma EN 388:');L.push(document.getElementById('fa2a').value||'(vacío)');L.push('');
+  L.push('2.3 Estadística interna:');L.push(document.getElementById('fa2b').value||'(vacío)');L.push('');
+  L.push('FASE 3 · MATRIZ DE DECISIÓN');
+  L.push('Pesos: '+CRIT3.map(function(c,i){return c+'='+peso3[i];}).join(' · ')+' (Σ='+(peso3.reduce(function(a,b){return a+b;},0)).toFixed(2)+')');
+  var elM=document.getElementById('caso-matriz-out');
+  L.push('Resultado de mi matriz: '+(elM.textContent||'(no calculada)').slice(0,160));
+  L.push('Comparación y justificación:');L.push(document.getElementById('fa3a').value||'(vacío)');L.push('');
+  L.push('FASE 4 · SESGOS Y NOTA DE DECISIÓN');
+  var sg=SESGOS.filter(function(s,i){return sgSel[i];}).map(function(s){return s.n;});
+  L.push('4.1 Sesgos marcados: '+(sg.length?sg.join(' · '):'(ninguno)'));
+  L.push('Manifestación y neutralización:');L.push(document.getElementById('fa4a').value||'(vacío)');L.push('');
+  L.push('4.2 Nota de decisión:');L.push(document.getElementById('fa4b').value||'(vacío)');
+  L.push('Checklist de auditabilidad: '+casoChkEstado.filter(function(v){return v;}).length+'/8');
+  var blob=new Blob([L.join('\n')],{type:'text/plain;charset=utf-8'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Caso_AndesMetal_UT3T2_respuestas.txt';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+
+/* ===== PESTAÑA 9: QUIZ (12 PREGUNTAS DEL MATERIAL) ===== */
+var QUIZ=[
+  {q:'El primer e-book de la historia fue:',ops:['Un best seller de Amazon','La Declaración de Independencia de EE. UU. (1971)','La Biblia en CD-ROM','Un cómic de Sony'],c:1,fb:'M. Hart lo tecleó en 1971: nació Project Gutenberg.'},
+  {q:'El estándar abierto de e-book hoy publicado por la W3C es:',ops:['MOBI','AZW','EPUB 3.3','PDF/A'],c:2,fb:'EPUB 3.3 es estándar oficial de la W3C desde 2022.'},
+  {q:'Los préstamos digitales de bibliotecas en 2024 (OverDrive/Libby) fueron:',ops:['75 mil','7,4 millones','739,5 millones','7.400 millones'],c:2,fb:'739,5 M de préstamos en 2024 (+17 % interanual).'},
+  {q:'Según el MIT (Science, 2018), la noticia falsa es más retuiteada que la verdadera en:',ops:['7 %','70 %','170 %','700 %'],c:1,fb:'70 % más probable de ser retuiteada (Science, 2018).'},
+  {q:'En el estudio SHEG (2019), el % de estudiantes que ignoró los conflictos de interés declarados fue:',ops:['59 %','69 %','96 %','52 %'],c:2,fb:'96 % no consideró los vínculos con la industria fósil.'},
+  {q:'La S de SIFT significa:',ops:['Search','Stop','Sort','Select'],c:1,fb:'Stop: detenerse antes de compartir o usar.'},
+  {q:'En la tarea 2-4-6 de Wason acertó al primer intento:',ops:['79 %','6 de 29','la mitad','62 %'],c:1,fb:'6 de 29 sujetos (≈21 %) acertaron al primer intento.'},
+  {q:'El anclaje de Tversky y Kahneman demostró que un número previo irrelevante:',ops:['No afecta','Arrastra la estimación','Mejora la lógica','Anula el Sistema 2'],c:1,fb:'25 % vs. 45 % según el ancla 10 o 65.'},
+  {q:'El modelo de Wang y Strong (1996) define la calidad con:',ops:['3 criterios','15 dimensiones en 4 categorías','6 marcos','8 pasos'],c:1,fb:'15 dimensiones en 4 categorías (intrínseca, contextual, representacional, accesibilidad).'},
+  {q:'La relevancia de una fuente se define como:',ops:['Su nivel de citación','Su aplicabilidad al problema concreto','Su alcance en millones','Su fecha de actualización'],c:1,fb:'Aplicabilidad al problema: escala, nivel y oportunidad.'},
+  {q:'La matriz de decisión ponderada calcula cada alternativa como:',ops:['Σ (peso × puntaje)','peso / puntaje','puntaje máximo','promedio simple'],c:0,fb:'Suma de peso por puntaje: A = 4,10 en el ejemplo.'},
+  {q:'El ACRL Framework (2015) establece:',ops:['4 categorías de calidad','6 marcos de referencia','15 dimensiones','8 pasos IFLA'],c:1,fb:'Seis marcos de referencia de alfabetización informacional.'}
+];
+var quizSel={},quizDone=false;
+function buildQuiz(){
+  quizSel={};quizDone=false;
+  var h='';
+  QUIZ.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+q.q+'</p>';
+    q.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="qo'+i+'-'+j+'" onclick="quizPick('+i+','+j+')">'+o+'</button>';
+    });
+    h+='</div>';
+  });
+  document.getElementById('quiz-boxes').innerHTML=h;
+  document.getElementById('quiz-result').className='calc-out';
+}
+function quizPick(i,j){
+  if(quizDone)return;
+  quizSel[i]=j;
+  QUIZ[i].ops.forEach(function(_,k){document.getElementById('qo'+i+'-'+k).className='opt-btn';});
+  document.getElementById('qo'+i+'-'+j).className='opt-btn sel';
+}
+function quizFin(){
+  var el=document.getElementById('quiz-result');
+  var faltan=QUIZ.filter(function(_,i){return quizSel[i]===undefined;}).length;
+  if(faltan){el.className='calc-out err';el.innerHTML='⚠ Le faltan '+faltan+' preguntas por responder.';return;}
+  quizDone=true;
+  var n=0,h='';
+  QUIZ.forEach(function(q,i){
+    var ok=quizSel[i]===q.c;
+    if(ok)n++;
+    document.getElementById('qo'+i+'-'+quizSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok)document.getElementById('qo'+i+'-'+q.c).className='opt-btn right';
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' <strong>'+(i+1)+'.</strong> '+q.fb+'</div>';
+  });
+  var pct=n/QUIZ.length*100;
+  h='<strong>Resultado: '+n+' / '+QUIZ.length+' ('+Math.round(pct)+'%)</strong> — '+(pct>=90?'dominio sobresaliente de la unidad.':pct>=70?'dominio bueno: repase las preguntas falladas en su pestaña.':'debe repasar las pestañas indicadas en cada retroalimentación antes del control.')+'<br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+function quizReset(){buildQuiz();}
+
+/* ===== INICIALIZACIÓN ===== */
+buildEbk();buildBib();buildBibQ();buildMit();buildWs();buildVfr();buildSift();
+buildSenales();buildCraap();buildPesos3();buildPunt3();buildSesgos();buildCasoChk();buildQuiz();
+showTab(location.hash?location.hash.replace('#',''):'tb1');
+</script>
+</body>
+</html>
