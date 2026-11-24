@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UT3 · Internet y Herramientas de Seguridad en los Sistemas de Información | UPSE</title>
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#f1f5f9;color:#1e293b;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+.page{max-width:900px;margin:0 auto;padding:10px}
+h1,h2,h3,h4{letter-spacing:-0.01em}
+h1{font-size:26px;font-weight:800;margin:0 0 8px}
+h2{font-size:17px;font-weight:700;margin:0;color:#0f172a}
+h3{font-size:15px;font-weight:700;margin:0 0 10px;color:#0f172a}
+h4{font-size:13px;font-weight:700;margin:0 0 6px;color:#0f172a}
+p{margin:0 0 10px;font-size:13.5px;color:#475569}
+ul,ol{margin:0 0 10px;padding-left:20px;font-size:13px;color:#475569}
+li{margin-bottom:6px}
+small{color:#64748b}
+a{color:#2563eb}
+.card{background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:24px}
+.badge{background:#1d4ed8;color:#fff;padding:4px 12px;border-radius:9999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:inline-block;margin-bottom:12px}
+.sec-title{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sec-title .n{background:#dbeafe;color:#1d4ed8;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:0 0 auto}
+.kbox{border-radius:8px;padding:12px;border:1px solid}
+.kbox-c{background-color:#eff6ff;border-color:#bfdbfe}
+.kbox-v{background-color:#f0fdf4;border-color:#bbf7d0}
+.kbox-a{background-color:#fffbeb;border-color:#fde68a}
+.kbox-r{background-color:#fef2f2;border-color:#fecaca}
+.kbox-g{background-color:#f8fafc;border-color:#e2e8f0}
+.kbox-h{background-color:#112240;border-color:#112240;color:#e2e8f0}
+.kbox h4{color:#0f172a}
+.kbox-a h4{color:#92400e}.kbox-v h4{color:#065f46}.kbox-c h4{color:#1d4ed8}.kbox-r h4{color:#991b1b}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:left;vertical-align:top}
+thead th{background:#111e2e;color:#fff;border-right:1px solid #1e293b}
+tbody tr:nth-child(odd){background:#f8fafc}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabs-bar{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 10px;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+.tab-btn{flex:0 0 auto;background:#ffffff;border:1px solid #cbd5e1;color:#334155;padding:8px 14px;border-radius:9999px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.tab-btn:hover{border-color:#2563eb;color:#1d4ed8}
+.tab-btn.active{background:#1d4ed8;border-color:#1d4ed8;color:#ffffff}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.url-note{background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:8px 12px;font-size:11.5px;color:#64748b;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.url-note code{background:#e2e8f0;color:#0f172a;padding:1px 6px;border-radius:4px;font-size:11px;word-break:break-all}
+.url-note a.ulink{font-size:11px;color:#2563eb;word-break:break-all}
+.copy-btn{background:#1d4ed8;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;flex:0 0 auto}
+.copy-btn:hover{background:#1e40af}
+details.sr{border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;padding:10px 12px;margin-bottom:12px}
+details.sr summary{cursor:pointer;font-size:12.5px;font-weight:700;color:#1d4ed8;user-select:none}
+details.sr[open] summary{margin-bottom:8px}
+details.sr .sr-body{font-size:12.5px;color:#334155}
+.calc-in{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:6px;padding:7px 9px;font-size:12.5px;font-family:inherit;background:#fff;color:#1e293b}
+.calc-out{background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #2563eb;border-radius:8px;padding:12px;font-size:12.8px;color:#1e293b;display:none;margin-top:10px}
+.calc-out.ok{display:block}
+.calc-out.err{display:block;border-left-color:#dc2626;background:#fef2f2}
+.btn-main{background:#1d4ed8;color:#ffffff;border:none;border-radius:8px;padding:9px 16px;font-size:12.8px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-main:hover{background:#1e40af}
+.btn-ghost{background:#ffffff;color:#334155;border:1px solid #cbd5e1;border-radius:8px;padding:8px 14px;font-size:12.3px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-ghost:hover{border-color:#2563eb;color:#1d4ed8}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.opt-btn{background:#fff;border:1.5px solid #cbd5e1;border-radius:8px;padding:9px 12px;font-size:12.5px;font-family:inherit;cursor:pointer;text-align:left;color:#334155;width:100%;display:block;margin-bottom:7px}
+.opt-btn:hover{border-color:#2563eb}
+.opt-btn.sel{border-color:#2563eb;background:#eff6ff;color:#1d4ed8;font-weight:700}
+.opt-btn.right{border-color:#059669;background:#f0fdf4;color:#065f46;font-weight:700}
+.opt-btn.wrong{border-color:#dc2626;background:#fef2f2;color:#991b1b;font-weight:700}
+.qbox{border:1px solid #e2e8f0;border-radius:10px;background:#fff;padding:14px;margin-bottom:14px}
+.tl{list-style:none;padding:0;margin:0}
+.tl li{position:relative;padding:0 0 18px 26px;border-left:2px solid #cbd5e1;margin-left:8px}
+.tl li:before{content:'';position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;background:#2563eb;border:2px solid #fff;box-shadow:0 0 0 2px #bfdbfe}
+.tl li:last-child{border-left-color:transparent}
+.chk{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:#334155;margin-bottom:6px;cursor:pointer}
+.chk input{margin-top:2px;flex:0 0 auto}
+.fw-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #e2e8f0;background:#fff;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;color:#334155;cursor:pointer;user-select:none}
+.fw-pill.on{background:#112240;color:#fff;border-color:#112240}
+.sem{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:6px}
+.sem-v{background:#059669}.sem-a{background:#d97706}.sem-r{background:#dc2626}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.bar-lab{flex:0 0 150px;font-size:12px;font-weight:600;color:#334155}
+.bar-tr{flex:1 1 160px;height:14px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.bar-fi{height:100%;border-radius:999px;background:linear-gradient(90deg,#2563eb,#059669)}
+.bar-val{flex:0 0 auto;font-size:12px;color:#475569;font-variant-numeric:tabular-nums}
+.copiable{cursor:pointer;position:relative}
+.copiable:hover:after{content:'copiar';position:absolute;right:6px;top:-8px;background:#1d4ed8;color:#fff;font-size:10px;padding:1px 6px;border-radius:4px}
+.fase-panel{display:none}
+.fase-panel.active{display:block}
+.fase-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.fase-step{border:1.5px solid #e2e8f0;border-radius:8px;padding:10px;background:#fff;cursor:pointer;font-size:12.5px;font-weight:700;color:#334155;text-align:left;font-family:inherit}
+.fase-step small{display:block;font-weight:600;color:#64748b;margin-top:2px;font-size:11px}
+.fase-step.cur{border-color:#2563eb;background:#eff6ff;color:#1d4ed8}
+.fase-step.done{border-color:#059669;background:#f0fdf4;color:#065f46}
+.prog-track{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:10px 0 4px 0}
+.prog-fill{height:100%;background:linear-gradient(90deg,#2563eb,#059669);border-radius:999px;transition:width .3s}
+textarea.txt{width:100%;min-height:90px;border:1px solid #cbd5e1;border-radius:8px;padding:10px;font-family:inherit;font-size:12.5px;color:#1e293b;box-sizing:border-box;background:#fff;resize:vertical}
+.txt-ok{border-color:#059669!important}
+.txt-bad{border-color:#dc2626!important}
+.rub-item{border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:10px;background:#fff}
+.sq{border:1px solid #e2e8f0;border-radius:8px;padding:12px;background:#fff}
+.sq .sv{font-size:22px;font-weight:800;color:#0f172a;display:block;line-height:1.2}
+.sq .sl{font-size:11px;color:#64748b;display:block;margin-top:4px}
+</style>
+</head>
+<body>
+<div style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1e293b;line-height:1.5;max-width:900px;margin:0 auto;padding:10px;">
+
+  <!-- ENCABEZADO PRINCIPAL -->
+  <div style="background-color:#112240;border-radius:12px;padding:24px;color:#ffffff;margin-bottom:24px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);">
+    <span style="background-color:#1d4ed8;color:#ffffff;padding:4px 12px;border-radius:9999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;display:inline-block;margin-bottom:12px;">UNIDAD TEMÁTICA 3</span>
+    <h1 style="color:#ffffff;font-size:26px;font-weight:800;margin:0 0 8px 0;letter-spacing:-0.025em;">Fundamentos de uso de Internet y Herramientas de Seguridad en los Sistemas de Información</h1>
+    <p style="color:#94a3b8;font-size:14px;margin:0;">Tecnologías de acceso a los recursos de información electrónica: enumeración de tecnologías, servicios de Internet, buscadores, seguridad informática, criptografía y protección de la información.</p>
+  </div>
+
+  <!-- RESULTADOS DE APRENDIZAJE CLAVE (RdA) -->
+  <div style="background-color:#ffffff;border:1px solid #e2e8f0;border-left:5px solid #2563eb;border-radius:10px;padding:20px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+    <div style="display:flex;align-items:center;margin-bottom:12px;">
+      <span style="background-color:#dbeafe;color:#1d4ed8;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;margin-right:10px;">✓</span>
+      <h2 style="font-size:17px;font-weight:700;color:#0f172a;margin:0;">Resultados de Aprendizaje Clave (RdA)</h2>
+    </div>
+    <ul style="margin:0;padding-left:20px;font-size:13.5px;color:#334155;">
+      <li style="margin-bottom:8px;"><strong>3.1:</strong> Enumera y compara las tecnologías de acceso a los recursos de información electrónica (conmutación de circuitos/paquetes, acceso fijo, inalámbrico, móvil y satelital), evaluando su aplicabilidad según cobertura, velocidad, costo y escenario de uso.</li>
+      <li style="margin-bottom:8px;"><strong>3.2:</strong> Utiliza los servicios de Internet (web, correo, transferencia de archivos, nube, streaming, colaboración) y las herramientas de búsqueda y recuperación de información electrónica con criterios de eficiencia y calidad.</li>
+      <li style="margin-bottom:8px;"><strong>3.3:</strong> Aplica herramientas de seguridad en los sistemas de información: clasificación de malware, amenazas sociales, contraseñas robustas, MFA, cifrado y navegación segura, siguiendo buenas prácticas y referentes internacionales (ISO/IEC 27001, NIST).</li>
+      <li style="margin-bottom:0;"><strong>3.4:</strong> Diseña e implementa un plan de seguridad de la información y respuesta a incidentes cibernéticos para una organización, incorporando copias de seguridad, control de accesos, normativa ecuatoriana (LODPDP) y métricas de gestión del riesgo.</li>
+    </ul>
+  </div>
+
+  <!-- BARRA DE PESTAÑAS (URL INDEPENDIENTE POR PESTAÑA) -->
+  <div class="tabs-bar" id="tabsbar" role="tablist" aria-label="Secciones de la unidad 3">
+    <button type="button" class="tab-btn active" data-tab="tp1" onclick="goTab('tp1')">1 · Internet y su arquitectura</button>
+    <button type="button" class="tab-btn" data-tab="tp2" onclick="goTab('tp2')">2 · Tecnologías de acceso</button>
+    <button type="button" class="tab-btn" data-tab="tp3" onclick="goTab('tp3')">3 · Servicios de Internet</button>
+    <button type="button" class="tab-btn" data-tab="tp4" onclick="goTab('tp4')">4 · Buscadores y búsqueda</button>
+    <button type="button" class="tab-btn" data-tab="tp5" onclick="goTab('tp5')">5 · Seguridad informática</button>
+    <button type="button" class="tab-btn" data-tab="tp6" onclick="goTab('tp6')">6 · Criptografía y contraseñas</button>
+    <button type="button" class="tab-btn" data-tab="tp7" onclick="goTab('tp7')">7 · Buenas prácticas</button>
+    <button type="button" class="tab-btn" data-tab="tp8" onclick="goTab('tp8')">8 · Caso de estudio (4 fases)</button>
+    <button type="button" class="tab-btn" data-tab="tp9" onclick="goTab('tp9')">9 · Autoevaluación</button>
+  </div>
+
+  <!-- ============ PESTAÑA 1: INTERNET Y SU ARQUITECTURA ============ -->
+  <div id="tp1" class="tab-panel active">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tp1"></code> <a class="ulink" id="lnk-tp1" href="#tp1" onclick="goTab('tp1');return false;"></a> — cópiela para volver directo a esta sección o compartirla.</span><button type="button" class="copy-btn" id="cpbtn-tp1" onclick="copiarURL('tp1')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">1</span><h2>Internet: concepto, origen y arquitectura básica</h2></div>
+      <p><strong>Internet</strong> es una red global de redes de computadoras interconectadas que utilizan un conjunto común de protocolos (<strong>TCP/IP</strong>) para comunicarse. No es un único sistema: es la infraestructura que conecta miles de millones de dispositivos — computadoras, servidores, teléfonos, sensores — permitiendo el intercambio de información y el acceso a servicios como la web, el correo electrónico o el streaming. El término proviene del inglés <em>interconnected networks</em> (redes interconectadas).</p>
+      <p>Su historia comienza en <strong>1969</strong> con <strong>ARPANET</strong>, un proyecto del Departamento de Defensa de EE.UU. (agencia ARPA) que conectó cuatro universidades con conmutación de paquetes. En <strong>1983</strong> ARPANET adoptó oficialmente TCP/IP (diseñado por Vint Cerf y Bob Kahn), fecha considerada el «nacimiento» de Internet. En <strong>1989-1991</strong>, Tim Berners-Lee creó la <strong>World Wide Web</strong> en el CERN (HTML, HTTP y URL), llevando Internet al gran público. Desde entonces, la red pasó de unos pocos millones de usuarios a más de <strong>5.500 millones de personas conectadas</strong> (≈68% de la humanidad, ITU 2024).</p>
+
+      <h3 style="margin-top:18px;">Línea de tiempo: de ARPANET a la Web 3.0</h3>
+      <ul class="tl">
+        <li><strong>1969 · ARPANET</strong> — Primera red de conmutación de paquetes; interconecta UCLA, Stanford, UCSB y la Universidad de Utah.</li>
+        <li><strong>1971 · Primer e-mail</strong> — Ray Tomlinson envía el primer mensaje entre computadoras e introduce el símbolo @.</li>
+        <li><strong>1974 · TCP/IP</strong> — Cerf y Kahn publican el diseño de los protocolos que unificarán las redes.</li>
+        <li><strong>1983 · Internet</strong> — ARPANET adopta TCP/IP como protocolo exclusivo (1 de enero, «flag day»).</li>
+        <li><strong>1984 · DNS</strong> — Nace el Sistema de Nombres de Dominio: los números IP obtienen nombres legibles (upse.edu.ec).</li>
+        <li><strong>1989-1991 · WWW</strong> — Tim Berners-Lene propone y publica la Web en el CERN; en 1993 el navegador Mosaic la populariza.</li>
+        <li><strong>1995 · Internet comercial</strong> — Se retiran las restricciones de uso comercial; nacen Amazon y eBay.</li>
+        <li><strong>2004-2007 · Web 2.0 y móvil</strong> — Redes sociales, wikis y el iPhone convierten la red en plataforma participativa.</li>
+        <li><strong>2010s · Nube y 4G</strong> — Servicios bajo demanda (SaaS) y banda ancha móvil masifican el acceso.</li>
+        <li><strong>2020s · IoT, 5G y Web 3.0</strong> — Miles de millones de objetos conectados, redes de quinta generación y web semántica/descentralizada.</li>
+      </ul>
+
+      <h3 style="margin-top:18px;">¿Cómo funciona? Conmutación de circuitos vs. conmutación de paquetes</h3>
+      <div class="grid2">
+        <div class="kbox kbox-g">
+          <h4>☎️ Conmutación de circuitos (modelo telefónico)</h4>
+          <p style="margin:0;font-size:12.5px;">Antes de comunicar, se establece un <strong>circuito físico dedicado</strong> de extremo a extremo (lo hacía la red telefónica). El canal queda reservado aunque no haya datos que transmitir: es simple y garantiza velocidad constante, pero <strong>desperdicia recursos</strong> y es frágil (si el circuito se corta, se pierde la comunicación). Es la base de la telefonía tradicional PSTN y del módem dial-up.</p>
+        </div>
+        <div class="kbox kbox-c">
+          <h4>📦 Conmutación de paquetes (modelo Internet)</h4>
+          <p style="margin:0;font-size:12.5px;">El mensaje se divide en <strong>paquetes</strong> pequeños que viajan de forma independiente por distintas rutas y se reensamblan en destino. Cada paquete lleva la dirección de origen y destino (IP). Es <strong>más eficiente y resistente</strong>: si una ruta falla, los paquetes toman otra. Es el principio sobre el que funciona Internet desde ARPANET.</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:18px;">Arquitectura cliente-servidor y el modelo TCP/IP</h3>
+      <p>Internet se organiza mayoritariamente bajo el modelo <strong>cliente-servidor</strong>: un equipo (cliente, por ejemplo su navegador) solicita un recurso a otro (servidor, que aloja el sitio web) a través de la red. La comunicación se describe con el <strong>modelo TCP/IP</strong>, organizado en capas, cada una con funciones y protocolos propios:</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:18%;">Capa</th><th style="width:32%;">Función principal</th><th>Protocolos y tecnologías</th></tr></thead>
+        <tbody>
+          <tr><td><strong>4 · Aplicación</strong></td><td>Proporciona servicios de red a las aplicaciones del usuario.</td><td>HTTP/HTTPS (web), SMTP/POP3/IMAP (correo), DNS, FTP/SFTP, SSH, TLS/SSL</td></tr>
+          <tr><td><strong>3 · Transporte</strong></td><td>Entrega los datos extremo a extremo: control de flujo y errores.</td><td>TCP (fiable, orientado a conexión), UDP (rápido, sin conexión — streaming, juegos)</td></tr>
+          <tr><td><strong>2 · Internet</strong></td><td>Direccionamiento y enrutamiento de paquetes entre redes.</td><td>IP (IPv4 de 32 bits, IPv6 de 128 bits), ICMP, protocolos de enrutamiento</td></tr>
+          <tr><td><strong>1 · Acceso a red</strong></td><td>Transmisión física de bits por el medio (cable o aire).</td><td>Ethernet, Wi-Fi, fibra óptica, PPP, tecnologías móviles (pestaña 2)</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:10px;"><small>El modelo TCP/IP (4 capas) es el implementado en la práctica; el modelo OSI (7 capas) es su referencia teórica y pedagógica.</small></p>
+
+      <h3 style="margin-top:18px;">Direcciones IP, DNS y URL: cómo se localiza un recurso</h3>
+      <p>Cada dispositivo conectado recibe una <strong>dirección IP</strong> que lo identifica (IPv4: 190.15.140.50; IPv6: 2803:9800::...). Como memorizar números es inviable, el <strong>DNS</strong> (Sistema de Nombres de Dominio) traduce nombres como <em>www.upse.edu.ec</em> a su IP. La <strong>URL</strong> (Localizador Uniforme de Recursos) es la dirección completa de un recurso y tiene estructura fija:</p>
+      <div class="kbox kbox-c">
+        <p style="margin:0;font-size:13px;font-family:monospace;"><strong>https</strong>://<strong>www.upse.edu.ec</strong>/<strong>vinculos</strong>/<strong>biblioteca.html</strong></p>
+        <p style="margin:6px 0 0 0;font-size:12.5px;"><strong>https</strong> = esquema/protocolo (con cifrado TLS) · <strong>www.upse.edu.ec</strong> = dominio (subdominio + nombre + tipo: .ec = Ecuador) · <strong>/vinculos/</strong> = ruta en el servidor · <strong>biblioteca.html</strong> = recurso solicitado.</p>
+      </div>
+
+      <h3 style="margin-top:18px;">Interactivo: viaje de una petición web</h3>
+      <p>Ordene las etapas del proceso que ocurre al escribir una URL en el navegador y pulsar Enter. Haga clic en las tarjetas en el orden correcto.</p>
+      <div id="viaje-slot"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+        <button type="button" class="btn-main" onclick="viajeEval()">Comprobar orden</button>
+        <button type="button" class="btn-ghost" onclick="viajeReset()">Reiniciar</button>
+      </div>
+      <div id="viaje-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 2: TECNOLOGÍAS DE ACCESO ============ -->
+  <div id="tp2" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tp2"></code> <a class="ulink" id="lnk-tp2" href="#tp2" onclick="goTab('tp2');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tp2" onclick="copiarURL('tp2')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">2</span><h2>Tecnologías de acceso a los recursos de información electrónica</h2></div>
+      <p>Para conectarse a Internet — y llegar así a los recursos de información electrónica (páginas, bases de datos, bibliotecas digitales, repositorios) — se requiere una <strong>tecnología de acceso</strong>: el enlace físico o inalámbrico que une el dispositivo del usuario con la red del proveedor de servicios (ISP, <em>Internet Service Provider</em>). Estas tecnologías se agrupan en cinco grandes familias: <strong>acceso fijo por cable</strong>, <strong>acceso inalámbrico terrestre</strong>, <strong>acceso móvil celular</strong>, <strong>acceso satelital</strong> y las <strong>redes de área local</strong> que distribuyen la conexión dentro del hogar u oficina.</p>
+
+      <h3>2.1 · Acceso fijo por cable (última milla cableada)</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:16%;">Tecnología</th><th style="width:30%;">Medio y principio</th><th style="width:18%;">Velocidades típicas</th><th>Ventajas y limitaciones</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Dial-up (RTC)</strong></td><td>Línea telefónica conmutada; módem analógico sobre voz (56 kbps).</td><td>Hasta 56 kbps</td><td>Primera tecnología doméstica (años 90). Hoy obsoleta: ocupa la línea, lentitud extrema; quedó como respaldo en zonas sin otra alternativa.</td></tr>
+          <tr><td><strong>ADSL / VDSL</strong></td><td>Par trenzado de cobre de la telefonía; usa frecuencias sobre la voz (asimétrico).</td><td>ADSL: 1-20 Mbps bajada; VDSL: hasta 100 Mbps</td><td>Aprovecha el cableado telefónico existente; la velocidad decae con la distancia a la central (km). Sigue siendo relevante en zonas sin fibra.</td></tr>
+          <tr><td><strong>Cablemódem (HFC)</strong></td><td>Red híbrida fibra-coaxial de la TV por cable (DOCSIS).</td><td>50 Mbps - 1 Gbps</td><td>Rápido y extendido en ciudades; el ancho de banda se comparte entre vecinos del mismo nodo (congestión en horas pico).</td></tr>
+          <tr><td><strong>Fibra óptica FTTH</strong></td><td>Filamentos de vidrio que transmiten pulsos de luz; fibra hasta el hogar.</td><td>100 Mbps - 10 Gbps</td><td>Estándar actual: máxima velocidad, simétrica, baja latencia, inmune a interferencias. Requiere despliegue de nueva infraestructura (costo de instalación).</td></tr>
+          <tr><td><strong>PLC (power line)</strong></td><td>Transmite datos por la red eléctrica doméstica.</td><td>Hasta 200-500 Mbps (práctica)</td><td>Aprovecha el cableado eléctrico existente; sensible a ruido eléctrico y distancias cortas. Uso puntual interior.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:18px;">2.2 · Acceso inalámbrico terrestre</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:16%;">Tecnología</th><th style="width:30%;">Principio de funcionamiento</th><th style="width:18%;">Alcance y velocidad</th><th>Escenario de uso</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Wi-Fi (802.11)</strong></td><td>Red de área local inalámbrica sobre bandas de 2,4 / 5 / 6 GHz.</td><td>Wi-Fi 4: 600 Mbps · Wi-Fi 6: 9,6 Gbps · 30-100 m</td><td>Distribución del acceso dentro del hogar, oficina o campus. Complementa (no sustituye) al enlace del ISP.</td></tr>
+          <tr><td><strong>WISP / radioenlace</strong></td><td>Enlace punto a punto o multipunto con antenas (frecuencias concesionadas o libres 5 GHz).</td><td>10-500 Mbps; 5-40 km con visión directa</td><td>Zonas rurales o dispersas sin cableado; proveedor inalámbrico de Internet (WISP) muy común en el Ecuador rural.</td></tr>
+          <tr><td><strong>WiMAX (802.16)</strong></td><td>Sucesor «ciudadano» del Wi-Fi: área metropolitana.</td><td>Hasta 1 Gbps teórico; varios km</td><td>Desplazado por 4G/5G; aún usado en enlaces corporativos y de proveedores.</td></tr>
+          <tr><td><strong>LMDS / microondas</strong></td><td>Radioenlaces licenciados de alta capacidad punto a punto.</td><td>100 Mbps - 10 Gbps</td><td>Interconexión de sedes empresariales y backhaul de operadoras.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:18px;">2.3 · Acceso móvil celular (generaciones)</h3>
+      <p>Las redes móviles son hoy la principal puerta de entrada a Internet en el mundo: cada generación multiplicó la velocidad y habilitó nuevos servicios. El espectro radioeléctrico es administrado en Ecuador por <strong>ARCOTEL</strong>, y las frecuencias para 5G fueron habilitadas para operación comercial en 2025 tras su adjudicación a fines de 2024.</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:12%;">Generación</th><th style="width:24%;">Año y hito</th><th style="width:20%;">Velocidad típica</th><th>Servicios que habilitó</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1G</strong></td><td>~1980 · telefonía analógica</td><td>Solo voz</td><td>Llamadas móviles sin datos.</td></tr>
+          <tr><td><strong>2G (GSM/GPRS)</strong></td><td>1991 · digital</td><td>GPRS: 40-100 kbps</td><td>SMS y primeros datos; acceso móvil incipiente.</td></tr>
+          <tr><td><strong>3G (UMTS/HSPA)</strong></td><td>2001</td><td>0,5-10 Mbps</td><td>Web móvil, videollamadas, apps básicas.</td></tr>
+          <tr><td><strong>4G/LTE</strong></td><td>2009</td><td>10-100 Mbps reales</td><td>Streaming HD, redes sociales en movimiento, banca móvil masiva.</td></tr>
+          <tr><td><strong>5G</strong></td><td>2019 (mundial) · espectro habilitado en Ecuador en 2025</td><td>0,1-10 Gbps; latencia ~10 ms</td><td>IoT masivo, realidad aumentada, industria 4.0, ciudades inteligentes.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:18px;">2.4 · Acceso satelital</h3>
+      <p>Cuando el cable no llega y las redes terrestres no cubren — Amazonía, áreas marítimas, zonas de montaña — el acceso satelital conecta mediante una antena que apunta a un satélite en órbita. Existen dos grandes grupos:</p>
+      <ul>
+        <li><strong>Órbita geoestacionaria (GEO, ~36.000 km):</strong> satélites tradicionales de telecomunicaciones (StarOne, Intelsat). Cobertura continental con pocas unidades, pero con <strong>latencia alta</strong> (>500 ms ida y vuelta) y velocidades de decenas de Mbps — suficiente para navegación y correo, incómodo para videollamadas o juegos.</li>
+        <li><strong>Órbita baja (LEO, 500-2.000 km):</strong> constelaciones de cientos o miles de satélites pequeños (Starlink, OneWeb, Amazon Kuiper). Al estar mucho más cerca, reducen la latencia a 20-40 ms y ofrecen 50-250 Mbps. Están cerrando la brecha digital en zonas remotas; en Ecuador operan servicios LEO desde 2022-2024.</li>
+      </ul>
+
+      <h3 style="margin-top:18px;">2.5 · Redes de área local que distribuyen el acceso</h3>
+      <p>El enlace del ISP llega al router, y desde allí se distribuye por la red local (LAN): <strong>Ethernet</strong> (cable UTP, la más estable y rápida dentro del edificio), <strong>Wi-Fi</strong> (inalámbrica doméstica/empresarial) y <strong>PAN</strong> personales como <strong>Bluetooth</strong> (periféricos, compartir datos entre cercanos, 10-50 m) o <strong>NFC</strong> (pagos por proximidad, ~4 cm). En instituciones educativas, la LAN del campus conecta aulas, laboratorios y bibliotecas con el proveedor.</p>
+
+      <h3 style="margin-top:18px;">Panorama del acceso en Ecuador y el mundo</h3>
+      <div class="grid3" style="margin-bottom:12px;">
+        <div class="sq"><span class="sv">71,3%</span><span class="sl">de hogares ecuatorianos con acceso a Internet (INEC, 2025; era 66,0% en 2024 y 53,2% en 2020)</span></div>
+        <div class="sq"><span class="sv">80,1%</span><span class="sl">de personas de 5+ años usan Internet en Ecuador (INEC)</span></div>
+        <div class="sq"><span class="sv">68%</span><span class="sl">de la población mundial usa Internet (ITU, 2024)</span></div>
+      </div>
+      <p>La <strong>brecha digital</strong> — diferencia de acceso entre zonas urbanas y rurales, y entre grupos socioeconómicos — sigue siendo el principal reto: en el área rural ecuatoriana el acceso a Internet de los hogares es muy inferior al urbano. Superarla combina despliegue de fibra, expansión 4G/5G, subsidios de tarifas y alfabetización digital.</p>
+
+      <h3 style="margin-top:18px;">Interactivo: seleccione la tecnología de acceso adecuada</h3>
+      <p>Para cada escenario, elija la tecnología de acceso más apropiada según lo estudiado.</p>
+      <div id="acc-q"></div>
+      <div id="acc-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 3: SERVICIOS DE INTERNET ============ -->
+  <div id="tp3" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tp3"></code> <a class="ulink" id="lnk-tp3" href="#tp3" onclick="goTab('tp3');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tp3" onclick="copiarURL('tp3')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">3</span><h2>Servicios de Internet: qué me ofrece la red</h2></div>
+      <p>El acceso es solo la puerta; lo que hace útil a Internet son sus <strong>servicios</strong>: aplicaciones protocolarias que corren sobre TCP/IP y permiten comunicar, informar, entretener y colaborar. Conviene distinguir servicio de protocolo: el <strong>correo electrónico</strong> es el servicio; <strong>SMTP, POP3 e IMAP</strong> son sus protocolos. Los servicios principales son:</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:18%;">Servicio</th><th style="width:22%;">Protocolo / tecnología</th><th style="width:34%;">Qué hace</th><th>Ejemplos de uso</th></tr></thead>
+        <tbody>
+          <tr><td><strong>World Wide Web</strong></td><td>HTTP/HTTPS, HTML, navegadores</td><td>Sistema de documentos hipervinculados (páginas) servidos por sitios web; hoy concentra la mayor parte del tráfico.</td><td>Navegar sitios, portals de noticias, banca en línea, plataformas educativas (Moodle UPSE).</td></tr>
+          <tr><td><strong>Correo electrónico</strong></td><td>SMTP (envío), POP3/IMAP (recepción)</td><td>Intercambio de mensajes con archivos adjuntos entre buzones.</td><td>Comunicación formal académica y laboral; envío de trabajos y notificaciones.</td></tr>
+          <tr><td><strong>Transferencia de archivos</strong></td><td>FTP, SFTP, FTPS</td><td>Copiar archivos entre cliente y servidor (descarga/carga).</td><td>Publicar páginas web, repositorios de software, copias de servidores.</td></tr>
+          <tr><td><strong>Mensajería y VoIP</strong></td><td>XMPP, RCS, WebRTC, SIP</td><td>Mensajería instantánea, llamadas y videollamadas sobre Internet.</td><td>WhatsApp, Zoom, Teams — clases sincrónicas y reuniones.</td></tr>
+          <tr><td><strong>Streaming</strong></td><td>HTTP adaptativo (HLS/DASH), codecs</td><td>Reproducción de audio/video en tiempo real sin descarga completa.</td><td>YouTube, Spotify, plataformas de cursos con video.</td></tr>
+          <tr><td><strong>Computación en la nube</strong></td><td>SaaS/PaaS/IaaS sobre HTTPS y APIs</td><td>Almacenamiento, software y procesamiento bajo demanda en servidores remotos.</td><td>Google Drive, OneDrive, Office 365, correo institucional.</td></tr>
+          <tr><td><strong>Colaboración y redes sociales</strong></td><td>Plataformas web/2.0</td><td>Creación, edición compartida y publicación social de contenido.</td><td>Wikis, Google Docs colaborativo, LinkedIn, X.</td></tr>
+          <tr><td><strong>Acceso remoto</strong></td><td>SSH, RDP, VPN</td><td>Control de equipos o redes privadas a distancia de forma cifrada.</td><td>Administración de servidores; teletrabajo seguro.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:18px;">Interactivo: clasifique cada caso en el servicio correcto</h3>
+      <p>Lea la situación y seleccione el servicio de Internet involucrado.</p>
+      <div id="srv-q"></div>
+      <div id="srv-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 4: BUSCADORES Y BÚSQUEDA ============ -->
+  <div id="tp4" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tp4"></code> <a class="ulink" id="lnk-tp4" href="#tp4" onclick="goTab('tp4');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tp4" onclick="copiarURL('tp4')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">4</span><h2>Buscadores y recuperación de información electrónica</h2></div>
+      <p>Un <strong>buscador</strong> (motor de búsqueda) es un sistema que indexa miles de millones de páginas y permite localizar información mediante palabras clave. Funciona en tres etapas: <strong>rastreo</strong> (robots recorren la web siguiendo enlaces), <strong>indexación</strong> (construcción de un catálogo invertido de términos) y <strong>ranking</strong> (algoritmos que ordenan los resultados por relevancia — Google usa más de 200 señales, incluidas PageRank, frescura y ubicación). Un buscador no es lo mismo que un navegador: el <strong>navegador</strong> (Chrome, Firefox, Edge) es el programa que muestra las páginas; el <strong>buscador</strong> es el servicio web al que consulta.</p>
+
+      <h3>Tipos de buscadores y herramientas de recuperación</h3>
+      <ul>
+        <li><strong>Buscadores web generales:</strong> Google (≈90% del mercado mundial), Bing, DuckDuckGo (orientado a privacidad), Yandex, Baidu.</li>
+        <li><strong>Metabuscadores:</strong> consultan varios buscadores a la vez y fusionan resultados (Startpage, MetaGer; históricamente Dogpile).</li>
+        <li><strong>Buscadores académicos y bases de datos:</strong> Google Académico, Scopus, Web of Science, SciELO, Redalyc, Dialnet — imprescindibles para trabajos universitarios porque indexan literatura revisada por pares.</li>
+        <li><strong>Directorios temáticos:</strong> catálogos curados por humanos (Open Directory Project histórico; directorios de bibliotecas como la Biblioteca Digital UPSE).</li>
+        <li><strong>Búsqueda en la nube propia:</strong> los buscadores integrados en Google Drive/OneDrive localizan documentos propios.</li>
+      </ul>
+
+      <h3 style="margin-top:14px;">Operadores de búsqueda: precisión quirúrgica</h3>
+      <p>Dominar los operadores convierte una búsqueda vaga en una recuperación exacta. Los esenciales (válidos en Google y Bing):</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:30%;">Operador / sintaxis</th><th>Efecto</th><th style="width:36%;">Ejemplo</th></tr></thead>
+        <tbody>
+          <tr><td><code>"frase exacta"</code></td><td>Busca la secuencia literal de palabras.</td><td>"tecnologías de acceso a la información"</td></tr>
+          <tr><td><code>site:dominio</code></td><td>Restringe los resultados a un sitio.</td><td>seguridad informática site:upse.edu.ec</td></tr>
+          <tr><td><code>filetype:ext</code></td><td>Limita al tipo de archivo indicado.</td><td>criptografía filetype:pdf</td></tr>
+          <tr><td><code>-término</code></td><td>Excluye páginas que contengan el término.</td><td>jaguar -coches (filtro de polisemia)</td></tr>
+          <tr><td><code>OR</code> (o <code>|</code>)</td><td>Resultado con cualquiera de las alternativas.</td><td>"data mining" OR "minería de datos"</td></tr>
+          <tr><td><code>intitle:</code></td><td>El término debe estar en el título.</td><td>intitle:phishing</td></tr>
+          <tr><td><code>inurl:</code></td><td>El término debe formar parte de la URL.</td><td>inurl:biblioteca</td></tr>
+          <tr><td><code>..</code> (rango)</td><td>Rango numérico, útil para años.</td><td>estándares seguridad 2020..2024</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="kbox kbox-a" style="margin-top:14px;">
+        <h4>⚠️ Evaluar la calidad de lo encontrado: el test CRAAP</h4>
+        <p style="margin:0;font-size:12.5px;">Todo recurso recuperado debe evaluarse antes de citarlo: <strong>C</strong>urrency (¿es vigente?), <strong>R</strong>elevance (¿responde a mi necesidad?), <strong>A</strong>uthority (¿quién lo publica y con qué credenciales?), <strong>A</strong>ccuracy (¿está respaldado por evidencia y referencias?), <strong>P</strong>urpose (¿qué interés tiene el autor: informar, vender, persuadir?). Un .gob.ec o .edu.ec suele cumplir autoridad; un blog anónimo exige verificación cruzada.</p>
+      </div>
+
+      <h3 style="margin-top:18px;">Interactivo: construya una búsqueda académica</h3>
+      <p>Seleccione los operadores correctos para construir una búsqueda que encuentre <strong>documentos PDF sobre ciberseguridad publicados en el dominio upse.edu.ec</strong>. Cada selección añade un fragmento a la consulta.</p>
+      <div id="ops-q"></div>
+      <div id="ops-consulta" class="kbox kbox-c" style="font-family:monospace;font-size:13px;margin-top:10px;"></div>
+      <div id="ops-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 5: SEGURIDAD INFORMÁTICA ============ -->
+  <div id="tp5" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tp5"></code> <a class="ulink" id="lnk-tp5" href="#tp5" onclick="goTab('tp5');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tp5" onclick="copiarURL('tp5')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">5</span><h2>Seguridad en los sistemas de información: amenazas y malware</h2></div>
+      <p>La <strong>seguridad de la información</strong> protege los activos informáticos y los datos frente a riesgos que comprometan su <strong>confidencialidad</strong> (solo accede quien está autorizado), <strong>integridad</strong> (los datos no se alteran indebidamente) y <strong>disponibilidad</strong> (el sistema funciona cuando se le necesita): la tríada <strong>CIA</strong>. A ella se suman propiedades como autenticidad, no repudio y trazabilidad. Gestionar la seguridad es gestionar el <strong>riesgo</strong>: identificar amenazas y vulnerabilidades, estimar su impacto y probabilidad, y aplicar controles que las reduzcan a un nivel aceptable. Los referentes internacionales son la familia de normas <strong>ISO/IEC 27000</strong> (27001 certificable) y los marcos del <strong>NIST</strong> (SP 800-series, Cybersecurity Framework).</p>
+
+      <h3>El panorama de amenazas</h3>
+      <div class="grid2">
+        <div class="kbox kbox-r">
+          <h4>🕵️ Amenazas pasivas vs. activas</h4>
+          <p style="margin:0;font-size:12.5px;"><strong>Pasivas:</strong> observan sin alterar (intercepción/escucha de tráfico, análisis de tráfico). Difíciles de detectar porque no dejan huella visible. <strong>Activas:</strong> modifican o interrumpen (inyección de código, suplantación, denegación de servicio, secuestro de sesión). Este módulo se centra en las más frecuentes: malware, ingeniería social y ataques web.</p>
+        </div>
+        <div class="kbox kbox-a">
+          <h4>🎯 Superficie de ataque</h4>
+          <p style="margin:0;font-size:12.5px;">Conjunto de puntos por donde un atacante puede entrar: puertos abiertos, software sin parches, contraseñas débiles, empleados sin formación, dispositivos USB desconocidos, redes Wi-Fi públicas. Reducir la superficie (cerrar lo que no se usa, actualizar, formar) es el primer control de cualquier plan de seguridad.</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:16px;">Clasificación del malware (software malicioso)</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:17%;">Tipo</th><th style="width:42%;">Comportamiento característico</th><th>Daño típico y ejemplo</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Virus</strong></td><td>Se adhiere a un archivo ejecutable y se activa cuando el usuario lo ejecuta; se propaga localmente.</td><td>Corrupción de archivos; requiere acción humana (abrir el adjunto).</td></tr>
+          <tr><td><strong>Gusano (worm)</strong></td><td>Se replica <strong>solo</strong> por la red, sin necesidad de archivo huésped ni intervención humana.</td><td>Satura redes y sistemas; Morris (1988), WannaCry (2017) viajó por SMB sin parchear.</td></tr>
+          <tr><td><strong>Troyano</strong></td><td>Programa aparentemente útil que oculta una función maliciosa.</td><td>Puerta trasera disfrazada de juego o crack de software; roba credenciales.</td></tr>
+          <tr><td><strong>Ransomware</strong></td><td><strong>Cifra</strong> los archivos de la víctima y exige un rescate (normalmente en criptomonedas) por la clave.</td><td>Parálisis institucional; WannaCry afectó 230.000+ equipos en 150 países (2017).</td></tr>
+          <tr><td><strong>Spyware / keylogger</strong></td><td>Espía la actividad del usuario en segundo plano; el keylogger registra cada tecla.</td><td>Robo de contraseñas y datos bancarios tecleados.</td></tr>
+          <tr><td><strong>Adware</strong></td><td>Muestra publicidad invasiva, a menudo instalado junto a software gratuito.</td><td>Degradación del equipo; puede derivar en robo de datos de navegación.</td></tr>
+          <tr><td><strong>Botnet / zombie</strong></td><td>Infecta equipos para agruparlos en redes controladas por un atacante (C&amp;C).</td><td>Ataques DDoS y envío masivo de spam desde miles de dispositivos.</td></tr>
+          <tr><td><strong>Fileless</strong></td><td>Opera solo en memoria (PowerShell, macros), sin archivo en disco.</td><td>Evasión de antivirus tradicionales; difícil de forensar.</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:10px;"><small>Un mismo ataque suele combinar categorías: WannaCry era gusano + ransomware; muchos troyanos instalan luego keyloggers.</small></p>
+
+      <h3 style="margin-top:16px;">Ingeniería social: el eslabón humano</h3>
+      <p>Es la manipulación psicológica para que la víctima revele información o ejecute acciones nocivas. Aprovecha autoridad, urgencia, miedo, codicia o confianza. Modalidades principales:</p>
+      <ul>
+        <li><strong>Phishing:</strong> correos o mensajes suplantando a una entidad legítima (banco, universidad) para capturar credenciales. El <strong>spear phishing</strong> apunta a una persona concreta, previamente estudiada; el <strong>smishing</strong> llega por SMS/WhatsApp y el <strong>vishing</strong> por llamada.</li>
+        <li><strong>Pharming:</strong> redirige el tráfico a un sitio falso alterando DNS o el archivo hosts, incluso con URL correcta escrita.</li>
+        <li><strong>Skimming:</strong> captura datos de tarjetas con lectores clonados en cajeros o terminales.</li>
+        <li><strong>Shoulder surfing:</strong> observar contraseñas o PIN a la vista; el <strong>dumpster diving</strong> hurga en la basura en busca de información impresa.</li>
+        <li><strong>Baiting / pretexting:</strong> señuelos (USB «perdido», premio) o identidades falsas (falso soporte técnico) para ganarse la confianza.</li>
+      </ul>
+      <div class="kbox kbox-r" style="margin-top:12px;">
+        <h4>🚩 Señales típicas de un correo de phishing</h4>
+        <p style="margin:0;font-size:12.5px;">Remitente extraño o dominio casi idéntico (upsee.edu.ec, con doble «e») · saludo genérico («Estimado cliente») · urgencia y amenaza («su cuenta será bloqueada en 24 h») · enlaces cuyo destino real (al pasar el cursor) no coincide con el texto · adjuntos inesperados · faltas de ortografía o traducciones torpes · petición de contraseñas o pagos (ninguna institución legítima las pide por correo).</p>
+      </div>
+
+      <h3 style="margin-top:16px;">Ataques técnicos frecuentes</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:22%;">Ataque</th><th>Mecanismo</th><th style="width:30%;">Contramedida principal</th></tr></thead>
+        <tbody>
+          <tr><td><strong>DDoS</strong></td><td>Un atacante satura un servicio con tráfico masivo (a menudo una botnet) hasta dejarlo inaccesible.</td><td>Servicios de mitigación/CDN, filtrado de tráfico, planes con el ISP.</td></tr>
+          <tr><td><strong>Fuerza bruta</strong></td><td>Prueba sistemática de contraseñas hasta dar con la correcta.</td><td>Contraseñas largas, MFA, bloqueo por intentos fallidos, limitación de intentos.</td></tr>
+          <tr><td><strong>Man in the middle</strong></td><td>El atacante se interpone entre cliente y servidor para leer o alterar el tráfico (típico en Wi-Fi públicas sin cifrar).</td><td>HTTPS en todo, VPN en redes públicas, certificados verificados.</td></tr>
+          <tr><td><strong>Inyección SQL / XSS</strong></td><td>Entradas maliciosas en formularios que manipulan consultas o páginas web.</td><td>Validación de entradas, desarrollo seguro, WAF.</td></tr>
+          <tr><td><strong>Zero-day</strong></td><td>Explota una vulnerabilidad desconocida para el fabricante, sin parche disponible.</td><td>Defensa en profundidad, segmentación, monitoreo de anomalías.</td></tr>
+          <tr><td><strong>Ataques a contraseñas por diccionario</strong></td><td>Prueba millones de contraseñas comunes filtradas.</td><td>No reutilizar contraseñas; gestor de contraseñas.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:18px;">Interactivo: ¿es phishing o correo legítimo?</h3>
+      <p>Analice las pistas de cada correo y decida si se trata de un intento de phishing.</p>
+      <div id="ph-q"></div>
+      <div id="ph-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 6: CRIPTOGRAFÍA Y CONTRASEÑAS ============ -->
+  <div id="tp6" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tp6"></code> <a class="ulink" id="lnk-tp6" href="#tp6" onclick="goTab('tp6');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tp6" onclick="copiarURL('tp6')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">6</span><h2>Criptografía, contraseñas y autenticación</h2></div>
+      <p>La <strong>criptografía</strong> es la disciplina que protege la información transformándola en ilegible para quien no posee la clave. Es el fundamento técnico del cifrado que viaja en HTTPS, del correo seguro y del almacenamiento protegido. Se divide en dos grandes familias:</p>
+      <div class="grid2">
+        <div class="kbox kbox-c">
+          <h4>🔑 Simétrica (una clave)</h4>
+          <p style="margin:0;font-size:12.5px;">La <strong>misma clave</strong> cifra y descifra. Muy rápida, ideal para grandes volúmenes de datos. Su reto es la <strong>distribución segura de la clave</strong> entre las partes. Algoritmos: <strong>AES</strong> (estándar actual, 128/256 bits), 3DES (obsoleto), ChaCha20.</p>
+        </div>
+        <div class="kbox kbox-v">
+          <h4>🔐 Asimétrica (par de claves)</h4>
+          <p style="margin:0;font-size:12.5px;">Usa un par: clave <strong>pública</strong> (se comparte, cifra/verifica) y clave <strong>privada</strong> (se custodia, descifra/firma). Resuelve la distribución y habilita la <strong>firma digital</strong> y el no repudio. Es más lenta: en la práctica (TLS) se usa para intercambiar una clave de sesión simétrica. Algoritmos: <strong>RSA</strong> (2048+ bits), curva elíptica <strong>ECC</strong>.</p>
+        </div>
+      </div>
+      <p style="margin-top:12px;">Sobre ellas se construyen servicios superiores: la <strong>función hash</strong> (SHA-256) produce una huella única e irreversible del dato — usada para integridad y para almacenar contraseñas con sal — y la <strong>firma digital</strong> (hash cifrado con la clave privada) acredita autoría e integridad. El <strong>candado HTTPS</strong> del navegador indica que el canal usa TLS: negociación asimétrica + cifrado simétrico de la sesión.</p>
+
+      <h3 style="margin-top:16px;">Contraseñas robustas y gestión de credenciales</h3>
+      <p>La contraseña sigue siendo el control de acceso más usado — y el más mal usado. Las contraseñas filtradas en brechas masivas (<em>123456</strong>, <em>password</em>, <em>qwerty</em>, nombres y fechas) son la primera opción de los ataques por diccionario. Una contraseña robusta:</p>
+      <ul>
+        <li>Tiene <strong>longitud suficiente</strong>: la fuerza crece exponencialmente con cada carácter adicional; se recomiendan <strong>12+ caracteres</strong> (o frases de contraseña de 4-5 palabras sin sentido común).</li>
+        <li>Combina <strong>mayúsculas, minúsculas, números y símbolos</strong>, evitando diccionarios y patrones predecibles (nombres, fechas, «admin2024»).</li>
+        <li>Es <strong>única por servicio</strong>: reutilizarla convierte un fallo de un sitio en la caída de todas las cuentas (credential stuffing).</li>
+        <li>Se custodia en un <strong>gestor de contraseñas</strong> (Bitwarden, 1Password, KeePass), que además genera contraseñas aleatorias.</li>
+      </ul>
+      <p>La <strong>autenticación multifactor (MFA/2FA)</strong> añade una segunda prueba de identidad independiente de la contraseña: <strong>algo que sé</strong> (contraseña/PIN) + <strong>algo que tengo</strong> (teléfono, token, llave física FIDO2) + <strong>algo que soy</strong> (huella, rostro). Con MFA activado, una contraseña robada por sí sola no basta para entrar: es el control con mejor relación costo-beneficio para cuentas críticas (banca, correo institucional, Moodle).</p>
+
+      <h3 style="margin-top:16px;">Interactivo: laboratorio de fortaleza de contraseñas</h3>
+      <p>Escriba (o invente) contraseñas de prueba y observe cómo el estimador calcula el <strong>espacio de claves</strong> y el tiempo estimado de un ataque de fuerza bruta. Este cálculo es local: nada sale de su navegador.</p>
+      <input class="calc-in" id="pw-in" placeholder="Escriba una contraseña de prueba (no use una real)..." oninput="pwEval()">
+      <div id="pw-out" class="calc-out"></div>
+      <div class="kbox kbox-a" style="margin-top:12px;">
+        <h4>📌 Nota didáctica</h4>
+        <p style="margin:0;font-size:12.5px;">Observe el salto de magnitud entre «gato123» (segundos) y «gato-azul-trebol-28» (miles de años): la <strong>longitud</strong> pesa más que la complejidad simbólica aislada. Compare también «P@ssw0rd» — que cae en segundos porque está en todos los diccionarios — con una frase de 4 palabras al azar.</p>
+      </div>
+    </div>
+
+    <!-- Calculadora de tiempo de descarga -->
+    <div class="card">
+      <h3>Calculadora: tiempo de transferencia según tecnología de acceso</h3>
+      <p>Aplicación práctica de las velocidades vistas en la pestaña 2: ¿cuánto tarda en descargarse un archivo según el enlace disponible? (Cálculo teórico sobre velocidad sostenida; la experiencia real depende de la distancia al servidor, la congestión y el overhead del protocolo.)</p>
+      <div class="grid2">
+        <label style="font-size:12px;font-weight:600;color:#334155;">Tamaño del archivo
+          <select class="calc-in" id="dl-tam">
+            <option value="5">Documento PDF de 5 MB</option>
+            <option value="700">Película comprimida de 700 MB</option>
+            <option value="5000">Juego o ISO de 5 GB</option>
+            <option value="0.7">Foto RAW de 0,7 MB</option>
+          </select>
+        </label>
+        <label style="font-size:12px;font-weight:600;color:#334155;">Tecnología de acceso
+          <select class="calc-in" id="dl-tec">
+            <option value="0.056">Dial-up 56 kbps</option>
+            <option value="10">ADSL 10 Mbps</option>
+            <option value="100">Cablemódem 100 Mbps</option>
+            <option value="300">Fibra FTTH 300 Mbps</option>
+            <option value="25">4G rural 25 Mbps</option>
+            <option value="150">5G 150 Mbps</option>
+            <option value="20">Satelital GEO 20 Mbps</option>
+          </select>
+        </label>
+      </div>
+      <div style="margin-top:10px;"><button type="button" class="btn-main" onclick="dlCalc()">Calcular tiempo</button></div>
+      <div id="dl-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 7: BUENAS PRÁCTICAS Y NORMATIVA ============ -->
+  <div id="tp7" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tp7"></code> <a class="ulink" id="lnk-tp7" href="#tp7" onclick="goTab('tp7');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tp7" onclick="copiarURL('tp7')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">7</span><h2>Buenas prácticas, herramientas y marco normativo</h2></div>
+
+      <h3>7.1 · Navegación segura y configuración del entorno</h3>
+      <ul>
+        <li><strong>HTTPS siempre:</strong> verifique el candado y nunca ingrese credenciales en páginas http:// o con certificado inválido. Los navegadores modernos marcan esas páginas como «No segura».</li>
+        <li><strong>Actualizaciones al día:</strong> sistema operativo, navegador y aplicaciones. Los parches cierran vulnerabilidades conocidas que el malware explota (WannaCry se propagó solo en equipos Windows sin actualizar).</li>
+        <li><strong>Software legítimo y fuentes oficiales:</strong> evitar cracks y «descargas gratis» de sitios dudosos, principal vía de instalación de troyanos.</li>
+        <li><strong>Wi-Fi públicas:</strong> asumir que la red es hostil; usar VPN o tráfico cifrado, no hacer operaciones bancarias, y olvidar la red al desconectarse.</li>
+        <li><strong>Permisos y privacidad:</strong> revisar qué datos pide cada app (linterna pidiendo contactos es una bandera roja) y configurar la privacidad de redes sociales.</li>
+        <li><strong>Copias de seguridad 3-2-1:</strong> 3 copias de los datos, en 2 medios distintos, con 1 copia <strong>fuera de línea y fuera de sitio</strong>. Es la única recuperación real frente al ransomware.</li>
+      </ul>
+
+      <h3 style="margin-top:16px;">7.2 · Herramientas de seguridad</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th style="width:22%;">Herramienta</th><th style="width:40%;">Función</th><th>Notas de uso</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Antivirus / EDR</strong></td><td>Detecta y bloquea malware por firmas y comportamiento; el EDR añade respuesta y telemetry de endpoints.</td><td>Windows Defender es razonable como línea base; mantener firmas actualizadas.</td></tr>
+          <tr><td><strong>Cortafuegos (firewall)</strong></td><td>Filtra tráfico según reglas de puerto/IP; separa redes de distinta confianza.</td><td>Activar el del SO y el del router; en empresa, segmentar (VLAN) áreas críticas.</td></tr>
+          <tr><td><strong>VPN</strong></td><td>Crea un túnel cifrado sobre redes no confiables; oculta el tráfico al operador local.</td><td>Uso corporativo y en Wi-Fi pública; elegir proveedores de confianza.</td></tr>
+          <tr><td><strong>Gestor de contraseñas</strong></td><td>Genera y almacena contraseñas únicas y fuertes cifradas.</td><td>Bitwarden, KeePass, 1Password; protege el «cofre» con MFA.</td></tr>
+          <tr><td><strong>Cifrado de disco</strong></td><td>Protector de datos si el equipo se pierde o roban.</td><td>BitLocker (Windows Pro), FileVault (macOS), LUKS (Linux); respaldar la clave de recuperación.</td></tr>
+          <tr><td><strong>Autenticador / FIDO2</strong></td><td>Segundo factor (TOTP de 6 dígitos o llave física).</td><td>App autenticadora mejor que SMS; FIDO2/passkeys resisten phishing.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:16px;">7.3 · Normativa y referentes</h3>
+      <ul>
+        <li><strong>ISO/IEC 27001:2022</strong> — Sistema de Gestión de Seguridad de la Información (SGSI) certificable: análisis de riesgos, controles del Anexo A, mejora continua PDCA.</li>
+        <li><strong>NIST SP 800-53 / CSF 2.0</strong> — Catálogos de controles y marco de gestión de ciberriesgo (Identificar, Proteger, Detectar, Responder, Recuperar, Gobernar).</li>
+        <li><strong>Ley Orgánica de Protección de Datos Personales del Ecuador (LODPDP, 2021)</strong> — Regula el tratamiento de datos personales: base legal, derechos ARCO-P (acceso, rectificación, cancelación, oposición, portabilidad), notificación de brechas a la autoridad (Agencia de Protección de Datos) y sanciones. Toda organización que maneje datos de estudiantes, clientes o empleados debe cumplirla.</li>
+        <li><strong>Código Orgánico Integral Penal (art. 233-234)</strong> — Tipifica en Ecuador los delitos informáticos: acceso no autorizado (hacking), sabotaje informático, interceptación no autorizada, suplantación de identidad y daños a sistemas.</li>
+        <li><strong>Política Nacional de Ciberseguridad (Ecuador)</strong> y la <strong>Agencia Nacional de Ciberseguridad</strong> como articuladores estatales de la respuesta a incidentes.</li>
+      </ul>
+
+      <h3 style="margin-top:16px;">7.4 · Respuesta a incidentes: el ciclo PICERI</h3>
+      <p>Cuando la prevención falla, la diferencia entre un susto y una catástrofe la marca tener un plan. El estándar NIST lo organiza en seis fases — memorice <strong>PICERI</strong>:</p>
+      <div class="fase-steps" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));">
+        <div class="sq" style="text-align:center;"><strong style="font-size:12.5px;">P · Preparación</strong><p style="font-size:11px;margin:4px 0 0 0;">Plan, roles, contactos, simulacros</p></div>
+        <div class="sq" style="text-align:center;"><strong style="font-size:12.5px;">I · Identificación</strong><p style="font-size:11px;margin:4px 0 0 0;">Detectar y acotar el incidente</p></div>
+        <div class="sq" style="text-align:center;"><strong style="font-size:12.5px;">C · Contención</strong><p style="font-size:11px;margin:4px 0 0 0;">Aislar equipos, cortar propagación</p></div>
+        <div class="sq" style="text-align:center;"><strong style="font-size:12.5px;">E · Erradicación</strong><p style="font-size:11px;margin:4px 0 0 0;">Eliminar causa raíz y malware</p></div>
+        <div class="sq" style="text-align:center;"><strong style="font-size:12.5px;">R · Recuperación</strong><p style="font-size:11px;margin:4px 0 0 0;">Restaurar desde respaldos limpios</p></div>
+        <div class="sq" style="text-align:center;"><strong style="font-size:12.5px;">I · Lecciones</strong><p style="font-size:11px;margin:4px 0 0 0;">Post-mortem y mejora del plan</p></div>
+      </div>
+
+      <h3 style="margin-top:18px;">Interactivo: checklist de higiene digital personal</h3>
+      <p>Marque las prácticas que hoy cumple; la barra muestra su nivel de higiene digital y las prioridades pendientes.</p>
+      <div id="hig-chk"></div>
+      <div id="hig-out" class="calc-out"></div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 8: CASO DE ESTUDIO EN 4 FASES (DESARROLLADO POR EL ESTUDIANTE) ============ -->
+  <div id="tp8" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tp8"></code> <a class="ulink" id="lnk-tp8" href="#tp8" onclick="goTab('tp8');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tp8" onclick="copiarURL('tp8')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">8</span><h2>Caso de estudio: red y seguridad informática de la distribuidora AndesMarket S.A.</h2></div>
+      <p><strong>Contexto.</strong> Usted acaba de ser contratado/a como soporte TI junior de <strong>AndesMarket S.A.</strong>, una distribuidora de abarrotes con sede en Cuenca, bodega rural en la parroquia San Joaquín, 32 empleados y estas condiciones actuales:</p>
+      <div class="kbox kbox-g" style="margin-bottom:14px;">
+        <h4>📋 Inventario tecnológico de AndesMarket (diagnóstico inicial)</h4>
+        <ul style="margin:6px 0 0 0;">
+          <li><strong>Sede Cuenca (urbana):</strong> Internet ADSL de 10 Mbps por la línea telefónica; LAN con 12 equipos por Wi-Fi (router con contraseña «andes2020» compartida con clientes que visitan la oficina); sin servidor propio: los procesos (facturación, planilla, cartera) viven en hojas de Excel en cada PC.</li>
+          <li><strong>Bodega San Joaquín (rural):</strong> sin cobertura de cable; el encargado usa sus propios datos móviles 4G del teléfono para consultar precios y enviar pedidos por WhatsApp; las notas de entrega son papel y se transcriben a mano cada noche.</li>
+          <li><strong>Personal:</strong> nadie usa gestor de contraseñas; la misma clave «Andes2020» sirve para el correo corporativo (Gmail), el sistema de impuestos (SRI) y las redes sociales de la empresa; no hay MFA en ninguna cuenta.</li>
+          <li><strong>Incidentes recientes:</strong> el mes pasado un correo con asunto «Rectificación de su RUC — SRI» redirigía a un sitio falso; la contadora escribió su usuario y clave, y dos días después se enviaron correos de «cambio de número de cuenta» a clientes desde el correo corporativo. Los archivos de cartera de clientes (Excel con nombres, cédulas, teléfonos y deudas) se comparten por un enlace público de Drive.</li>
+          <li><strong>Datos a proteger:</strong> 1.400 clientes (datos personales LODPDP), facturación electrónica, nómina de los 32 empleados.</li>
+          <li><strong>Presupuesto anual disponible para TI:</strong> USD 4.800.</li>
+        </ul>
+      </div>
+      <p>La gerencia le pide un plan en cuatro fases que será presentado al Consejo. Cada fase se desarrolla a continuación: <strong>usted</strong> debe analizar, decidir y redactar.</p>
+
+      <h3>Las cuatro fases del encargo</h3>
+      <div class="fase-steps" id="fase-steps">
+        <button type="button" class="fase-step cur" id="fs1" onclick="goFase(1)">FASE 1 · Diagnóstico de acceso<small>Tecnologías de conexión y brecha digital</small></button>
+        <button type="button" class="fase-step" id="fs2" onclick="goFase(2)">FASE 2 · Análisis de riesgos<small>Amenazas, malware e ingeniería social</small></button>
+        <button type="button" class="fase-step" id="fs3" onclick="goFase(3)">FASE 3 · Plan de seguridad<small>Controles, contraseñas, MFA, respaldos</small></button>
+        <button type="button" class="fase-step" id="fs4" onclick="goFase(4)">FASE 4 · Respuesta y mejora<small>PICERI, LODPDP y presentación al Consejo</small></button>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="fase-prog" style="width:0%"></div></div>
+      <p style="font-size:11.5px;color:#64748b;margin-bottom:0;"><span id="fase-prog-txt">Fase 1 de 4 — avance del caso: 0%</span></p>
+
+      <!-- FASE 1 -->
+      <div class="fase-panel active" id="fase1">
+        <div class="kbox kbox-h" style="margin:14px 0;">
+          <h4 style="color:#ffffff;">FASE 1 · Diagnóstico: tecnologías de acceso y brecha digital (trabajo del estudiante)</h4>
+          <p style="font-size:12.5px;color:#e2e8f0;margin:0;">Antes de comprar nada, hay que entender qué enlaces de comunicación tiene la empresa hoy y qué necesita mañana. Esta fase aplica la pestaña 2 al caso.</p>
+        </div>
+        <h4>Actividad 1.1 · Clasificar los enlaces actuales (10 min)</h4>
+        <p style="font-size:12.5px;">Identifique la tecnología de acceso presente en cada punto de AndesMarket y su limitación principal. Complete la tabla (una línea por sitio).</p>
+        <textarea class="txt" id="fa1a" placeholder="Sede Cuenca: tecnología ___, limitación: ...&#10;Bodega rural: tecnología ___, limitación: ...&#10;Telefonía de gerencia en ruta: ..."></textarea>
+        <h4 style="margin-top:12px;">Actividad 1.2 · Proponer la tecnología de acceso correcta (15 min)</h4>
+        <p style="font-size:12.5px;">Para cada necesidad, elija la tecnología más adecuada y justifíquela en una línea (cobertura, velocidad, costo). Considere: fibra FTTH, mejora de ADSL a VDSL, radioenlace WISP, 4G/5G dedicado, LEO satelital.</p>
+        <div class="tblwrap"><table style="font-size:12px;">
+          <thead><tr><th>Necesidad</th><th style="width:34%;">Tecnología que propone</th></tr></thead>
+          <tbody>
+            <tr><td>Sede Cuenca: facturación electrónica SRI + correo + videollamadas con proveedores</td><td><input class="calc-in" id="f1b1" type="text" placeholder="Tecnología y justificación breve"></td></tr>
+            <tr><td>Bodega San Joaquín: enviar pedidos en línea y sincronizar inventario</td><td><input class="calc-in" id="f1b2" type="text" placeholder="Tecnología y justificación breve"></td></tr>
+            <tr><td>Respaldo del enlace principal de la sede (si falla, el negocio para)</td><td><input class="calc-in" id="f1b3" type="text" placeholder="Tecnología de respaldo"></td></tr>
+          </tbody>
+        </table></div>
+        <h4 style="margin-top:12px;">Actividad 1.3 · Tiempo de transferencia (10 min)</h4>
+        <p style="font-size:12.5px;">Con la calculadora de la pestaña 6: ¿cuánto tardaría hoy en subir el respaldo diario de 5 GB de la empresa por el ADSL de 10 Mbps? ¿Y por una fibra de 300 Mbps? Anote ambos valores y concluya si el enlace actual sirve para respaldar en línea.</p>
+        <div class="grid2">
+          <label style="font-size:12px;font-weight:600;color:#334155;">Tiempo con ADSL 10 Mbps (horas, 2 decimales)<input class="calc-in" id="f1c1" type="number" step="any" placeholder="h"></label>
+          <label style="font-size:12px;font-weight:600;color:#334155;">Tiempo con fibra 300 Mbps (horas, 2 decimales)<input class="calc-in" id="f1c2" type="number" step="any" placeholder="h"></label>
+        </div>
+        <textarea class="txt" id="fa1d" style="margin-top:10px;" placeholder="Conclusión: ¿el enlace actual permite respaldar 5 GB en línea? ¿Qué implica para la fase 3?"></textarea>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button type="button" class="btn-main" onclick="faseCheck(1)">Guardar fase 1 y continuar</button>
+          <details class="sr" style="margin:0;flex:1 1 260px;"><summary>Pista: cálculo de la 1.3</summary><div class="sr-body">5 GB = 5.000 MB = 40.000 Mb (×8 bits). A 10 Mbps → 40.000/10 = 4.000 s ≈ 1,11 h. A 300 Mbps → 40.000/300 ≈ 133 s ≈ 0,04 h. Con ADSL además la subida suele ser mucho menor que la bajada (asimetría).</div></details>
+        </div>
+        <div id="fase1-out" class="calc-out"></div>
+      </div>
+
+      <!-- FASE 2 -->
+      <div class="fase-panel" id="fase2">
+        <div class="kbox kbox-h" style="margin:14px 0;">
+          <h4 style="color:#ffffff;">FASE 2 · Análisis de riesgos: amenazas e incidente sufrido (trabajo del estudiante)</h4>
+          <p style="font-size:12.5px;color:#e2e8f0;margin:0;">Ahora analice con la taxonomía de las pestañas 5 qué le pasó a AndesMarket y qué podría pasarle.</p>
+        </div>
+        <h4>Actividad 2.1 · Autopsia del incidente (15 min)</h4>
+        <p style="font-size:12.5px;">El correo «Rectificación de su RUC — SRI» fue un ataque. Identifique: (a) el tipo exacto de ataque según la clasificación de ingeniería social; (b) al menos dos señales de phishing que el correo mostraba; (c) qué propiedad de la tríada CIA se violó en cada consecuencia.</p>
+        <textarea class="txt" id="fa2a" placeholder="a) Tipo de ataque: ...&#10;b) Señales del correo: ...&#10;c) Propiedades CIA vulneradas: ..."></textarea>
+        <h4 style="margin-top:12px;">Actividad 2.2 · Matriz de riesgos (20 min)</h4>
+        <p style="font-size:12.5px;">De la lista, asigne a cada riesgo su probabilidad (1-5) e impacto (1-5) en la matriz; el sistema calculará la exposición = P × I. Luego justifique cuál riesgo trataría primero y por qué.</p>
+        <div id="riesgos-tbl"></div>
+        <textarea class="txt" id="fa2b" style="margin-top:10px;" placeholder="El riesgo que trataría primero es ... porque ... (considere exposición y costo del control)"></textarea>
+        <h4 style="margin-top:12px;">Actividad 2.3 · Escenario ransomware (10 min)</h4>
+        <p style="font-size:12.5px;">Si un ransomware cifrara mañana los Excel de cartera y pidiera USD 3.000 de rescate: ¿podría AndesMarket recuperar sus datos hoy? ¿Qué control de la pestaña 7 lo habría prevenido y cuál permite recuperarse?</p>
+        <textarea class="txt" id="fa2c" placeholder="Situación actual: ...&#10;Prevención: ...&#10;Recuperación: ..."></textarea>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button type="button" class="btn-main" onclick="faseCheck(2)">Guardar fase 2 y continuar</button>
+          <details class="sr" style="margin:0;flex:1 1 260px;"><summary>Pista: exposición</summary><div class="sr-body">Exposición = Probabilidad × Impacto. Riesgo crítico ≥ 15, alto 10-14, medio 5-9, bajo &lt; 5. Priorizar no es solo exposición: un control barato que baja mucho un riesgo alto también va primero (relación costo-beneficio).</div></details>
+        </div>
+        <div id="fase2-out" class="calc-out"></div>
+      </div>
+
+      <!-- FASE 3 -->
+      <div class="fase-panel" id="fase3">
+        <div class="kbox kbox-h" style="margin:14px 0;">
+          <h4 style="color:#ffffff;">FASE 3 · Plan de seguridad con presupuesto (trabajo del estudiante)</h4>
+          <p style="font-size:12.5px;color:#e2e8f0;margin:0;">Con USD 4.800 anuales, diseñe el plan de controles. Cada decisión cuesta: elija bien.</p>
+        </div>
+        <h4>Actividad 3.1 · Comprar controles con el presupuesto (20 min)</h4>
+        <p style="font-size:12.5px;">Seleccione los controles que implementaría con el presupuesto anual. El panel muestra el gasto acumulado; no puede pasarse de USD 4.800. Priorice según la matriz de la fase 2.</p>
+        <div id="ctrl-chips"></div>
+        <div class="kbox kbox-c" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <strong style="font-size:13px;">Presupuesto:</strong>
+          <span id="ctrl-gasto" style="font-size:13px;font-weight:700;color:#1d4ed8;">USD 0 / 4.800</span>
+          <span id="ctrl-resto" style="font-size:12px;color:#475569;"></span>
+        </div>
+        <textarea class="txt" id="fa3a" style="margin-top:10px;" placeholder="Justificación de la selección: ¿qué control dejó fuera y por qué? ¿qué riesgo de la fase 2 queda residual?"></textarea>
+        <h4 style="margin-top:12px;">Actividad 3.2 · Políticas de credenciales (10 min)</h4>
+        <p style="font-size:12.5px;">Redacte la nueva política de contraseñas y accesos de AndesMarket: formato de contraseña mínima, MFA en qué cuentas, gestor compartido, y cómo dividir el acceso (quién ve la cartera de clientes).</p>
+        <textarea class="txt" id="fa3b" placeholder="1. Contraseñas: ...&#10;2. MFA: ...&#10;3. Gestor: ...&#10;4. Accesos por rol: ..."></textarea>
+        <h4 style="margin-top:12px;">Actividad 3.3 · Respaldos 3-2-1 (10 min)</h4>
+        <p style="font-size:12.5px;">Diseñe el esquema 3-2-1 para los datos de la empresa: qué se respalda, con qué frecuencia, en qué medios y dónde queda la copia externa. Considere el resultado de la actividad 1.3 (ancho de banda disponible).</p>
+        <textarea class="txt" id="fa3c" placeholder="Datos: ...&#10;Frecuencia: ...&#10;Medios (2): ...&#10;Copia externa (1): ..."></textarea>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button type="button" class="btn-main" onclick="faseCheck(3)">Guardar fase 3 y continuar</button>
+        </div>
+        <div id="fase3-out" class="calc-out"></div>
+      </div>
+
+      <!-- FASE 4 -->
+      <div class="fase-panel" id="fase4">
+        <div class="kbox kbox-h" style="margin:14px 0;">
+          <h4 style="color:#ffffff;">FASE 4 · Respuesta a incidentes, LODPDP y presentación (trabajo del estudiante)</h4>
+          <p style="font-size:12.5px;color:#e2e8f0;margin:0;">Cierre el plan: qué hacer cuando (no si) ocurra el próximo incidente, y cómo cumplir la ley.</p>
+        </div>
+        <h4>Actividad 4.1 · Aplicar PICERI al siguiente phishing (15 min)</h4>
+        <p style="font-size:12.5px;">El lunes entra un correo sospechoso a la cuenta de ventas. Escriba la acción concreta de AndesMarket en cada una de las seis fases de respuesta (PICERI) para este caso.</p>
+        <textarea class="txt" id="fa4a" style="min-height:120px;" placeholder="P (Preparación): ...&#10;I (Identificación): ...&#10;C (Contención): ...&#10;E (Erradicación): ...&#10;R (Recuperación): ...&#10;I (Lecciones aprendidas): ..."></textarea>
+        <h4 style="margin-top:12px;">Actividad 4.2 · Cumplimiento LODPDP (15 min)</h4>
+        <p style="font-size:12.5px;">El Excel de cartera expuesto en el enlace público de Drive contiene datos personales de 1.400 clientes. Identifique: (a) si ya ocurrió una brecha de datos notificable; (b) qué derechos ARCO-P asisten a los clientes; (c) tres acciones inmediatas de cumplimiento (base legal, seguridad del tratamiento, aviso de privacidad).</p>
+        <textarea class="txt" id="fa4b" placeholder="a) ¿Brecha notificable?: ...&#10;b) Derechos ARCO-P aplicables: ...&#10;c) Acciones de cumplimiento: 1)... 2)... 3)..."></textarea>
+        <h4 style="margin-top:12px;">Actividad 4.3 · Presentación al Consejo (10 min)</h4>
+        <p style="font-size:12.5px;">Redacte el resumen ejecutivo (máximo 8 líneas) que presentaría al Consejo: situación encontrada, inversión propuesta, riesgo que se reduce y resultado esperado en un año. Después marque la checklist final del plan.</p>
+        <textarea class="txt" id="fa4c" placeholder="Resumen ejecutivo para el Consejo..."></textarea>
+        <div id="caso-chk"></div>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button type="button" class="btn-main" onclick="faseCheck(4)">Finalizar caso y ver rúbrica</button>
+          <button type="button" class="btn-ghost" onclick="casoReset()">Reiniciar el caso</button>
+          <button type="button" class="btn-ghost" onclick="casoDescargar()">Descargar mis respuestas (.txt)</button>
+        </div>
+        <div id="fase4-out" class="calc-out"></div>
+
+        <div id="rubrica" style="display:none;margin-top:16px;">
+          <h3 style="border-top:1px solid #e2e8f0;padding-top:14px;">Rúbrica de evaluación del caso (100 puntos)</h3>
+          <div class="tblwrap"><table style="font-size:12px;">
+            <thead><tr><th style="width:22%;">Fase</th><th style="width:52%;">Criterio central</th><th>Puntos</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="2"><strong>1 · Acceso</strong></td><td>Clasifica correctamente los enlaces actuales y propone tecnología justificada por sitio (cobertura/velocidad/costo).</td><td>15</td></tr>
+              <tr><td>Cálculo de tiempos de transferencia correcto (±5%) con conclusión sobre el respaldo en línea.</td><td>10</td></tr>
+              <tr><td rowspan="2"><strong>2 · Riesgos</strong></td><td>Autopsia del incidente: tipo de ataque, señales y propiedades CIA correctas.</td><td>15</td></tr>
+              <tr><td>Matriz P×I coherente y priorización justificada por exposición y costo del control.</td><td>15</td></tr>
+              <tr><td rowspan="2"><strong>3 · Plan</strong></td><td>Selección de controles dentro de presupuesto, con justificación y riesgo residual identificado.</td><td>15</td></tr>
+              <tr><td>Política de credenciales y esquema 3-2-1 completos y aplicables.</td><td>10</td></tr>
+              <tr><td rowspan="2"><strong>4 · Respuesta</strong></td><td>PICERI aplicado al caso y cumplimiento LODPDP (brecha, ARCO-P, acciones).</td><td>10</td></tr>
+              <tr><td>Resumen ejecutivo claro y alineado con las fases 1-3.</td><td>10</td></tr>
+            </tbody>
+          </table></div>
+          <p style="font-size:11.5px;color:#64748b;margin:8px 0 0 0;">≥85 sobresaliente · 70-84 muy bueno · 50-69 suficiente (revisar fases débiles) · &lt;50 debe rehacer el caso con la guía de las pestañas 2, 5, 6 y 7.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PESTAÑA 9: AUTOEVALUACIÓN ============ -->
+  <div id="tp9" class="tab-panel">
+    <div class="url-note">🔗 <span>Esta pestaña tiene dirección URL propia: <code id="url-tp9"></code> <a class="ulink" id="lnk-tp9" href="#tp9" onclick="goTab('tp9');return false;"></a></span><button type="button" class="copy-btn" id="cpbtn-tp9" onclick="copiarURL('tp9')">Copiar URL</button></div>
+    <div class="card">
+      <div class="sec-title"><span class="n">9</span><h2>Autoevaluación final de la unidad</h2></div>
+      <p>Diez preguntas de opción múltiple sobre la unidad. Responda todas y pulse «Finalizar» para ver su resultado con retroalimentación por pregunta.</p>
+      <div id="quiz-boxes"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+        <button type="button" class="btn-main" id="quiz-fin-btn" onclick="quizFin()">Finalizar y ver resultado</button>
+        <button type="button" class="btn-ghost" onclick="quizReset()">Reiniciar autoevaluación</button>
+      </div>
+      <div id="quiz-result" class="calc-out"></div>
+    </div>
+
+    <div style="background-color:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:20px;">
+      <h3 style="font-size:15px;font-weight:700;color:#0f172a;margin:0 0 12px 0;">Metodología y Sistema de Evaluación (UPSE)</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;font-size:12.5px;color:#475569;">
+        <div>
+          <strong style="color:#1e293b;display:block;margin-bottom:4px;">Estrategia Metodológica:</strong>
+          Horas de Acompañamiento Docente (ACD), aprendizaje colaborativo con los simuladores interactivos, construcción del propio plan de seguridad en talleres autónomos apoyados en Moodle, Zoom y Teams.
+        </div>
+        <div>
+          <strong style="color:#1e293b;display:block;margin-bottom:4px;">Técnicas de Evaluación:</strong>
+          <ul style="margin:0;padding-left:16px;">
+            <li>Inmediata: control interactivo en sesión sincrónica (pestaña 9).</li>
+            <li>Continua: laboratorios de búsqueda, contraseñas y transferencias (pestañas 4 y 6).</li>
+            <li>Especial: taller asincrónico — caso de estudio en 4 fases de AndesMarket S.A. (pestaña 8) con la rúbrica de 100 puntos.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== PESTAÑAS CON URL INDEPENDIENTE (ROUTING POR HASH) ===== */
+var TAB_IDS=['tp1','tp2','tp3','tp4','tp5','tp6','tp7','tp8','tp9'];
+function showTab(id){
+  if(TAB_IDS.indexOf(id)<0)id='tp1';
+  TAB_IDS.forEach(function(t){document.getElementById(t).classList.toggle('active',t===id);});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-tab')===id);});
+  updUrlNotes(id);
+}
+function updUrlNotes(id){
+  var base=location.href.split('#')[0];
+  var c=document.getElementById('url-'+id);
+  if(c)c.textContent=base+'#'+id;
+  var l=document.getElementById('lnk-'+id);
+  if(l){l.textContent=base+'#'+id;l.href='#'+id;}
+}
+function goTab(id){
+  if(TAB_IDS.indexOf(id)<0)id='tp1';
+  if(location.hash!=='#'+id){location.hash=id;}
+  showTab(id);
+  var m=document.getElementById('tabsbar');
+  if(m){var b=m.querySelector('[data-tab="'+id+'"]');if(b)b.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function copiarURL(id){
+  var base=location.href.split('#')[0]+'#'+id;
+  var done=function(){var b=document.getElementById('cpbtn-'+id);if(b){b.textContent='✔ Copiada';setTimeout(function(){b.textContent='Copiar URL';},1800);}};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(base).then(done,done);}
+  else{
+    var ta=document.createElement('textarea');ta.value=base;document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');}catch(e){}
+    document.body.removeChild(ta);done();
+  }
+}
+window.addEventListener('hashchange',function(){showTab(location.hash.replace('#',''));window.scrollTo(0,0);});
+
+/* ===== PESTAÑA 1: VIAJE DE UNA PETICIÓN WEB ===== */
+var VIAJE=['Escribe la URL en el navegador','El DNS traduce el dominio a una dirección IP','El navegador abre una conexión TCP con el servidor','Se negocia el cifrado TLS (HTTPS)','El navegador envía la petición HTTP GET','El servidor procesa y responde con el recurso','El navegador renderiza HTML, CSS y JS'];
+var viajeOrd=[];
+var viajeClicks=[];
+function buildViaje(){
+  viajeOrd=[];
+  viajeClicks=[];
+  var h='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;" id="viaje-grid">';
+  var idx=VIAJE.map(function(_,i){return i;});
+  /* orden de presentación aleatorio pero estable por semilla simple */
+  var seed=42;function rnd(){seed=(seed*9301+49297)%233280;return seed/233280;}
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  idx.forEach(function(orig){
+    h+='<button type="button" class="opt-btn" id="vj-'+orig+'" onclick="viajePick('+orig+')"><strong>Paso —:</strong> '+VIAJE[orig]+'</button>';
+    viajeOrd.push(orig);
+  });
+  h+='</div>';
+  document.getElementById('viaje-slot').innerHTML=h;
+}
+function viajePick(orig){
+  var b=document.getElementById('vj-'+orig);
+  if(b.classList.contains('sel')){
+    b.classList.remove('sel');
+    viajeClicks=viajeClicks.filter(function(x){return x!==orig;});
+  }else{
+    b.classList.add('sel');
+    viajeClicks.push(orig);
+  }
+  renumSel();
+}
+function renumSel(){
+  var n=1;
+  viajeOrd.forEach(function(orig){
+    var b=document.getElementById('vj-'+orig);
+    if(b&&b.classList.contains('sel')){b.innerHTML='<strong>Paso '+(n++)+':</strong> '+VIAJE[orig];}
+    else if(b){b.innerHTML='<strong>Paso —:</strong> '+VIAJE[orig];}
+  });
+}
+function viajeEval(){
+  var sel=viajeClicks.slice();
+  var ok=sel.length===VIAJE.length;
+  if(ok){
+    for(var i=0;i<VIAJE.length;i++){if(sel[i]!==i){ok=false;break;}}
+  }
+  var el=document.getElementById('viaje-out');
+  el.className='calc-out '+(ok?'ok':'err');
+  el.innerHTML=ok?'✅ ¡Correcto! Esa es la secuencia completa: URL → DNS → TCP → TLS → HTTP → respuesta → render. Note cómo DNS y TLS actúan <em>antes</em> de que viaje la petición HTTP: sin cifrado negociado, la petición iría en claro.'
+    :(sel.length<VIAJE.length?'⚠ Faltan etapas por seleccionar ('+sel.length+' de '+VIAJE.length+'). ':'❌ El orden aún no es correcto. ')+(!ok?'Pistas: lo primero que ocurre al pulsar Enter es resolver el nombre (DNS); la conexión se establece antes de pedir el recurso; el render es siempre lo último.':'');
+}
+function viajeReset(){buildViaje();document.getElementById('viaje-out').className='calc-out';}
+
+/* ===== PESTAÑA 2: SELECTOR DE TECNOLOGÍA DE ACCESO ===== */
+var ACC_Q=[
+  {t:'Estudiante en Cuenca que necesita 300 Mbps simétricos para clases y respaldos en la nube.',ops:['Fibra óptica FTTH','ADSL','Dial-up'],c:0,fb:'La fibra hasta el hogar es el único de los tres que ofrece cientos de Mbps simétricos; ADSL decae con la distancia y dial-up es de 56 kbps.'},
+  {t:'Caserío de la Amazonía a 80 km de la cabecera cantonal, sin cableado ni cobertura móvil estable.',ops:['Satelital LEO (Starlink)','Cablemódem','Wi-Fi'],c:0,fb:'Sin cable ni cobertura celular, el satelital (hoy preferible LEO por su baja latencia) es la opción viable; el Wi-Fi solo distribuye un acceso que ya existe.'},
+  {t:'Departamento de una oficina que ya tiene el enlace del ISP y quiere conectar 12 PCs sin cables.',ops:['Wi-Fi (LAN inalámbrica)','PLC nuevo enlace al ISP','Nuevo módem ADSL'],c:0,fb:'El Wi-Fi es tecnología de distribución local del acceso existente; no reemplaza al enlace del proveedor.'},
+  {t:'Vincular dos sedes corporativas en Quito y Vallecillos con 1 Gbps dedicado y visión directa.',ops:['Radioenlace punto a punto (microondas)','Bluetooth','Satélite GEO'],c:0,fb:'Con visión directa, un radioenlace licenciado de microondas entrega alta capacidad a costo fijo; Bluetooth es de alcance personal (~10 m) y GEO añade alta latencia.'},
+  {t:'Backup del enlace principal de una tienda que factura electrónicamente y no puede parar.',ops:['Módem 4G/5G de respaldo','Una segunda línea dial-up','Ninguno: confiar en el principal'],c:0,fb:'El 4G/5G ofrece decenas de Mbps casi anywhere con instalación inmediata: redundancia real para el SRI y el correo.'}
+];
+var accSel={};
+function buildAcc(){
+  var h='';
+  ACC_Q.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+q.t+'</p>';
+    q.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="acc-'+i+'-'+j+'" onclick="accPick('+i+','+j+')">'+o+'</button>';
+    });
+    h+='</div>';
+  });
+  document.getElementById('acc-q').innerHTML=h;
+}
+function accPick(i,j){
+  accSel[i]=j;
+  ACC_Q[i].ops.forEach(function(_,k){document.getElementById('acc-'+i+'-'+k).className='opt-btn';});
+  document.getElementById('acc-'+i+'-'+j).className='opt-btn sel';
+}
+function accEval(){
+  var el=document.getElementById('acc-out'),n=0,h='',todo=true;
+  for(var i=0;i<ACC_Q.length;i++){
+    if(accSel[i]===undefined){todo=false;break;}
+  }
+  if(!todo){el.className='calc-out err';el.innerHTML='⚠ Responda los '+ACC_Q.length+' escenarios antes de evaluar.';return;}
+  ACC_Q.forEach(function(q,i){
+    var ok=accSel[i]===q.c;
+    if(ok)n++;
+    document.getElementById('acc-'+i+'-'+accSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok)document.getElementById('acc-'+i+'-'+q.c).className='opt-btn right';
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' '+(i+1)+'. '+q.fb+'</div>';
+  });
+  h='<strong>Resultado: '+n+' / '+ACC_Q.length+'</strong>'+(n<ACC_Q.length?' — revise los fallos con las tablas de la sección 2.':' — ¡excelente dominio de las tecnologías de acceso!')+'<br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+
+/* ===== PESTAÑA 3: SERVICIOS ===== */
+var SRV_Q=[
+  {t:'La coordinadora guarda la planilla compartida en OneDrive y las dos asistentes la editan a la vez.',ops:['Computación en la nube / colaboración','FTP','Streaming'],c:0,fb:'Almacenamiento y edición colaborativa en servidores remotos: servicio de nube (SaaS).'},
+  {t:'El profesor sube las calificaciones a un repositorio de archivos del servidor de la universidad.',ops:['Transferencia de archivos (SFTP)','Correo electrónico','VoIP'],c:0,fb:'Copiar archivos entre cliente y servidor es el servicio de transferencia de archivos, hoy preferiblemente SFTP (cifrado).'},
+  {t:'La reunión de Consejo con participantes en Machala, Cuenca y Quito.',ops:['Mensajería y videollamada (VoIP)','WWW','DNS'],c:0,fb:'Videollamada sobre Internet = mensajería/VoIP (Zoom, Teams).'},
+  {t:'El estudiante ve la clase grabada sin descargar el archivo completo.',ops:['Streaming','Acceso remoto SSH','Red social'],c:0,fb:'Reproducción en tiempo real sin descarga previa: streaming sobre HTTP adaptativo.'},
+  {t:'El administrador administra el servidor de biblioteca digital desde su casa como si estuviera frente a él.',ops:['Acceso remoto (SSH/RDP/VPN)','Buscador','Nube'],c:0,fb:'Control remoto cifrado de equipos: SSH, RDP o VPN.'},
+  {t:'Enviar el trabajo fin de unidad con adjunto al tutor.',ops:['Correo electrónico (SMTP)','Streaming','FTP anónimo'],c:0,fb:'El e-mail (SMTP para enviar, IMAP/POP3 para recibir) sigue siendo el canal formal con adjuntos.'}
+];
+var srvSel={};
+function buildSrv(){
+  var h='';
+  SRV_Q.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+q.t+'</p>';
+    q.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="srv-'+i+'-'+j+'" onclick="srvPick('+i+','+j+')">'+o+'</button>';
+    });
+    h+='</div>';
+  });
+  document.getElementById('srv-q').innerHTML=h;
+}
+function srvPick(i,j){
+  srvSel[i]=j;
+  SRV_Q[i].ops.forEach(function(_,k){document.getElementById('srv-'+i+'-'+k).className='opt-btn';});
+  document.getElementById('srv-'+i+'-'+j).className='opt-btn sel';
+}
+function srvEval(){
+  var el=document.getElementById('srv-out'),n=0,h='',todo=true;
+  for(var i=0;i<SRV_Q.length;i++){if(srvSel[i]===undefined){todo=false;break;}}
+  if(!todo){el.className='calc-out err';el.innerHTML='⚠ Responda los '+SRV_Q.length+' casos antes de evaluar.';return;}
+  SRV_Q.forEach(function(q,i){
+    var ok=srvSel[i]===q.c;
+    if(ok)n++;
+    document.getElementById('srv-'+i+'-'+srvSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok)document.getElementById('srv-'+i+'-'+q.c).className='opt-btn right';
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' '+(i+1)+'. '+q.fb+'</div>';
+  });
+  h='<strong>Resultado: '+n+' / '+SRV_Q.length+'</strong><br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+
+/* ===== PESTAÑA 4: OPERADORES DE BÚSQUEDA ===== */
+var OPS_PARTS=[
+  {lab:'Término base',ok:'ciberseguridad',ops:['ciberseguridad','seguridad de la información','informática']},
+  {lab:'Restricción de dominio',ok:'site:upse.edu.ec',ops:['site:upse.edu.ec','inurl:upse','@upse']},
+  {lab:'Tipo de archivo',ok:'filetype:pdf',ops:['filetype:pdf','formato:pdf','ext:documento']},
+  {lab:'Precisión de frase (opcional pero válida)',ok:'"seguridad de la información"',ops:['"seguridad de la información"','+seguridad+información','seguridad AND información (sin comillas)']}
+];
+var opsSel={};
+function buildOps(){
+  var h='';
+  OPS_PARTS.forEach(function(p,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+p.lab+'</p>';
+    p.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="ops-'+i+'-'+j+'" onclick="opsPick('+i+','+j+')"><code style="font-size:12px;">'+o+'</code></button>';
+    });
+    h+='</div>';
+  });
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap;"><button type="button" class="btn-main" onclick="opsEval()">Construir y evaluar consulta</button><button type="button" class="btn-ghost" onclick="opsReset()">Reiniciar</button></div>';
+  document.getElementById('ops-q').innerHTML=h;
+  updConsulta();
+}
+function opsPick(i,j){
+  opsSel[i]=j;
+  OPS_PARTS[i].ops.forEach(function(_,k){document.getElementById('ops-'+i+'-'+k).className='opt-btn';});
+  document.getElementById('ops-'+i+'-'+j).className='opt-btn sel';
+  updConsulta();
+}
+function updConsulta(){
+  var parts=[];
+  OPS_PARTS.forEach(function(p,i){
+    if(opsSel[i]!==undefined)parts.push(p.ops[opsSel[i]]);
+  });
+  document.getElementById('ops-consulta').innerHTML='Consulta construida: <strong>'+(parts.length?parts.join(' '):'— seleccione fragmentos —')+'</strong>';
+}
+function opsEval(){
+  var el=document.getElementById('ops-out'),n=0;
+  var pend=OPS_PARTS.filter(function(_,i){return opsSel[i]===undefined;}).length;
+  if(pend){el.className='calc-out err';el.innerHTML='⚠ Le faltan '+pend+' fragmentos por seleccionar.';return;}
+  OPS_PARTS.forEach(function(p,i){
+    var ok=p.ops[opsSel[i]]===p.ok;
+    if(ok)n++;
+    document.getElementById('ops-'+i+'-'+opsSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok){
+      var jok=p.ops.indexOf(p.ok);
+      document.getElementById('ops-'+i+'-'+jok).className='opt-btn right';
+    }
+  });
+  el.className='calc-out '+(n>=3?'ok':'err');
+  el.innerHTML=(n===4?'✅ Consulta perfecta: <code>ciberseguridad site:upse.edu.ec filetype:pdf</code> localiza documentos PDF de ciberseguridad publicados por la UPSE.'
+    :n>=3?'⚠ Casi: '+n+' de 4 fragmentos correctos. La consulta completa es <code>ciberseguridad site:upse.edu.ec filetype:pdf</code> (la frase entre comillas es válida como término alternativo).'
+    :'❌ Solo '+n+' de 4 correctos. Revise: site: restringe dominio, filetype: restringe tipo de archivo; las comillas fijan frase exacta.');
+}
+function opsReset(){opsSel={};buildOps();document.getElementById('ops-out').className='calc-out';}
+
+/* ===== PESTAÑA 5: PHISHING O LEGÍTIMO ===== */
+var PH_Q=[
+  {t:'«Estimado cliente: su cuenta será suspendida en 24 horas. Verifique sus datos aquí: http://secure-banc0-az.com/login»',c:false,fb:'Phishing: dominio falsificado (banc0 con cero), urgencia, saludo genérico y enlace http sin cifrar.'},
+  {t:'Correo de notificaciones@upse.edu.ec con asunto «Cambio de contraseña completado» y texto: «si no solicitó este cambio, contacte a soporte en el número oficial del sitio institucional».',c:true,fb:'Legítimo: dominio correcto, sin enlaces directos a formularios de credenciales, remite a canales oficiales y no pide datos.'},
+  {t:'«Ha ganado un iPhone 16. Solo responda con su número de cédula y tarjeta para el envío gratis».',c:false,fb:'Phishing tipo baiting/lotería: codicia + solicitud de datos sensibles que ningún concurso real pide por correo.'},
+  {t:'Mensaje de WhatsApp de un número desconocido: «Hola, soy el gerente. Estoy en reunión, transfiere 500 USD a esta cuenta nueva del proveedor».',c:false,fb:'Phishing (vishing/smishing) por suplantación de autoridad + urgencia: verificar SIEMPRE por otro canal antes de pagar.'},
+  {t:'Correo de facturacion@sri.gob.ec avisando que su factura está lista y adjuntando un PDF con el detalle, sin pedir credenciales.',c:true,fb:'Legítimo en forma (dominio oficial, sin petición de credenciales). Aun así, con adjuntos inesperados se recomienda verificar en el portal oficial — hábito de desconfianza saludable.'},
+  {t:'«Su paquete está retenido en aduana. Pague 2,50 USD de giro aquí para liberarlo: aduana-pagos-ec.com»',c:false,fb:'Phishing con montos pequeños (para bajar la guardia) y dominio parecido al oficial. La aduana real no cobra giros por enlaces de correo.'}
+];
+var phSel={};
+function buildPh(){
+  var h='';
+  PH_Q.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.6px;color:#0f172a;margin-bottom:8px;font-style:italic;">'+(i+1)+'. '+q.t+'</p><div style="display:flex;gap:8px;">';
+    h+='<button type="button" class="opt-btn" style="width:auto;" id="ph-'+i+'-0" onclick="phPick('+i+',0)">✅ Legítimo</button>';
+    h+='<button type="button" class="opt-btn" style="width:auto;" id="ph-'+i+'-1" onclick="phPick('+i+',1)">🎣 Phishing</button>';
+    h+='</div></div>';
+  });
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap;"><button type="button" class="btn-main" onclick="phEval()">Evaluar respuestas</button><button type="button" class="btn-ghost" onclick="phReset()">Reiniciar</button></div>';
+  document.getElementById('ph-q').innerHTML=h;
+}
+function phPick(i,v){
+  phSel[i]=v;
+  document.getElementById('ph-'+i+'-0').className='opt-btn';
+  document.getElementById('ph-'+i+'-1').className='opt-btn';
+  document.getElementById('ph-'+i+'-'+v).className='opt-btn sel';
+}
+function phEval(){
+  var el=document.getElementById('ph-out'),n=0,h='',todo=true;
+  for(var i=0;i<PH_Q.length;i++){if(phSel[i]===undefined){todo=false;break;}}
+  if(!todo){el.className='calc-out err';el.innerHTML='⚠ Clasifique los '+PH_Q.length+' correos antes de evaluar.';return;}
+  PH_Q.forEach(function(q,i){
+    var resp=phSel[i]===0; /* 0=legítimo */
+    var ok=resp===q.c;
+    if(ok)n++;
+    document.getElementById('ph-'+i+'-'+phSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' '+(i+1)+'. '+q.fb+'</div>';
+  });
+  h='<strong>Resultado: '+n+' / '+PH_Q.length+'</strong><br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+function phReset(){phSel={};buildPh();document.getElementById('ph-out').className='calc-out';}
+
+/* ===== PESTAÑA 6: FORTALEZA DE CONTRASEÑAS ===== */
+var COMUNES=['123456','password','123456789','12345678','qwerty','abc123','111111','123123','iloveyou','admin','password1','qwerty123','andra123','andes2020','letmein','dragon','monkey','sunshine','princess','football'];
+function pwEval(){
+  var pw=document.getElementById('pw-in').value;
+  var el=document.getElementById('pw-out');
+  if(!pw){el.className='calc-out';return;}
+  var charset=0,sets=[
+    {re:/[a-z]/,n:26,name:'minúsculas'},
+    {re:/[A-Z]/,n:26,name:'mayúsculas'},
+    {re:/[0-9]/,n:10,name:'dígitos'},
+    {re:/[^a-zA-Z0-9]/,n:33,name:'símbolos'}
+  ];
+  var usados=[];
+  sets.forEach(function(s){if(s.re.test(pw)){charset+=s.n;usados.push(s.name);}});
+  if(charset===0)charset=1;
+  var space=Math.pow(charset,pw.length);
+  var guesses=1e9; /* mil millones de intentos por segundo: GPU moderna offline */
+  var segs=space/2/guesses; /* promedio: mitad del espacio */
+  var comun=COMUNES.indexOf(pw.toLowerCase())>=0;
+  function fmt(s){
+    if(s<1)return s.toFixed(3)+' segundos';
+    if(s<60)return s.toFixed(1)+' segundos';
+    if(s<3600)return (s/60).toFixed(1)+' minutos';
+    if(s<86400)return (s/3600).toFixed(1)+' horas';
+    if(s<31557600)return (s/86400).toFixed(1)+' días';
+    var a=s/31557600;
+    if(a<1e3)return a.toFixed(1)+' años';
+    if(a<1e6)return (a/1e3).toFixed(1)+' mil años';
+    if(a<1e9)return (a/1e6).toFixed(1)+' millones de años';
+    if(a<1e12)return (a/1e9).toFixed(1)+' mil millones de años';
+    return (a/1e12).toExponential(2)+' billones de años';
+  }
+  var nivel,rec;
+  if(comun){nivel='⛔ MUY DÉBIL (contraseña de diccionario)';rec='Aparece en las listas de contraseñas filtradas: cae en menos de un segundo. Prohibida en cualquier cuenta real.';}
+  else if(pw.length<8){nivel='🔴 DÉBIL';rec='Muy corta: incluso con variedad de caracteres, el espacio de claves es pequeño. Suba a 12+ caracteres.';}
+  else if(segs<3600){nivel='🟠 INSUFICIENTE';rec='Cae en horas frente a un ataque offline con GPU (~10⁹ intentos/s). Alargue la contraseña o use una frase de varias palabras.';}
+  else if(segs<31557600){nivel='🟡 MODERADA';rec='Resiste menos de un año de fuerza bruta. Aceptable solo con MFA activado; mejorable alargando.';}
+  else if(segs<31557600000){nivel='🟢 FUERTE';rec='Resiste décadas de fuerza bruta. Aún así: única por servicio y con MFA en cuentas críticas.';}
+  else{nivel='🟢 MUY FUERTE';rec='Prácticamente irrompible por fuerza bruta. La frase de varias palabras aleatorias logra esto siendo memorable.';}
+  el.className='calc-out ok';
+  el.innerHTML='<strong>Análisis local (nada se envía a ningún servidor):</strong><br>'+
+  '· Longitud: <strong>'+pw.length+'</strong> caracteres · Conjuntos usados: <strong>'+(usados.join(', ')||'ninguno')+'</strong> (espacio: '+charset+' símbolos por posición)<br>'+
+  '· Espacio de claves: ~10<sup>'+Math.log10(space).toFixed(1)+'</sup> combinaciones<br>'+
+  '· Tiempo estimado de agotamiento (ataque offline a 10⁹ intentos/s, promedio): <strong>'+fmt(segs)+'</strong><br>'+
+  '· Veredicto: <strong>'+nivel+'</strong> — '+rec;
+}
+
+/* ===== PESTAÑA 6: TIEMPO DE DESCARGA ===== */
+function dlCalc(){
+  var mb=parseFloat(document.getElementById('dl-tam').value);
+  var mbps=parseFloat(document.getElementById('dl-tec').value);
+  var segs=mb*8/mbps;
+  function fmt(s){
+    if(s<60)return s.toFixed(1)+' s';
+    if(s<3600)return (s/60).toFixed(1)+' min';
+    if(s<86400)return (s/3600).toFixed(2)+' h';
+    return (s/86400).toFixed(1)+' días';
+  }
+  var el=document.getElementById('dl-out');
+  el.className='calc-out ok';
+  el.innerHTML='Con '+mbps+' Mbps sostenidos, transferir '+mb+' MB ('+(mb*8)+' Mb) toma: <strong>'+fmt(segs)+'</strong> ('+Math.round(segs).toLocaleString('es')+' segundos).<br><small>Tiempo teórico mínimo: la velocidad real suele ser 60-90% de la contratada por overhead y distancia al servidor.</small>';
+}
+
+/* ===== PESTAÑA 7: HIGIENE DIGITAL ===== */
+var HIG=['Uso contraseñas de 12+ caracteres (o frases largas) y únicas por servicio','Tengo MFA/2FA activado en correo y banca','Mantengo sistema operativo, navegador y apps actualizados','Uso gestor de contraseñas','Verifico el candado HTTPS antes de escribir credenciales','Hago copias de seguridad 3-2-1 de mis archivos importantes','Evito abrir adjuntos y enlaces de remitentes desconocidos','Reviso permisos de apps y privacidad de redes sociales','Uso VPN o evito operaciones sensibles en Wi-Fi públicas','Tengo antivirus/EDR activo y actualizado'];
+var higSt=[];
+function buildHig(){
+  higSt=HIG.map(function(){return false;});
+  var h='';
+  HIG.forEach(function(c,i){h+='<label class="chk"><input type="checkbox" id="hg'+i+'" onchange="higSet('+i+')"><span>'+c+'</span></label>';});
+  h+='<div style="margin-top:8px;"><button type="button" class="btn-main" onclick="higEval()">Evaluar mi higiene digital</button></div>';
+  document.getElementById('hig-chk').innerHTML=h;
+}
+function higSet(i){higSt[i]=document.getElementById('hg'+i).checked;}
+function higEval(){
+  var n=higSt.filter(function(v){return v;}).length;
+  var el=document.getElementById('hig-out');
+  var pct=n/HIG.length*100;
+  var msg;
+  if(pct<=30)msg='🔴 Zona de riesgo: con este nivel, un phishing o un disco averiado puede costarle cuentas y trabajos. Empiece hoy por MFA + gestor de contraseñas.';
+  else if(pct<=60)msg='🟡 Base aceptable pero incompleta: priorice respaldos 3-2-1 y actualizaciones automáticas.';
+  else if(pct<=90)msg='🟢 Buena higiene digital: pula los hábitos restantes y ayude a su entorno (familia, compañeros) a subir de nivel.';
+  else msg='🟢⭐ Higiene digital sobresaliente: usted es el candidato natural a «campeón de seguridad» de su área.';
+  el.className='calc-out ok';
+  el.innerHTML='<div class="prog-track" style="margin:4px 0 8px 0;"><div class="prog-fill" style="width:'+pct+'%"></div></div><strong>'+n+' / '+HIG.length+' prácticas ('+Math.round(pct)+'%)</strong> — '+msg;
+}
+
+/* ===== PESTAÑA 8: CASO DE ESTUDIO (ANDESMARKET) ===== */
+var FASES=['fase1','fase2','fase3','fase4'];
+var faseHechas={1:false,2:false,3:false,4:false};
+var FASE_TITULOS=['Diagnóstico de acceso','Análisis de riesgos','Plan de seguridad','Respuesta y mejora'];
+function goFase(n){
+  FASES.forEach(function(f,i){
+    document.getElementById(f).classList.toggle('active',i===n-1);
+    var s=document.getElementById('fs'+(i+1));
+    s.classList.toggle('cur',i===n-1);
+    s.classList.toggle('done',faseHechas[i+1]);
+  });
+  document.getElementById('fase-prog').style.width=((n-1)/4*100)+'%';
+  document.getElementById('fase-prog-txt').textContent='Fase '+n+' de 4 — '+FASE_TITULOS[n-1]+' · avance del caso: '+Math.round((n-1)/4*100)+'%';
+  var panel=document.getElementById('fase'+n);
+  if(panel)panel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function num(id){var v=parseFloat(document.getElementById(id).value);return isNaN(v)?null:v;}
+function cerca(v,ref,tol){return v!==null&&Math.abs(v-ref)<=tol;}
+
+/* Matriz de riesgos de la fase 2 */
+var RIESGOS=['Ransomware cifra los Excel de cartera','Phishing a la contadora (ya ocurrió)','Fuga del Drive público con datos de 1.400 clientes','Contraseña única compartida en todas las cuentas','Wi-Fi de oficina abierta a visitantes','Fallo del disco de la PC de facturación'];
+var riesgoP=[0,0,0,0,0,0],riesgoI=[0,0,0,0,0,0];
+function buildRiesgos(){
+  var h='<div class="tblwrap"><table style="font-size:12px;"><thead><tr><th>Riesgo</th><th style="width:90px;">Prob. (1-5)</th><th style="width:90px;">Impacto (1-5)</th><th style="width:110px;">Exposición</th></tr></thead><tbody>';
+  RIESGOS.forEach(function(r,i){
+    h+='<tr><td>'+r+'</td>'+
+    '<td><select class="calc-in" id="rp'+i+'" onchange="riesgoSet('+i+')"><option value="0">—</option>'+[1,2,3,4,5].map(function(v){return '<option'+(riesgoP[i]===v?' selected':'')+'>'+v+'</option>';}).join('')+'</select></td>'+
+    '<td><select class="calc-in" id="ri'+i+'" onchange="riesgoSet('+i+')"><option value="0">—</option>'+[1,2,3,4,5].map(function(v){return '<option'+(riesgoI[i]===v?' selected':'')+'>'+v+'</option>';}).join('')+'</select></td>'+
+    '<td id="rex'+i+'" style="font-weight:700;">'+(riesgoP[i]&&riesgoI[i]?riesgoP[i]*riesgoI[i]:'—')+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  document.getElementById('riesgos-tbl').innerHTML=h;
+}
+function riesgoSet(i){
+  riesgoP[i]=parseInt(document.getElementById('rp'+i).value)||0;
+  riesgoI[i]=parseInt(document.getElementById('ri'+i).value)||0;
+  document.getElementById('rex'+i).textContent=(riesgoP[i]&&riesgoI[i])?riesgoP[i]*riesgoI[i]:'—';
+  var cel=document.getElementById('rex'+i);
+  var ex=riesgoP[i]*riesgoI[i];
+  cel.style.color=ex>=15?'#dc2626':ex>=10?'#d97706':ex>=5?'#ca8a04':'#059669';
+}
+/* Controles con presupuesto de la fase 3 */
+var CTRL=[
+  {n:'Migrar sede a fibra FTTH 300 Mbps (incluye instalación)',c:960},
+  {n:'Enlace 4G dedicado para la bodega rural (router + plan anual)',c:600},
+  {n:'Cambio de contraseñas + gestor de contraseñas para todo el personal (licencias anuales)',c:300},
+  {n:'MFA en correo, SRI y banca (implementación y capacitación)',c:150},
+  {n:'Capacitación anti-phishing al personal (taller + simulacro)',c:400},
+  {n:'Servidor NAS de respaldo + esquema 3-2-1 (hardware)',c:1200},
+  {n:'Antivirus/EDR para las 15 PCs (licencias anuales)',c:450},
+  {n:'Cerradura de la Wi-Fi: red de invitados separada y contraseña robusta',c:80},
+  {n:'Consultoría ISO 27001 para el SGSI (diagnóstico inicial)',c:1500},
+  {n:'Migrar los Excel a un servicio en la nube con control de accesos por rol (plan anual)',c:520}
+];
+var ctrlSel={};
+function buildCtrl(){
+  var h='';
+  CTRL.forEach(function(c,i){
+    h+='<button type="button" class="fw-pill'+(ctrlSel[i]?' on':'')+'" id="ct'+i+'" onclick="ctrlToggle('+i+')">'+c.n+' — USD '+c.c+'</button> ';
+  });
+  document.getElementById('ctrl-chips').innerHTML=h;
+  ctrlGasto();
+}
+function ctrlToggle(i){
+  ctrlSel[i]=!ctrlSel[i];
+  var gasto=Object.keys(ctrlSel).filter(function(i){return ctrlSel[i];}).reduce(function(a,i){return a+CTRL[i].c;},0);
+  if(gasto>4800){
+    ctrlSel[i]=false;
+    document.getElementById('ctrl-resto').innerHTML='<span style="color:#dc2626;font-weight:700;">⚠ Excede el presupuesto: ese control no cabe.</span>';
+  }else{
+    document.getElementById('ctrl-resto').textContent='';
+  }
+  buildCtrl();
+}
+function ctrlGasto(){
+  var gasto=Object.keys(ctrlSel).filter(function(i){return ctrlSel[i];}).reduce(function(a,i){return a+CTRL[i].c;},0);
+  document.getElementById('ctrl-gasto').textContent='USD '+gasto.toLocaleString('es')+' / 4.800';
+  if(gasto>0&&gasto<=4800)document.getElementById('ctrl-resto').textContent='Quedan USD '+(4800-gasto).toLocaleString('es')+' disponibles.';
+}
+/* Checklist final del caso */
+var casoChkItems=[
+  'El plan cubre las tres sedes/conexiones (sede, bodega, respaldo)',
+  'Las contraseñas únicas y el MFA quedan implementados',
+  'Existe esquema de respaldo 3-2-1 con copia externa',
+  'El personal recibió capacitación anti-phishing',
+  'Los datos personales de clientes están fuera del enlace público',
+  'Hay una política de acceso por roles (mínimo privilegio)',
+  'El plan PICERI está escrito y con responsables',
+  'Se identificó la obligación de notificación ante brechas (LODPDP)',
+  'El presupuesto se asignó sin excederse',
+  'El resumen ejecutivo refleja las fases 1-3'
+];
+var casoChkEstado=[];
+function buildCasoChk(){
+  casoChkEstado=casoChkItems.map(function(){return false;});
+  var h='';
+  casoChkItems.forEach(function(c,i){h+='<label class="chk"><input type="checkbox" id="cck'+i+'" onchange="casoChkSet('+i+')"><span>'+c+'</span></label>';});
+  document.getElementById('caso-chk').innerHTML=h;
+}
+function casoChkSet(i){casoChkEstado[i]=document.getElementById('cck'+i).checked;}
+/* Validación por fases */
+function faseCheck(n){
+  var el=document.getElementById('fase'+n+'-out');
+  var ok=true,msg='';
+  if(n===1){
+    var a=document.getElementById('fa1a').value.trim();
+    var nSitios=a?a.split('\n').filter(function(x){return x.trim().length>5;}).length:0;
+    if(nSitios<2){ok=false;msg='La actividad 1.1 necesita al menos 2 líneas (sede y bodega) con tecnología y limitación (lleva '+nSitios+').';}
+    else if(!document.getElementById('f1b1').value.trim()||!document.getElementById('f1b2').value.trim()||!document.getElementById('f1b3').value.trim()){ok=false;msg='Complete las tres propuestas de tecnología de la actividad 1.2.';}
+    else if(!cerca(num('f1c1'),1.11,0.06)||!cerca(num('f1c2'),0.04,0.01)){ok=false;msg='⚠ Revise la actividad 1.3: 5 GB a 10 Mbps ≈ 1,11 h y a 300 Mbps ≈ 0,04 h (use la pista si es necesario).';}
+    else if(document.getElementById('fa1d').value.trim().length<20){ok=false;msg='Escriba la conclusión de la actividad 1.3 sobre el respaldo en línea.';}
+    else{msg='✅ Fase 1 guardada. Diagnóstico completo: '+nSitios+' sitios clasificados, tecnologías propuestas y cálculo de transferencia verificado (ADSL ≈ 1,11 h vs fibra ≈ 0,04 h para 5 GB).';}
+  }
+  if(n===2){
+    var a2=document.getElementById('fa2a').value.trim(),b2=document.getElementById('fa2b').value.trim(),c2=document.getElementById('fa2c').value.trim();
+    if(a2.length<40){ok=false;msg='Desarrolle la autopsia del incidente (actividad 2.1): tipo de ataque, señales y propiedades CIA.';}
+    else{
+      var nR=0;
+      for(var i=0;i<RIESGOS.length;i++){if(riesgoP[i]>0&&riesgoI[i]>0)nR++;}
+      if(nR<RIESGOS.length){ok=false;msg='Complete la matriz: faltan '+(RIESGOS.length-nR)+' riesgos por valorar (P e I).';}
+      else if(b2.length<25){ok=false;msg='Justifique qué riesgo trataría primero (actividad 2.2).';}
+      else if(c2.length<25){ok=false;msg='Complete el escenario ransomware (actividad 2.3).';}
+      else{
+        var suma=0;for(var k=0;k<RIESGOS.length;k++)suma+=riesgoP[k]*riesgoI[k];
+        msg='✅ Fase 2 guardada. Matriz completa: exposición total acumulada '+suma+' (promedio '+(suma/RIESGOS.length).toFixed(1)+' por riesgo). Su priorización pasará a la fase 3.';
+      }
+    }
+  }
+  if(n===3){
+    var sel=Object.keys(ctrlSel).filter(function(i){return ctrlSel[i];});
+    var gasto=sel.reduce(function(a,i){return a+CTRL[i].c;},0);
+    var a3=document.getElementById('fa3a').value.trim(),b3=document.getElementById('fa3b').value.trim(),c3=document.getElementById('fa3c').value.trim();
+    if(sel.length<4){ok=false;msg='Seleccione al menos 4 controles para el plan (lleva '+sel.length+').';}
+    else if(gasto>4800){ok=false;msg='⚠ El plan excede el presupuesto: USD '+gasto+' de 4.800. Deseleccione algún control.';}
+    else if(a3.length<30){ok=false;msg='Justifique la selección de controles y el riesgo residual (actividad 3.1).';}
+    else if(b3.length<40){ok=false;msg='Redacte la política de credenciales completa (actividad 3.2).';}
+    else if(c3.length<30){ok=false;msg='Diseñe el esquema de respaldo 3-2-1 (actividad 3.3).';}
+    else{msg='✅ Fase 3 guardada. Plan dentro de presupuesto: USD '+gasto.toLocaleString('es')+' asignados a '+sel.length+' controles (quedan USD '+(4800-gasto).toLocaleString('es')+').';}
+  }
+  if(n===4){
+    var a4=document.getElementById('fa4a').value.trim(),b4=document.getElementById('fa4b').value.trim(),c4=document.getElementById('fa4c').value.trim();
+    var nPic=(a4.toUpperCase().match(/\b[PICERI]\b/g)||[]).length+(a4.match(/Preparaci|Identificaci|Contenci|Erradicaci|Recuperaci|Lecciones/g)||[]).length;
+    if(a4.length<100||nPic<4){ok=false;msg='Desarrolle las seis fases PICERI para el caso (mencione al menos 4 de las fases por nombre).';}
+    else if(b4.length<60||b4.toUpperCase().indexOf('ARCO')<0){ok=false;msg='Complete la actividad 4.2 incluyendo los derechos ARCO-P.';}
+    else if(c4.length<60){ok=false;msg='Redacte el resumen ejecutivo para el Consejo (mínimo 3 líneas).';}
+    else{
+      var nChk=0;casoChkEstado.forEach(function(v){if(v)nChk++;});
+      msg='✅ ¡Caso completado! Checklist del plan: '+nChk+'/10. La rúbrica de 100 puntos se muestra abajo; descargue sus respuestas y entréguelas por Moodle.';
+      document.getElementById('rubrica').style.display='block';
+      document.getElementById('fase-prog').style.width='100%';
+      document.getElementById('fase-prog-txt').textContent='Caso completado — avance 100%';
+      FASES.forEach(function(f,i){faseHechas[i+1]=true;document.getElementById('fs'+(i+1)).classList.add('done');});
+    }
+  }
+  if(ok&&n<4){faseHechas[n]=true;goFase(n+1);}
+  el.className='calc-out '+(ok?'ok':'err');
+  el.innerHTML=msg;
+}
+function casoReset(){
+  ['fa1a','fa1d','fa2a','fa2b','fa2c','fa3a','fa3b','fa3c','fa4a','fa4b','fa4c'].forEach(function(id){
+    var e=document.getElementById(id);if(e){e.value='';e.classList.remove('txt-ok','txt-bad');}
+  });
+  ['f1b1','f1b2','f1b3','f1c1','f1c2'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  riesgoP=[0,0,0,0,0,0];riesgoI=[0,0,0,0,0,0];
+  ctrlSel={};
+  faseHechas={1:false,2:false,3:false,4:false};
+  document.getElementById('rubrica').style.display='none';
+  [1,2,3,4].forEach(function(n){var el=document.getElementById('fase'+n+'-out');if(el)el.className='calc-out';});
+  buildRiesgos();buildCtrl();buildCasoChk();goFase(1);
+}
+function casoDescargar(){
+  var L=[];
+  L.push('CASO DE ESTUDIO UT3 — ANDESMARKET S.A. · Internet y Herramientas de Seguridad en los SI');
+  L.push('Estudiante: ____________________  Fecha: '+new Date().toLocaleDateString('es-EC'));
+  L.push('');
+  L.push('FASE 1 · DIAGNÓSTICO DE ACCESO');
+  L.push('1.1 Enlaces actuales:');L.push(document.getElementById('fa1a').value||'(vacío)');L.push('');
+  L.push('1.2 Tecnologías propuestas: Sede: '+(document.getElementById('f1b1').value||'-')+' | Bodega: '+(document.getElementById('f1b2').value||'-')+' | Respaldo: '+(document.getElementById('f1b3').value||'-'));
+  L.push('1.3 Tiempos: ADSL='+(document.getElementById('f1c1').value||'-')+' h · Fibra='+(document.getElementById('f1c2').value||'-')+' h');
+  L.push('Conclusión:');L.push(document.getElementById('fa1d').value||'(vacío)');L.push('');
+  L.push('FASE 2 · ANÁLISIS DE RIESGOS');
+  L.push('2.1 Autopsia del incidente:');L.push(document.getElementById('fa2a').value||'(vacío)');L.push('');
+  L.push('2.2 Matriz P×I: '+RIESGOS.map(function(r,i){return r+'='+(riesgoP[i]&&riesgoI[i]?riesgoP[i]*riesgoI[i]:'-');}).join(' · '));
+  L.push('Priorización:');L.push(document.getElementById('fa2b').value||'(vacío)');L.push('');
+  L.push('2.3 Escenario ransomware:');L.push(document.getElementById('fa2c').value||'(vacío)');L.push('');
+  L.push('FASE 3 · PLAN DE SEGURIDAD');
+  var sel=Object.keys(ctrlSel).filter(function(i){return ctrlSel[i];});
+  L.push('3.1 Controles seleccionados ('+sel.length+', USD '+sel.reduce(function(a,i){return a+CTRL[i].c;},0)+'): '+sel.map(function(i){return CTRL[i].n;}).join(' · '));
+  L.push('Justificación:');L.push(document.getElementById('fa3a').value||'(vacío)');L.push('');
+  L.push('3.2 Política de credenciales:');L.push(document.getElementById('fa3b').value||'(vacío)');L.push('');
+  L.push('3.3 Respaldos 3-2-1:');L.push(document.getElementById('fa3c').value||'(vacío)');L.push('');
+  L.push('FASE 4 · RESPUESTA Y MEJORA');
+  L.push('4.1 PICERI:');L.push(document.getElementById('fa4a').value||'(vacío)');L.push('');
+  L.push('4.2 LODPDP:');L.push(document.getElementById('fa4b').value||'(vacío)');L.push('');
+  L.push('4.3 Resumen ejecutivo:');L.push(document.getElementById('fa4c').value||'(vacío)');
+  L.push('Checklist final: '+casoChkEstado.filter(function(v){return v;}).length+'/10');
+  var blob=new Blob([L.join('\n')],{type:'text/plain;charset=utf-8'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Caso_AndesMarket_UT3_respuestas.txt';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+
+/* ===== PESTAÑA 9: QUIZ ===== */
+var QUIZ=[
+  {q:'Internet es mejor descrita como…',ops:['Una red global de redes interconectadas que usan TCP/IP','Un programa para navegar páginas web','Una empresa internacional de telecomunicaciones','El conjunto de páginas del mundo'],c:0,fb:'Internet = red de redes con un conjunto común de protocolos (TCP/IP). La web es un servicio que corre sobre ella.'},
+  {q:'La principal diferencia entre conmutación de circuitos y de paquetes es que…',ops:['La de circuitos reserva un canal dedicado; la de paquetes divide el mensaje en unidades que viajan por rutas independientes','La de paquetes solo funciona con fibra óptica','La de circuitos es más eficiente en el uso del canal','La de paquetes requiere líneas telefónicas analógicas'],c:0,fb:'Circuitos = camino exclusivo reservado (modelo telefónico). Paquetes = división en unidades con reensamblado en destino: eficiente y resistente.'},
+  {q:'La tecnología de acceso doméstica más rápida y simétrica de la actualidad es…',ops:['La fibra óptica FTTH','El ADSL sobre línea telefónica','El dial-up de 56 kbps','El Bluetooth'],c:0,fb:'FTTH ofrece 100 Mbps-10 Gbps simétricos. ADSL es asimétrico y decae con la distancia; dial-up es histórico y Bluetooth es de área personal.'},
+  {q:'Para una parroquia rural sin cableado ni cobertura móvil estable, la tecnología de acceso más viable hoy es…',ops:['El satelital (preferiblemente LEO por su baja latencia)','El cablemódem HFC','La LAN Ethernet del colegio','El PLC sobre la red eléctrica'],c:0,fb:'Sin cable ni celular, queda el satélite; las constelaciones LEO (500-2.000 km) reducen la latencia a 20-40 ms frente a los GEO de 36.000 km.'},
+  {q:'¿Cuál NO es un servicio de Internet?',ops:['El sistema operativo Windows','El correo electrónico','La transferencia de archivos (FTP)','El streaming de video'],c:0,fb:'Windows es software local de la máquina; los demás son servicios que corren sobre la red con sus protocolos.'},
+  {q:'La búsqueda «seguridad site:upse.edu.ec filetype:pdf» significa que…',ops:['Se buscan páginas sobre seguridad solo dentro de upse.edu.ec y solo en archivos PDF','Se busca la palabra seguridad en cualquier sitio con PDF','Se envía un correo a la UPSE pidiendo PDFs','Se restringe la búsqueda a sitios seguros (https)'],c:0,fb:'site: restringe el dominio y filetype: el tipo de archivo: dos operadores que convierten una búsqueda vaga en quirúrgica.'},
+  {q:'El malware que cifra los archivos y exige un rescate es…',ops:['El ransomware','El adware','El gusano','El spyware'],c:0,fb:'Ransom = rescate. WannaCry (2017) infectó 230.000+ equipos combinando gusano + ransomware. La contramedida clave: respaldos 3-2-1.'},
+  {q:'El correo «su cuenta será bloqueada en 24 h, verifique aquí: banc0-seguro.com» es un ejemplo de…',ops:['Phishing (ingeniería social con urgencia y dominio falsificado)','Un ataque de fuerza bruta','Un virus de arranque','Un ataque DDoS'],c:0,fb:'Urgencia + enlace a dominio casi idéntico = phishing clásico. Ninguna entidad legítima pide credenciales por correo.'},
+  {q:'Sobre la autenticación multifactor (MFA), es correcto afirmar que…',ops:['Combina dos o más pruebas de factores distintos (algo que sé + tengo + soy) y neutraliza la contraseña robada por sí sola','Es escribir la contraseña dos veces para verificarla','Solo se usa en banca en línea','Reemplaza la contraseña por la huella digital únicamente'],c:0,fb:'MFA = factores independientes. Con MFA activo, una contraseña filtrada no basta para entrar: el mejor control costo-beneficio.'},
+  {q:'En la tríada CIA de la seguridad de la información, la «disponibilidad» significa que…',ops:['La información y los servicios son accesibles cuando se les necesita','Los datos solo los ve quien está autorizado','Los datos no se alteran indebidamente','Los correos llegan sin retraso'],c:0,fb:'Disponibilidad = acceso en el momento necesario (un DDoS o un ransomware la ataca). Confidencialidad = secreto; integridad = exactitud.'}
+];
+var quizSel={},quizDone=false;
+function buildQuiz(){
+  quizSel={};quizDone=false;
+  var h='';
+  QUIZ.forEach(function(q,i){
+    h+='<div class="qbox"><p style="font-size:12.8px;font-weight:600;color:#0f172a;margin-bottom:8px;">'+(i+1)+'. '+q.q+'</p>';
+    q.ops.forEach(function(o,j){
+      h+='<button type="button" class="opt-btn" id="qo'+i+'-'+j+'" onclick="quizPick('+i+','+j+')">'+o+'</button>';
+    });
+    h+='</div>';
+  });
+  document.getElementById('quiz-boxes').innerHTML=h;
+  document.getElementById('quiz-result').className='calc-out';
+}
+function quizPick(i,j){
+  if(quizDone)return;
+  quizSel[i]=j;
+  QUIZ[i].ops.forEach(function(_,k){document.getElementById('qo'+i+'-'+k).className='opt-btn';});
+  document.getElementById('qo'+i+'-'+j).className='opt-btn sel';
+}
+function quizFin(){
+  var el=document.getElementById('quiz-result');
+  var faltan=QUIZ.filter(function(_,i){return quizSel[i]===undefined;}).length;
+  if(faltan){el.className='calc-out err';el.innerHTML='⚠ Le faltan '+faltan+' preguntas por responder.';return;}
+  quizDone=true;
+  var n=0,h='';
+  QUIZ.forEach(function(q,i){
+    var ok=quizSel[i]===q.c;
+    if(ok)n++;
+    document.getElementById('qo'+i+'-'+quizSel[i]).className='opt-btn '+(ok?'right':'wrong');
+    if(!ok)document.getElementById('qo'+i+'-'+q.c).className='opt-btn right';
+    h+='<div style="margin-bottom:6px;">'+(ok?'✅':'❌')+' <strong>'+(i+1)+'.</strong> '+q.fb+'</div>';
+  });
+  var pct=n/QUIZ.length*100;
+  h='<strong>Resultado: '+n+' / '+QUIZ.length+' ('+Math.round(pct)+'%)</strong> — '+(pct>=90?'dominio sobresaliente de la unidad.':pct>=70?'dominio bueno: repase las preguntas falladas en su pestaña.':'debe repasar las pestañas indicadas en cada retroalimentación antes del control.')+'<br>'+h;
+  el.className='calc-out ok';el.innerHTML=h;
+}
+function quizReset(){buildQuiz();}
+
+/* ===== INICIALIZACIÓN ===== */
+buildViaje();buildAcc();buildSrv();buildOps();buildPh();buildHig();
+buildRiesgos();buildCtrl();buildCasoChk();buildQuiz();
+showTab(location.hash?location.hash.replace('#',''):'tp1');
+</script>
+</body>
+</html>
